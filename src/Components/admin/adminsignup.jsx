@@ -1,10 +1,7 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { setUserCredentials} from '../../features/authSlice';
-
-import { submitUserDetail } from '../../features/api/registerApi';
+import { submitAdminDetail } from '../../features/api/registerApi';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
 
 const validationSchema = Yup.object({
@@ -32,17 +29,14 @@ const validationSchema = Yup.object({
 function RegistrationForm() {
 
   const navigate = useNavigate()
-  const dispatch = useDispatch()
 
   const handleSubmit = (values) => {
     try {
-      submitUserDetail(values).then((data)=>{
+      submitAdminDetail(values).then((data)=>{
         console.log(data)
-        navigate("/")
-        dispatch(setUserCredentials(data))
+        navigate("/admin/admindashboard")
       }).catch((error)=>{
         console.log(error)
-       
       })
       
     } catch (error) {
@@ -61,7 +55,7 @@ function RegistrationForm() {
             <h1 className="text-4xl font-normal mb-4">
               <span className="font-bold">V</span>ingle
             </h1>
-            <p className="text-2xl">Hello. Sign up and let the learning begin!</p>
+            <p className="text-2xl">Hello. Admin</p>
           </div>
 
           <div className="bg-white rounded-3xl shadow-lg p-8 w-120">

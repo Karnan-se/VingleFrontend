@@ -2,6 +2,7 @@ import { userApi } from "../../axios/axiosInstance"
 import { tutorApi } from "../../axios/axiosInstance"
 
 const update =(api)=>{
+    
     return async(values)=>{
         try {
         const response = await api.post("update", {user:values},{ withCredentials: true })

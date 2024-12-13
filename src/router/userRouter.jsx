@@ -8,6 +8,7 @@ import ProfilePage from "../Components/user/profile.jsx";
 import AddPhoto from "../Components/user/photo.jsx";
 import PhotoMain from "../generalParts/profile/photoMain.jsx";
 import ProfileMain from "../generalParts/profile/profileMain.jsx";
+import CourseMain from "../generalParts/profile/courseMain.jsx";
 
 
 
@@ -25,9 +26,11 @@ function UserRouter(){
                 
                <Route element={<UserPrivateRoute/>}> 
                 <Route path="/" element={<LandingPage/>} />
+
                 <Route path="/profile" element={<ProfilePage/>}>
                 <Route index element={<ProfileMain/>}></Route>
                 <Route path="/profile/photo" element={<PhotoMain/>}/>
+                <Route path="/profile/course"  element={<CourseMain/>} />
                 </Route>
                 
                 </Route> 

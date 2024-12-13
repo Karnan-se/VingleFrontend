@@ -38,7 +38,8 @@ function RegistrationForm() {
     try {
       submitUserDetail(values).then((data)=>{
         console.log(data)
-        navigate("/")
+        navigate(`/otp`, {state:{data:data}})
+        localStorage.setItem('otpTimer', 60);
         dispatch(setUserCredentials(data))
       }).catch((error)=>{
         console.log(error)

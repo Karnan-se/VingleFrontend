@@ -45,7 +45,7 @@ export default function LandingPage() {
     
 
     <div className="min-h-screen bg-white">
-        <Navbar></Navbar>
+        <Navbar />
 
       <section className="w-full py-12 px-4">
         <div className="max-w-6xl mx-auto">

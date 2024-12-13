@@ -1,17 +1,26 @@
 import { NavLink } from 'react-router-dom';
 import Aside from '../../generalParts/admindashboard/aside';
+import { adminLogout } from '../../features/authSlice';
+import { useDispatch } from 'react-redux';
 
 
 export default function Dashboard() {
+
+  const dispatch = useDispatch()
+  const logout = () =>{
+    const logout = dispatch(adminLogout())
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
       
       <header className="bg-gray-700 text-white py-4 px-6">
         <div className="flex justify-between items-center">
           <h1 className="text-xl font-semibold">Dashboard</h1>
-          <NavLink to={"/admin/logout"} className="bg-yellow-400 text-black px-4 py-2 rounded-md hover:bg-yellow-500 transition-colors">
+          <button className="bg-yellow-400 text-black px-4 py-2 rounded-md hover:bg-yellow-500 transition-colors"
+          onClick={logout}>
             Logout
-          </NavLink>
+          </button>
         </div>
       </header>
 

@@ -6,7 +6,7 @@ import { Navigate } from "react-router-dom";
 
 export default function UserPrivateRoute(){
 
-    const navigate = useNavigate()
+    
 
     const userInfo = useSelector(state=>state.user.userInfo)
 

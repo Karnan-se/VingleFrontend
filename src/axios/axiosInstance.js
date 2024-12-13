@@ -13,9 +13,9 @@ export const userApi = axios.create({
 
 export const adminApi = axios.create({
     ...axiosBaseConfig,
-    baseURL : `${axiosBaseConfig.baseURL}/admin`
+    baseURL : `http://localhost:3000/admin`
 })
 export const tutorApi = axios.create({
     ...axiosBaseConfig,
-    baseURL:`${axiosBaseConfig.baseURL}/tutor`
+    baseURL:`http://localhost:3000/tutor`
 })

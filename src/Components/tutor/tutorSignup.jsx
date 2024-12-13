@@ -1,7 +1,9 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { submitAdminDetail } from '../../features/api/registerApi';
+import { submitTutorDetail } from '../../features/api/registerApi';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setTutorCredentials } from '../../features/authSlice';
 
 
 const validationSchema = Yup.object({
@@ -28,12 +30,15 @@ const validationSchema = Yup.object({
 
 function RegistrationForm() {
 
+  const dispatch = useDispatch()
+
   const navigate = useNavigate()
 
   const handleSubmit = (values) => {
     try {
-      submitAdminDetail(values).then((data)=>{
+      submitTutorDetail(values).then((data)=>{
         console.log(data)
+        dispatch(setTutorCredentials(data))
         navigate("/tutor/dashboard")
       }).catch((error)=>{
         console.log(error)
@@ -55,7 +60,7 @@ function RegistrationForm() {
             <h1 className="text-4xl font-normal mb-4">
               <span className="font-bold">V</span>ingle
             </h1>
-            <p className="text-2xl">Hello. Admin</p>
+            <p className="text-2xl">Hello. Tutor</p>
           </div>
 
           <div className="bg-white rounded-3xl shadow-lg p-8 w-120">
@@ -168,7 +173,7 @@ function RegistrationForm() {
 
                   <button
                     type="submit"
-                    className={`w-full bg-yellow-400 text-black font-medium py-3 rounded-full mt-4 ${
+                    className={`w-full bg-blue-600 text-black font-medium py-3 rounded-full mt-4 ${
                       !(dirty && isValid) && 'cursor-not-allowed opacity-50'
                     } hover:bg-yellow-500 transition-colors`}
                     disabled={!(dirty && isValid)}

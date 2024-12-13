@@ -2,6 +2,10 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { submitAdminDetail } from '../../features/api/registerApi';
 import { useNavigate } from 'react-router-dom';
+import { setAdminCredentials } from '../../features/authSlice';
+import { useDispatch } from 'react-redux';
+
+
 
 
 const validationSchema = Yup.object({
@@ -28,6 +32,8 @@ const validationSchema = Yup.object({
 
 function RegistrationForm() {
 
+const dispatch = useDispatch()
+
   const navigate = useNavigate()
 
   const handleSubmit = (values) => {
@@ -35,6 +41,9 @@ function RegistrationForm() {
       submitAdminDetail(values).then((data)=>{
         console.log(data)
         navigate("/admin/admindashboard")
+        dispatch(setAdminCredentials(data))
+        
+
       }).catch((error)=>{
         console.log(error)
       })

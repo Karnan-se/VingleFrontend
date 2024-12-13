@@ -25,8 +25,8 @@ export default function DynamicProfilePic() {
 </NavLink>
 </div> : <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 overflow-hidden">
         <img
-          src="" 
-          alt="Profile"
+          src={userInfo?.photo || "https://lh3.googleusercontent.com/a/ACg8ocLKHbbXlKTKlXS04FurppuwIwD-bw68yZnO8nrVjk1LMHeHyhM=s96-c"} 
+          alt="Profil"
           className="w-full h-full object-cover"
         />
       </div>

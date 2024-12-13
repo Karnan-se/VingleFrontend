@@ -1,17 +1,12 @@
 
+
 import React, { useEffect } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { setUserCredentials } from '../../features/authSlice';
+import { setAdminCredentials } from '../../features/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { userLogin } from '../../features/api/signInApi';
-import { Button } from "@nextui-org/react"
-import { GoogleLogin } from '@react-oauth/google';
-import { userApi } from '../../axios/axiosInstance';
-
-
-
+import {useNavigate } from 'react-router-dom';
+import { adminLogin } from '../../features/api/signInApi';
 
 
 
@@ -28,47 +23,21 @@ export default function LoginPage() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const userInfo = useSelector((state)=>state.user.userInfo)
+  const adminInfo = useSelector((state)=>state.admin.adminInfo)
   useEffect(()=>{
-    if(userInfo){
-      navigate("/")
+    if(adminInfo){
+      navigate("/admin/admindashboard")
     }
 
   },[])
 
-  const handleGoogleSuccess = async (credentialResponse) => {
-    try {
-      
-      const tokenId = credentialResponse.credential;
-      console.log(tokenId)
-
-
-      const response = await userApi.post('/auth/google/verify', { token: tokenId });
-      if (response.status === 200) {
-        console.log("User authenticated:", response.data.data);
-        dispatch(setUserCredentials(response.data.data))
-        navigate("/")
-
-      }
-    } catch (error) {
-      console.error("Error during Google Sign-In:", error);
-    }
-  };
-
-  const handleGoogleFailure = () => {
-    console.error("Google Sign-In failed");
-  };
-  
-
-  
-
 
 
   const handleSubmit = async (values) => {
-   const response =  await userLogin(values);
+   const response =  await adminLogin(values);
    console.log(response, "hello this is reposnse")
-   dispatch(setUserCredentials(response))
-   navigate("/")
+   dispatch(setAdminCredentials(response))
+   navigate("/admin/admindashboard")
 
   };
 
@@ -80,14 +49,14 @@ export default function LoginPage() {
             <h1 className="text-4xl font-normal mb-4">
               <span className="font-bold">V</span>ingle
             </h1>
-            <p className="text-2xl">Hello. Sign in and let the learning begin!</p>
+            <p className="text-2xl">Hello. Let's build The Empire</p>
           </div>
 
           <div className="bg-white rounded-3xl shadow-lg p-8 w-120">
             <h2 className="text-2xl font-medium mb-4">Sign In</h2>
             <p className="text-sm mb-4">
               New to Vingle?{' '}
-              <a href="/register" className="text-blue-500 hover:underline">
+              <a href="admin/register" className="text-blue-500 hover:underline">
                 Create a new account
               </a>
             </p>
@@ -155,86 +124,16 @@ export default function LoginPage() {
 
                   <button
                     type="submit"
-                    className="w-full bg-yellow-400 text-black font-medium py-3 rounded-full mt-4 hover:bg-yellow-500 transition-colors"
+                    className="w-full bg-blue-400 text-black font-medium py-3 rounded-full mt-4 hover:bg-blue-500 transition-colors"
                   >
                     Sign In
                   </button>
                 </Form>
               )}
             </Formik>
-
-            <div className="flex flex-col gap-4 w-full max-w-md my-12">
-            <GoogleLogin
-        onSuccess={handleGoogleSuccess}
-        onError={handleGoogleFailure}
-      />
-
-      <Button
-        className="w-full bg-white hover:bg-gray-50 text-black border-2 h-12 text-sm font-medium"
-        variant="bordered"
-        startContent={
-          <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden="true">
-            <path
-              fill="#f25022"
-              d="M0 0h11.5v11.5H0z"
-            />
-            <path
-              fill="#00a4ef"
-              d="M0 12.5h11.5V24H0z"
-            />
-            <path
-              fill="#7fba00"
-              d="M12.5 0H24v11.5H12.5z"
-            />
-            <path
-              fill="#ffb900"
-              d="M12.5 12.5H24V24H12.5z"
-            />
-          </svg>
-        }
-      >
-        Sign in with Microsoft
-      </Button>
-    </div>
-
-
-
-
-
-
           </div>
-
-
-          
-
-
-
-
-
-
-
         </div>
-
-
-        
-
-
-
-
-
-
-
       </div>
-
-
-      
-  
-
-
-
-
-
-
     </div>
   );
 }

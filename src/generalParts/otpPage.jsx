@@ -3,10 +3,10 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { userApi } from '../axios/axiosInstance'
 
-export default function OTPVerification({LoginRoute}) {
+export default function OTPVerification({LoginRoute , handleSubmit}) {
   const [otp, setOtp] = useState('');
 
-  const navigate = useNavigate("")
+
 
   const [timer, setTimer] = useState(()=>{
     const savedTimer = localStorage.getItem("otpTimer");
@@ -14,6 +14,8 @@ export default function OTPVerification({LoginRoute}) {
   })
   const location = useLocation();
   const data = location.state?.data
+  console.log(data,  "hello this is user fetched data from OTP page")
+  
 
   
 
@@ -31,44 +33,24 @@ export default function OTPVerification({LoginRoute}) {
   },[])
 
   const resendOTp = ()=>{
-    console.log("called")
+ 
     localStorage.setItem('otpTimer', "60");
     setTimer(60)
     const userInfo=localStorage.getItem("userInfo")? JSON.parse(localStorage.getItem("userInfo") ) : ""
-   const email = userInfo.emailAddress
-   console.log(email, "email")
-   console.log(data.emailAddress , "emailAdress")
-    
+   const email = data.emailAddress
     userApi.post("/resendOTP",{email})
   }
 
+const submit = (otp)=>{
+  handleSubmit(otp);
 
-
-  const handleSubmit = async(e) => {
-    e.preventDefault(); 
-    console.log("submitted")
-    const userInfo=localStorage.getItem("userInfo")? JSON.parse(localStorage.getItem("userInfo") ) : ""
-    const payload = {userDetails:userInfo, otp }
-  try {
-    const verifyUser  = await userApi.post("/verifyUser", {payload}).then((data)=>{
-      console.log(data)
-      console.log(data.data.data.isVerfied)
-      if(data.data.data.isVerfied == true){
-        navigate("/", {replace:true})
-       
-      }
-      console.log(data, "verified")
-    })
+}
     
-  } catch (error) {
-    console.log(error)
-    
-  }
+ 
   
 
-    
-    console.log('OTP submitted:', otp)
-  }
+
+
 
   return (
     <div className="min-h-screen bg-white p-4">
@@ -105,7 +87,7 @@ export default function OTPVerification({LoginRoute}) {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit}>
+            <form >
               <div className="mb-6">
                 <label 
                   htmlFor="otp" 
@@ -138,7 +120,7 @@ export default function OTPVerification({LoginRoute}) {
                      <button type="button"className="w-full bg-red-400 hover:bg-yellow-500 text-black font-medium py-3 px-4 rounded-lg transition-colors" onClick={resendOTp}> Resend OTP</button>
                      
                 ):(
-                    <button type="button"className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-3 px-4 rounded-lg transition-colors" onClick={handleSubmit} > Submit</button>
+                    <button type="button"className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-3 px-4 rounded-lg transition-colors" onClick={()=>submit(otp)} > Submit</button>
                    
                 ) } 
              

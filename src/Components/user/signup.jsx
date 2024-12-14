@@ -56,6 +56,7 @@ function RegistrationForm() {
 
   return (
     <div className="min-h-screen bg-white p-6 w-full">
+      
       <div className="w-full mx-auto items-center">
         <div className="flex justify-around">
           <div className="mb-12">

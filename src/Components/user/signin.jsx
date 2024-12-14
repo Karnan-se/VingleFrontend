@@ -66,7 +66,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (values) => {
    const response =  await userLogin(values);
-   console.log(response, "hello this is reposnse")
+   
    dispatch(setUserCredentials(response))
    navigate("/")
 
@@ -148,7 +148,7 @@ export default function LoginPage() {
                       />
                       <span className="ml-2">Remember my email address</span>
                     </label>
-                    <a href="/forgot-password" className="text-sm text-blue-500 hover:underline">
+                    <a href="/forgotpassword" className="text-sm text-blue-500 hover:underline">
                       Forgot Password?
                     </a>
                   </div>

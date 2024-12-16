@@ -22,14 +22,14 @@ export default function ForgotPassword() {
      console.log(response)
      if(response){
       localStorage.setItem('otpTimer', 60);
-        navigate("/forgotpassword/otp",  {state:{data:response.data}})
+        navigate("/forgotpassword/otp",  {state:{data:response.data}} ,{ replace: true })
      }
       
       
     },
   });
 
-  return (
+    return (
     <>
       <div className="min-h-screen bg-white p-6 w-full">
         <div className="w-full mx-auto items-center">

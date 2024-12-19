@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import logo from "../../assets/logo/Vingle.png"
-import { LogOut } from "lucide-react";
-import {  Dropdown,  DropdownTrigger,  DropdownMenu,  DropdownSection,  DropdownItem} from "@nextui-org/dropdown";
+
+import {  Dropdown,  DropdownTrigger,  DropdownMenu,    DropdownItem} from "@nextui-org/dropdown";
 import {useDispatch, useSelector} from 'react-redux'
 import { userLogout } from "../../features/authSlice";
 
@@ -154,6 +154,28 @@ const Navbar = () => {
         View Profile
       </NavLink>
     </DropdownItem>
+
+
+    
+
+    <DropdownItem
+      key="profile"
+      className="py-3 hover:bg-slate-200 px-5"
+    >
+      <NavLink to="/beainstructor" className="w-full">
+        View Profile
+      </NavLink>
+    </DropdownItem>
+
+
+
+
+
+
+
+
+
+
     <DropdownItem
       key="logout"
       className="text-danger px-5 hover:bg-slate-200"

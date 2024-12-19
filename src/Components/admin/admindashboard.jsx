@@ -56,7 +56,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Uncomment and pass Chart component if needed */}
+        
           {/* <Chart
               data={data}
               activeRange={activeRange}

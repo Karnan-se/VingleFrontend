@@ -18,6 +18,7 @@ export default function PhotoMain() {
 
   const UPLOAD_PRESET = "ml_default";
   const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/deubjmlf3/image/upload";
+  const folderPath = "user/profile_pic";
 
   
   const handleImageUpload = (event) => {
@@ -42,6 +43,7 @@ export default function PhotoMain() {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", UPLOAD_PRESET);
+    formData.append("folder", folderPath);
 
     try {
       const response = await fetch(CLOUDINARY_URL, {

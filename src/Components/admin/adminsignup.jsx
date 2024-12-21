@@ -40,7 +40,7 @@ const dispatch = useDispatch()
     try {
       submitAdminDetail(values).then((data)=>{
         console.log(data)
-        navigate("/admin/admindashboard")
+        navigate("/admin")
         dispatch(setAdminCredentials(data))
         
 

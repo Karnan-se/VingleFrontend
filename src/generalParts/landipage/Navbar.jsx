@@ -36,7 +36,36 @@ const Navbar = () => {
       
     }
     
+
+    }
     
+    let content = <DropdownItem
+    key="Instructor"
+    className="py-3 hover:bg-slate-200 px-5"
+  >
+    <NavLink to="/beainstructor" className="w-full">
+      Be a Instructor
+    </NavLink>
+  </DropdownItem>
+    if(userInfo?.isInstructor == "pending"){
+      content=<DropdownItem
+      key="Instructor"
+      className="py-3 hover:bg-slate-200 px-5"
+    >
+      <NavLink to="/beainstructor" className="w-full">
+        pending
+      </NavLink>
+    </DropdownItem>
+      
+    }else if(userInfo?.isInstructor == "accepted"){
+      content=<DropdownItem
+      key="Instructor"
+      className="py-3 hover:bg-slate-200 px-5"
+    >
+      <NavLink to="/beainstructor" className="w-full">
+      Login as a Instructor  
+      </NavLink>
+    </DropdownItem>
     
   }
 
@@ -158,22 +187,7 @@ const Navbar = () => {
 
     
 
-    <DropdownItem
-      key="profile"
-      className="py-3 hover:bg-slate-200 px-5"
-    >
-      <NavLink to="/beainstructor" className="w-full">
-        View Profile
-      </NavLink>
-    </DropdownItem>
-
-
-
-
-
-
-
-
+    {content}
 
 
     <DropdownItem

@@ -26,7 +26,7 @@ export default function LoginPage() {
   const adminInfo = useSelector((state)=>state.admin.adminInfo)
   useEffect(()=>{
     if(adminInfo){
-      navigate("/admin/admindashboard")
+      navigate("/admin")
     }
 
   },[])
@@ -37,7 +37,7 @@ export default function LoginPage() {
    const response =  await adminLogin(values);
    console.log(response, "hello this is reposnse")
    dispatch(setAdminCredentials(response))
-   navigate("/admin/admindashboard")
+   navigate("/admin")
 
   };
 

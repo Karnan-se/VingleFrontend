@@ -5,6 +5,10 @@ import { Formik, Form, Field, FieldArray, useField } from "formik";
 import * as Yup from "yup";
 import { Eye, X } from 'lucide-react';
 import { tutorApi } from "../../axios/axiosInstance";
+import {useDispatch} from "react-redux"
+import { setUserCredentials } from "../../features/authSlice";
+import {useNavigate} from  "react-router-dom"
+
 
 const validationSchema = Yup.object().shape({
   headline: Yup.string().required("Headline is required"),
@@ -120,6 +124,11 @@ export default function InstructorApplicationForm() {
   const [currentField, setCurrentField] = useState(null);
   const [submissionSummary, setSubmissionSummary] = useState(null);
 
+ 
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const initialValues = {
     headline: "",
     skills: [],
@@ -158,12 +167,22 @@ export default function InstructorApplicationForm() {
                 }
         });
         console.log(formData, "fomaDta")
-        const response = await tutorApi.post("/applicationForm", formData,{withCredentials:true} ,{
+        try {
+          const response = await tutorApi.post("/applicationForm", formData,{withCredentials:true} ,{
             headers: {
               "Content-Type": "multipart/form-data", 
             },
           });
-          console.log(response);
+          
+          const userDetail = response.data.message;
+          console.log(userDetail.updateUserDetail)
+          dispatch(setUserCredentials(userDetail.updateUserDetail));
+          navigate("/")
+  
+        } catch (error) {
+          
+        }
+      
 
 
         }

@@ -1,69 +1,29 @@
 import { NavLink } from 'react-router-dom';
 import Aside from '../../generalParts/admindashboard/aside';
-import { adminLogout } from '../../features/authSlice';
-import { useDispatch } from 'react-redux';
+import AdminHeader from '../../generalParts/admindashboard/adminHeader';
+import DashboardMain from '../../generalParts/admindashboard/dashboardMain';
+import { Outlet } from 'react-router-dom';
 
 
 export default function Dashboard() {
 
-  const dispatch = useDispatch()
-  const logout = () =>{
-    const logout = dispatch(adminLogout())
-  }
+
 
   return (
     <div className="min-h-screen bg-gray-100">
+
+      <AdminHeader heading={"AdminDashboard"} /> 
       
-      <header className="bg-gray-700 text-white py-4 px-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-xl font-semibold">Dashboard</h1>
-          <button className="bg-yellow-400 text-black px-4 py-2 rounded-md hover:bg-yellow-500 transition-colors"
-          onClick={logout}>
-            Logout
-          </button>
-        </div>
-      </header>
+      
 
   
       <div className="flex">
         <Aside />
 
-        <main className="flex-1 p-8">
-        
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-gray-500 text-sm">Total Revenue</h3>
-              <p className="text-2xl font-semibold mt-2">₹2100000</p>
-            </div>
-
-          
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-gray-500 text-sm">Total Courses</h3>
-              <p className="text-2xl font-semibold mt-2">65</p>
-            </div>
-
-         
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-gray-500 text-sm">Total Tutors</h3>
-              <p className="text-2xl font-semibold mt-2">12</p>
-            </div>
-
-           
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-gray-500 text-sm">Total Students</h3>
-              <p className="text-2xl font-semibold mt-2">252</p>
-            </div>
-          </div>
+        {/* <DashboardMain></DashboardMain> */}
+        <Outlet></Outlet>
 
         
-          {/* <Chart
-              data={data}
-              activeRange={activeRange}
-              timeRanges={timeRanges}
-              handleRangeChange={handleRangeChange}
-            /> */}
-        </main>
       </div>
     </div>
   );

@@ -11,12 +11,13 @@ export default function (){
     <div className="mb-6">
       <h2 className="text-lg font-semibold text-gray-700 mb-4">Main Menu</h2>
       <NavLink
-        to="/admin/admindashboard"
+        to="/admin"
         className={({ isActive }) =>
           `p-2 mb-1 rounded cursor-pointer block ${
             isActive ? 'bg-gray-300 font-bold' : 'hover:bg-gray-100'
           }`
         }
+        end
       >
         Dashboard
       </NavLink>

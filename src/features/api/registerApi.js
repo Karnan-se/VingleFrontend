@@ -8,7 +8,7 @@ const register = (userRoute, api) => {
 
   return async (values) => {
     try {
-      const response = await api.post(userRoute, { user: values }, { withCredentials: false });
+      const response = await api.post(userRoute, { user: values }, { withCredentials: true });
       console.log('API Response:', response.data);
       if(response.data){
         console.log(response.data);

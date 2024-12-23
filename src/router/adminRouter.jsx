@@ -5,7 +5,9 @@ import AdminPrivateRoute from "../Components/admin/adminPrivateRoute";
 import LoginPage from "../Components/admin/adminSignIn";
 import DashboardMain from "../generalParts/admindashboard/dashboardMain";
 import StudentTable from "../generalParts/admindashboard/StudentTable";
-import ViewApplication from "../Components/admin/viewApplication";
+import ViewApplication from "../generalParts/admindashboard/viewApplication";
+import TutorsTable from "../generalParts/admindashboard/tutorsTAble";
+import PviewApplication from "../generalParts/admindashboard/higherOrder/PviewApplication";
 
 
 
@@ -24,7 +26,9 @@ return (
     <Route path="/" element={<Dashboard/>}> 
     <Route index element={<DashboardMain/>} />
     <Route path="students" element={<StudentTable/>}> </Route>
-    <Route path="viewApplication" element={<ViewApplication/>}></Route>
+    <Route path="tutors" element={<TutorsTable/>} ></Route>
+    <Route path="viewApplication" element={<PviewApplication/>}> </Route>
+    
     
     </Route>
     

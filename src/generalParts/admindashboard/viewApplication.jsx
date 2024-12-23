@@ -1,43 +1,45 @@
 import React from 'react';
 import { Eye, Download, CheckCircle, XCircle } from 'lucide-react';
+import { adminApi } from '../../axios/axiosInstance';
+import {useNavigate} from "react-router-dom"
+import RejectionModal from '../modals/rejectionModal';
 
-const ViewApplication = () => {
-  const application = {
-    headline: "Experienced Software Developer",
-    skills: ["JavaScript", "React", "Node.js", "CSS"],
-    degree: "Bachelor of Computer Science",
-    qualification: "Certified Full-Stack Developer",
-    experience:
-      "Over 5 years of experience developing scalable web applications and APIs using MERN stack.",
-    resume: new File(["Dummy Resume Content"], "resume.pdf", {
-      type: "application/pdf",
-    }),
-    certifications: [
-      {
-        title: "Full-Stack Web Development",
-        issuer: "Coursera",
-        date: "2023-01-15",
-        file: new File(["Dummy Certificate Content"], "certificate.jpg", {
-          type: "image/jpeg",
-        }),
-      },
-      {
-        title: "Advanced JavaScript",
-        issuer: "Udemy",
-        date: "2022-12-01",
-        file: null,
-      },
-    ],
+
+const ViewApplication = ({application}) => {
+
+  const navigate = useNavigate()
+
+  if(!application){
+    return <div>Loading..</div>
+  }
+
+  console.log(application)
+  
+  const onApprove = async()=>{
+    console.log(application)
+    const response = await adminApi.put("/approveApplication",{application})
+    console.log(response.data.approve);
+    if(response){
+      navigate("/admin/tutors")
+
+    }
+    
+    
+  }
+
+  const onReject =  async(rejectionReasons) =>{
+    console.log("called")
+    const response = await adminApi.put("/rejectApplication", {application, rejectionReasons})
+    console.log(response.data.data)
+    if(response){
+      navigate("/admin/tutors")
+    }
+    
   };
 
-  const onApprove = () => alert("Application Approved!");
-  const onReject = () => alert("Application Rejected!");
-
   return (
-    <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
-        <h1 className="text-3xl font-bold">Instructor Application Review</h1>
-      </div>
+    <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden  w-full">
+     
       <div className="p-6 space-y-6">
         <section>
           <h2 className="text-2xl font-semibold mb-4">Basic Information</h2>
@@ -81,7 +83,7 @@ const ViewApplication = () => {
           {application.resume ? (
             <div className="flex items-center space-x-4">
               <a
-                href={URL.createObjectURL(application.resume)}
+                href={application.resume}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300"
@@ -90,7 +92,7 @@ const ViewApplication = () => {
                 View Resume
               </a>
               <a
-                href={URL.createObjectURL(application.resume)}
+                href={application.resume}
                 download={application.resume.name}
                 className="flex items-center px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300"
               >
@@ -112,18 +114,12 @@ const ViewApplication = () => {
                   <h3 className="text-lg font-medium text-gray-700">{cert.title}</h3>
                   <p className="text-gray-600">Issuer: {cert.issuer}</p>
                   <p className="text-gray-600">Date: {cert.date}</p>
-                  {cert.file && (
+                  {cert.certificateUrl && (
                     <div className="mt-2">
-                      {cert.file.type.startsWith('image/') ? (
-                        <img
-                          src={URL.createObjectURL(cert.file)}
-                          alt={`Certificate for ${cert.title}`}
-                          className="max-w-full h-auto rounded-lg shadow-sm"
-                        />
-                      ) : (
+                      
                         <div className="flex items-center space-x-4 mt-2">
                           <a
-                            href={URL.createObjectURL(cert.file)}
+                            href={cert.certificateUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600 transition duration-300"
@@ -132,15 +128,15 @@ const ViewApplication = () => {
                             View
                           </a>
                           <a
-                            href={URL.createObjectURL(cert.file)}
-                            download={cert.file.name}
+                            href={cert.certificateUrl}
+                            download={"download"}
                             className="flex items-center px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600 transition duration-300"
                           >
                             <Download className="mr-1" size={14} />
                             Download
                           </a>
                         </div>
-                      )}
+                      
                     </div>
                   )}
                 </div>
@@ -152,15 +148,13 @@ const ViewApplication = () => {
         </section>
 
         <div className="flex justify-end space-x-4 mt-8">
+         
+
+
+          <RejectionModal onReject={onReject}> </RejectionModal>
+
           <button
-            onClick={onReject}
-            className="px-6 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition duration-300 flex items-center"
-          >
-            <XCircle className="mr-2" size={18} />
-            Reject Application
-          </button>
-          <button
-            onClick={onApprove}
+            onClick={()=>onApprove()}
             className="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300 flex items-center"
           >
             <CheckCircle className="mr-2" size={18} />

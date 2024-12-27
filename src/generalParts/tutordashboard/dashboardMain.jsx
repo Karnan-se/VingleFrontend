@@ -39,7 +39,7 @@ export default function DashboardMain(){
         </div>
 
      
-        <Card className="mx-6 p-6 border shadow-md">
+        {/* <Card className="mx-6 p-6 border shadow-md">
           <div className="mb-6 flex items-center justify-between">
             <h2 className="text-xl font-semibold">Market Overview</h2>
             <Tabs 
@@ -69,7 +69,7 @@ export default function DashboardMain(){
               </LineChart>
             </ResponsiveContainer>
           </div>
-        </Card>
+        </Card> */}
         </>
     )
 }

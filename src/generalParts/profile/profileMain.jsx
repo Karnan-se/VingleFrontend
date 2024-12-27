@@ -1,17 +1,18 @@
 import { Input, Button, Card } from "@nextui-org/react";
 import PhoneInput from "react-phone-number-input";
-import { userUpdate } from "../../features/api/updateApi";
+// import { userUpdate } from "../../features/api/updateApi";
 import { setUserCredentials } from "../../features/authSlice";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { useOutletContext } from "react-router-dom";
 
 
 export default function ProfileMain({}){
-    const userDetail = useSelector((state=> state.user.userInfo))
+
     const dispatch = useDispatch()
-    const emailAddress = userDetail.emailAddress
+    const {userUpdate , userDetail} = useOutletContext()
 
 
 

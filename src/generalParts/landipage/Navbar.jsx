@@ -52,17 +52,17 @@ const Navbar = () => {
       key="Instructor"
       className="py-3 hover:bg-slate-200 px-5"
     >
-      <NavLink to="/beainstructor" className="w-full">
+      <NavLink to="/" className="w-full">
         pending
       </NavLink>
     </DropdownItem>
       
-    }else if(userInfo?.isInstructor == "accepted"){
+    }else if(userInfo?.isInstructor == "Accepted"){
       content=<DropdownItem
       key="Instructor"
       className="py-3 hover:bg-slate-200 px-5"
     >
-      <NavLink to="/beainstructor" className="w-full">
+      <NavLink to="/tutor/login" className="w-full">
       Login as a Instructor  
       </NavLink>
     </DropdownItem>

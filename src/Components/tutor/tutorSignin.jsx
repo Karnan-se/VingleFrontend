@@ -26,7 +26,7 @@ export default function LoginPage() {
   const tutorInfo = useSelector((state)=>state.tutor.tutorInfo)
   useEffect(()=>{
     if(tutorInfo){
-      navigate("/tutor/dashboard")
+      navigate("/tutor")
     }
 
   },[])
@@ -37,7 +37,7 @@ export default function LoginPage() {
    const response =  await tutorLogin(values);
    console.log(response, "hello this is reposnse")
    dispatch(setTutorCredentials(response))
-   navigate("/tutor/dashboard")
+   navigate("/tutor")
 
   };
 

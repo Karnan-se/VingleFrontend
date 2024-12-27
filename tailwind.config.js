@@ -6,10 +6,13 @@ export default {
   ],
   theme: {
     extend: {
-      width:{
-        120:"30rem"
-      }
+      width: {
+        120: "30rem",
+      },
+      colors: {
+        danger: "#F31260", // Configure only the danger color
+      },
     },
   },
   plugins: [require("@nextui-org/react")],
-}
+};

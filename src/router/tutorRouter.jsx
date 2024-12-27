@@ -5,7 +5,8 @@ import LoginPage from "../Components/tutor/tutorSignin";
 import TutorDashboard from "../Components/tutor/tutordashboard";
 import DashboardMain from "../generalParts/tutordashboard/dashboardMain";
 import TutorProtectedRoute from "../Components/tutor/tutorPrivateRoute";
-import ProfilePage from "../generalParts/tutorprofilePage/editApplication";
+import ProfileMain from "../generalParts/profile/profileMain";
+import CourseTable from "../generalParts/tutorprofilePage/coursetable";
 
 function TutorLogin(){
     return (
@@ -13,8 +14,8 @@ function TutorLogin(){
             <Route element={<TutorProtectedRoute />}>  
     <Route path="/" element={<TutorDashboard/>}>
     <Route index element={<DashboardMain/>} />
-    <Route path="profile" element={<ProfilePage/>} />
-    <Route path="courses" element={<DashboardMain/>} />
+    <Route path="profile" element={<ProfileMain/>} />
+    <Route path="courses" element={<CourseTable/>} />
     </Route>
     </Route>
 

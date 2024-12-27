@@ -1,7 +1,7 @@
 import { Input, Button, Card } from "@nextui-org/react";
 import PhoneInput from "react-phone-number-input";
 // import { userUpdate } from "../../features/api/updateApi";
-import { setUserCredentials } from "../../features/authSlice";
+
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from "react-redux";
@@ -10,9 +10,11 @@ import { useOutletContext } from "react-router-dom";
 
 
 export default function ProfileMain({}){
-
+  const {userUpdate , userDetail, setUserCredentials } = useOutletContext()
+   
     const dispatch = useDispatch()
-    const {userUpdate , userDetail} = useOutletContext()
+    const emailAddress = userDetail.emailAddress
+  
 
 
 

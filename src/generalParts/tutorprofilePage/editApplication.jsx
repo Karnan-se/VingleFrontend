@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Briefcase, GraduationCap, Award } from "lucide-react";
 
-const ProfilePage = () => {
+const EditApplication = () => {
   const [instructor, setInstructor] = useState({
     firstname: "John",
     lastname: "Doe",
@@ -364,4 +364,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default EditApplication;

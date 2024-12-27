@@ -5,6 +5,7 @@ import ProfileAside from "../../generalParts/profile/aside";
 import { userUpdate } from "../../features/api/updateApi";
 import "react-phone-number-input/style.css";
 import { useDispatch, useSelector } from "react-redux";
+import { setUserCredentials } from "../../features/authSlice";
 
 
 export default function ProfileComponent() {
@@ -19,7 +20,7 @@ export default function ProfileComponent() {
         <div className="flex gap-6">
           <ProfileAside state={userDetail} />
 
-          <Outlet  context ={{userUpdate, userDetail}}  />
+          <Outlet  context ={{userUpdate, userDetail , setUserCredentials}}  />
         </div>
       </div>
     </div>

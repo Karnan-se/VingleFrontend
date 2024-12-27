@@ -22,7 +22,6 @@ const TutorNavbar = () => {
     console.log(userInfo, "hello tthis is navbar ");
     setState(userInfo);
   }, [userInfo]);
-  
   useEffect(() => {
     console.log(currState, "chaneged");
   }, [currState]);

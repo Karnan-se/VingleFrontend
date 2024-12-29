@@ -12,7 +12,11 @@ export default {
       colors: {
         danger: "#F31260", // Configure only the danger color
       },
+      
     },
+    
   },
+
+  darkMode:"class",
   plugins: [require("@nextui-org/react")],
 };

@@ -1,22 +1,50 @@
-'use client'
 
-import { useState } from 'react'
+
+import { useEffect, useState } from 'react'
 import { PlusCircle } from 'lucide-react'
+import { tutorApi } from '../../axios/axiosInstance'
+import {useNavigate} from "react-router-dom"
 
 // Dummy data
 const dummyCourses = [
-  { id: 1, name: 'Introduction to React', photo: '/placeholder.svg?height=40&width=40', isPublished: true, date: '2023-01-15' },
-  { id: 2, name: 'Advanced JavaScript', photo: '/placeholder.svg?height=40&width=40', isPublished: false, date: '2023-02-20' },
-  { id: 3, name: 'Node.js Fundamentals', photo: '/placeholder.svg?height=40&width=40', isPublished: true, date: '2023-03-10' },
-  { id: 4, name: 'CSS Mastery', photo: '/placeholder.svg?height=40&width=40', isPublished: false, date: '2023-04-05' },
-  { id: 5, name: 'Python for Beginners', photo: '/placeholder.svg?height=40&width=40', isPublished: true, date: '2023-05-12' },
+  // { id: 1, name: 'Introduction to React', thumbnail: '/placeholder.svg?height=40&width=40', isPublished: true, date: '2023-01-15' },
+  // { id: 2, name: 'Advanced JavaScript', thumbnail: '/placeholder.svg?height=40&width=40', isPublished: false, date: '2023-02-20' },
+  // { id: 3, name: 'Node.js Fundamentals', thumbnail: '/placeholder.svg?height=40&width=40', isPublished: true, date: '2023-03-10' },
+  // { id: 4, name: 'CSS Mastery', thumbnail: '/placeholder.svg?height=40&width=40', isPublished: false, date: '2023-04-05' },
+  // { id: 5, name: 'Python for Beginners', thumbnail: '/placeholder.svg?height=40&width=40', isPublished: true, date: '2023-05-12' },
 ]
 
+
+
 export default function CourseTable() {
+
+
+  useEffect(()=>{
+    const fetchcourse = async()=>{
+      try {
+        const response = await tutorApi.get("/getallCourse")
+        console.log(response)
+        
+      } catch (error) {
+        console.log(error)
+        
+      }
+     
+  
+    }
+    return ()=>fetchcourse()
+   
+  
+  },[])
+
+
+
+
   const [courses, setCourses] = useState(dummyCourses)
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [currentPage, setCurrentPage] = useState(1)
+  const navigate = useNavigate()
   const itemsPerPage = 5
 
   const filteredCourses = courses.filter(course => {
@@ -45,14 +73,8 @@ export default function CourseTable() {
   }
 
   const handleAddNewCourse = () => {
-    const newCourse = {
-      id: courses.length + 1,
-      name: `New Course ${courses.length + 1}`,
-      photo: '/placeholder.svg?height=40&width=40',
-      isPublished: false,
-      date: new Date().toISOString().split('T')[0]
-    }
-    setCourses([...courses, newCourse])
+    navigate("/tutor/coursecreate")
+   
   }
 
   return (
@@ -118,7 +140,7 @@ export default function CourseTable() {
                       <div className="flex-shrink-0 h-10 w-10">
                         <img
                           className="h-10 w-10 rounded-full"
-                          src={course.photo}
+                          src={course.thumbnail}
                           alt=""
                           width={40}
                           height={40}

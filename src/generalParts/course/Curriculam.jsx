@@ -72,7 +72,7 @@ export function CurriculumItem({ item, onUpdate, onDelete, error }) {
                 onUpdate({
                   ...item,
                   fileUrl: e.target.files?.[0]
-                    ? URL.createObjectURL(e.target.files[0])
+                    ? (e.target.files[0])
                     : undefined,
                 })
               }

@@ -211,7 +211,7 @@ export default function TutorsTable() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
 
-                    {student.isInstructor != "pending" && (
+                    {student.isInstructor != "pending" &&  student.isInstructor != "Accepted" && (
                   <button
                       onClick={() => toggleStatus(student._id)}
                       className={`mr-2 px-3 py-1 rounded ${

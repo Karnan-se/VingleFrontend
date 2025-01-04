@@ -5,7 +5,7 @@ import { Formik, Form, Field, FieldArray, useField } from "formik";
 import * as Yup from "yup";
 import { Eye, X } from 'lucide-react';
 import { tutorApi } from "../../axios/axiosInstance";
-import {useDispatch} from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
 import { setUserCredentials } from "../../features/authSlice";
 import {useNavigate} from  "react-router-dom"
 
@@ -123,6 +123,7 @@ export default function InstructorApplicationForm() {
   const [filePreview, setFilePreview] = useState(null);
   const [currentField, setCurrentField] = useState(null);
   const [submissionSummary, setSubmissionSummary] = useState(null);
+  const userInfo = useSelector((state)=> state.user.userInfo)
 
  
 
@@ -141,11 +142,13 @@ export default function InstructorApplicationForm() {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     console.log("Form submitted", values);
+
     const formData = new FormData();
         formData.append("headline", values.headline);
         formData.append("degree", values.degree);
         formData.append("qualification", values.qualification);
         formData.append("experience", values.experience);
+        formData.append("user_id", userInfo._id)
     
        
         values.skills.forEach((skill, index) => {
@@ -159,12 +162,14 @@ export default function InstructorApplicationForm() {
     
         if(values.certifications){
             values.certifications.forEach((cert, index) => {
+              
                 formData.append(`certifications[${index}][title]`, cert.title);
                 formData.append(`certifications[${index}][issuer]`, cert.issuer);
                 formData.append(`certifications[${index}][date]`, cert.date);
                 if (cert.file) {
                   formData.append(`certificateUrl`, cert.file);
                 }
+                
         });
         console.log(formData, "fomaDta")
         try {

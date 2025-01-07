@@ -23,6 +23,7 @@ function TutorLogin(){
 
     <Route path= "/login" element={<LoginPage/>}></Route>
     <Route path="/register" element={<RegistrationForm/>}></Route>
+    
        </Routes>
 
     )

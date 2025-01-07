@@ -8,6 +8,7 @@ import StudentTable from "../generalParts/admindashboard/StudentTable";
 import ViewApplication from "../generalParts/admindashboard/viewApplication";
 import TutorsTable from "../generalParts/admindashboard/tutorsTAble";
 import PviewApplication from "../generalParts/admindashboard/higherOrder/PviewApplication";
+import Category from "../generalParts/category/categories";
 
 
 
@@ -28,8 +29,7 @@ return (
     <Route path="students" element={<StudentTable/>}> </Route>
     <Route path="tutors" element={<TutorsTable/>} ></Route>
     <Route path="viewApplication" element={<PviewApplication/>}> </Route>
-    
-    
+    <Route path="categories" element={<Category/>}></Route>
     </Route>
     
     </Route>

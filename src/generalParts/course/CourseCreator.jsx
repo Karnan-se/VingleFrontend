@@ -157,6 +157,7 @@ export function CourseCreator() {
             title:"Success",
             text:"course Saved Sucessfully",
           })
+          navigate("/tutor/courses")
           
         }
         console.log(response);

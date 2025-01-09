@@ -19,6 +19,7 @@ export function CurriculumItem({ item, onUpdate, onDelete, error }) {
     })
     setVideo(URL.createObjectURL(e.target.files[0]))
    }
+   
 
 
   return (
@@ -30,17 +31,22 @@ export function CurriculumItem({ item, onUpdate, onDelete, error }) {
         ) : (
           <FileText className="w-5 h-5 text-success" />
         )}
-        <p>Curriculam</p>
+        
         <Input
           value={item.title}
           onChange={(e) => onUpdate({ ...item, title: e.target.value })}
-          className="flex-1"
+          className="flex-1 border"
           placeholder="Lesson title"
           variant="bordered"
-          isInvalid={error && !item.title}
-          errorMessage={error && !item.title ? "Lesson title is required" : ""}
-          color={error && !item.title ? "danger" : "default"}
+          color={error && error.title ? "danger" : "default"}
         />
+        <div>
+        {error?.title && (
+        <p className="text-sm text-danger mt-1">{error.title}</p>
+      )}
+
+        </div>
+      
         <Input
           value={item.duration}
           onChange={(e) => onUpdate({ ...item, duration: e.target.value })}
@@ -71,10 +77,10 @@ export function CurriculumItem({ item, onUpdate, onDelete, error }) {
               }
               placeholder="Enter lesson description..."
               variant="bordered"
-              isInvalid={error && !item.description}
-              errorMessage={error && !item.description ? "Description is required" : ""}
-              color={error && !item.description ? "danger" : "default"}
             />
+             {error?.description && (
+            <p className="text-sm text-danger mt-1">{error.description}</p>
+      )}
           </div>
           <div className="space-y-2">
             <p className="text-sm">Content File</p>

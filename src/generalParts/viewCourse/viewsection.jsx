@@ -1,22 +1,45 @@
 import { ChevronDown, ChevronUp, Play, FileText } from "lucide-react";
 import { Section } from "./editableSection";
 import { X } from 'lucide-react';
+import { validateSectionData } from "./validateSectionData";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import VideoPlayer from "./VideoPlayer";
 
 export default function CourseSection({ sectionData , setSection }) {
   console.log(sectionData, "sectionData");
 
-  const handleEdit = (e) => {
+  const [error, setError] = useState([]);
+  const [editable , setEditable] = useState()
+  const [newSection ,  setNewSection] = useState()
+
+  const deleteSection =(sectionid)=>{
+    const afterDetele = sectionData.filter((section)=> section._id !== sectionid)
+    console.log(afterDetele , "deleted")
+    setSection(afterDetele)
+  }
+
+
+  const handleEdit = (e , section_id) => {
     e.preventDefault();
-    console.log("edit");
+    setEditable(section_id)
     setExpanded(true)
   };
+
+  const handleSave = (e )  =>{
+    e.preventDefault();
+    
+    console.log("saved")
+    validateSectionData(setError , sectionData)
+    console.log(error , "Error in form ");
+  }
+
+
 
   const [expandedSections, setExpandedSections] = useState([]);
   const [item, setItem] = useState();
   const [isExpanded , setExpanded] = useState(false)
+  const [isAdded , setAdded] = useState(false)
   
 
   const toggleSection = (sectionId) => {
@@ -33,6 +56,13 @@ export default function CourseSection({ sectionData , setSection }) {
    setSection(updated)
   };
 
+  const addnewSection =() =>{
+    const newSect = [{title:"" , items:[{title:"", type:"video" ,  duration:"", description:""}]}]
+    setNewSection(newSect)
+  }
+
+
+
 
   const totalSections = sectionData?.length;
   const totalLectures = sectionData.reduce(
@@ -42,152 +72,146 @@ export default function CourseSection({ sectionData , setSection }) {
   const totalDuration = "3h 45m";
 
   return (
-    <div className="flex justify-between">
 
-      {!isExpanded ? (  
-      <div className="max-w-3xl mt-14 p-4 font-sans w-1/2">
-        <h2 className="text-2xl font-bold mb-4">Course content</h2>
-        <div className="flex justify-between items-center mb-4 text-sm text-gray-600">
-          <span>
-            {totalSections} sections • {totalLectures} lectures •{" "}
-            {totalDuration} total length
-          </span>
-          <button
-            className="text-blue-600 hover:underline"
-            onClick={() =>
-              setExpandedSections(
-                expandedSections.length ? [] : sectionData.map((s) => s._id)
-              )
-            }
-          >
-            {expandedSections.length
-              ? "Collapse all sections"
-              : "Expand all sections"}
-          </button>
-        </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg overflow-hidden">
 
-        {sectionData.map((section) => (
-          <div
-            key={section._id}
-            className="mb-2 border border-gray-200 rounded-lg overflow-hidden"
-          >
-            <button
-              onClick={() => toggleSection(section._id)}
-              className="w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
-            >
-              <div className="flex items-center">
-                {expandedSections.includes(section._id) ? (
-                  <ChevronUp />
-                ) : (
-                  <ChevronDown />
-                )}
-                <span className="ml-2 font-semibold">{section.title}</span>
-              </div>
-              <span className="text-sm text-gray-600">
-                {section.items.length} lecture
-                {section.items.length !== 1 ? "s" : ""}
+        {!isAdded ? (  
+          <> 
+
+        {!isExpanded ? (
+          <div className="p-6">
+            <h2 className="text-3xl font-bold mb-6 text-center">Course content</h2>
+            <div className="flex justify-between items-center mb-6 text-sm text-gray-600">
+              <span>
+                {totalSections} sections • {totalLectures} lectures • {totalDuration} total length
               </span>
-            </button>
+              <button
+                className="text-blue-600 hover:underline"
+                onClick={() => setExpandedSections(expandedSections.length ? [] : sectionData.map((s) => s._id))}
+              >
+                {expandedSections.length ? "Collapse all sections" : "Expand all sections"}
+              </button>
+            </div>
 
-            {expandedSections.includes(section._id) && (
-              <div className="bg-white">
-                {section.items.map((item) => (
-                  <div
-                    key={item._id}
-                    className="flex items-center p-4 hover:bg-gray-50 border-t border-gray-200"
-                  >
-                    {item.type === "video" ? <Play /> : <FileText />}
-                    <div className="ml-3 flex-grow">
-                      <h3 className="font-medium">{item.title}</h3>
-                      {item.description && (
-                        <p
-                          className="text-sm text-gray-600 mt-1 cursor-pointer"
-                          onClick={() => setItem(item)}
-                        >
-                          {item.description}
-                        </p>
-                      )}
-                    </div>
-                    {item.duration && (
-                      <span className="text-sm text-gray-600">
-                        {item.duration}
-                      </span>
-                    )}
+            {sectionData.map((section) => (
+              <div key={section._id} className="mb-4 border border-gray-200 rounded-lg overflow-hidden">
+                <button
+                  onClick={() => toggleSection(section._id)}
+                  className="w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
+                >
+                  <div className="flex items-center">
+                    {expandedSections.includes(section._id) ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                    <span className="ml-2 font-semibold">{section.title}</span>
                   </div>
-                ))}
+                  <span className="text-sm text-gray-600">
+                    {section.items.length} lecture{section.items.length !== 1 ? "s" : ""}
+                  </span>
+                </button>
+
+                {expandedSections.includes(section._id) && (
+                  <div className="bg-white">
+                    {section.items.map((item) => (
+                      <div key={item._id} className="flex items-center p-4 hover:bg-gray-50 border-t border-gray-200">
+                        {item.type === "video" ? <Play className="w-5 h-5" /> : <FileText className="w-5 h-5" />}
+                        <div className="ml-3 flex-grow">
+                          <h3 className="font-medium">{item.title}</h3>
+                          {item.description && (
+                            <p className="text-sm text-gray-600 mt-1 cursor-pointer" onClick={() => setItem(item)}>
+                              {item.description}
+                            </p>
+                          )}
+                        </div>
+                        {item.duration && (
+                          <span className="text-sm text-gray-600">{item.duration}</span>
+                        )}
+                      </div>
+                    ))}
+                   
+                  </div>
+                  
+                )}
+                <button
+                  className="w-full bg-gray-800 text-white py-2 px-4 hover:bg-gray-700 transition-colors"
+                  onClick={(e) => handleEdit(e, section._id)}
+                >
+                  Edit
+                </button>
+
               </div>
-            )}
-            <button
-              className="flex  w-32 bg-gray-800  text-white text-center float-right text-md shadow-md justify-center border border-b"
-              onClick={handleEdit}
-            >
-              Edit
-            </button>
+               
+            ))}
+             <button 
+             className="w-full bg-gray-800 text-white py-2 px-4
+              hover:bg-gray-700
+               transition-colors" onClick={()=>addnewSection()}>Add new Section</button>
           </div>
-        ))}
-      </div>
+          
 
-) :( 
-  <>
-  {sectionData.map((section , index)=> (
-   <Section key={index} section={section} onUpdate={(updatedSection)=>{updateSection(section._id , updatedSection) }}/>
-  ))}
-  
-  </>
-  
+        ) : (
+          
+          <div className="p-6 bg-gray-100 border shadow-lg border-black">
+            {sectionData
+              .filter((section) => editable === section._id)
+              .map((section, index) => (
+                <div key={section._id} className="mb-6">
+                  <Section
+                    key={section._id}
+                    section={section}
+                    onUpdate={(updatedSection) => {
+                      updateSection(section._id, updatedSection);
+                    }}
+                    canAddContent={""}
+                    error={error[index]}
+                    onDelete={() => deleteSection(section._id)}
+                  />
+                </div>
+              ))}
+            <div className="mt-6 text-center">
+              <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-lg font-semibold" onClick={handleSave}>
+                Save Changes
+              </button>
 
-)}
-
-      <div className=" w-1/2  mt-14 mr-36 items-center justify-center flex">
-      {item && ( 
-        <>
-         <VideoPlayer fileUrl={item.fileUrl} />
-         <div className="column flex">
-          <label onClick={()=>setItem()} className="cursor-pointer"> 
-         <X className="size-8" />
-         <p>close</p>
-
-         </label>
-
-         </div>
-         
-
+            </div>
+          </div>
+        )  
+        }
         </>
-       
-      )}
+
+      ) :( <>
+      
+
+      
+      
+      </>) }
+
+
+
+
+
+
+
       </div>
+
+      {item && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg p-6 max-w-3xl w-full">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold">{item.title}</h3>
+              <button onClick={() => setItem(null)} className="text-gray-500 hover:text-gray-700">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <VideoPlayer fileUrl={item.fileUrl} />
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 
 
 
 
-// {values.sections.map((section, index) => (
-//   <Section
-//     key={section.id}
-//     section={section}
-//     onUpdate={(updatedSection) => {
-//       updateSection(section.id, updatedSection);
-//       setFieldValue(`sections.${index}`, updatedSection);
-//     }}
-//     onDelete={() => deleteSection(section.id)}
-//     error={
-//       !!validationErrors[`section_${index}`] ||
-//       section.items.some(
-//         (_, itemIndex) =>
-//           !!validationErrors[`item_${index}_${itemIndex}`]
-//       )
-//     }
-//     canAddContent={
-//       section.title.trim() !== "" &&
-//       section.items.every(
-//         (item) =>
-//           item.title.trim() !== "" &&
-//           item.description.trim() !== "" &&
-//           item.fileUrl !== ""
-//       )
-//     }
-//   />
-// ))}
+

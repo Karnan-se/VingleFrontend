@@ -1,16 +1,18 @@
 
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ChevronDown, ChevronRight, Plus, Trash2 } from 'lucide-react'
 import { Button, Input } from '@nextui-org/react'
 import { ContentTypeSelector } from '../course/ContentTypeSelector'
-// import { CurriculumItem } from './CurriculamItem'
 import { CurriculumItem } from '../course/Curriculam'
 
 
 export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
   const [isExpanded, setIsExpanded] = useState(true)
   const [showContentTypeSelector, setShowContentTypeSelector] = useState(false)
+
+
+ 
 
   const addItem = (type) => {
     const newItem = {
@@ -28,7 +30,7 @@ export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
   }
 
   const updateItem = (itemId, updatedItem) => {
-    console.log(itemId ,  "hdhhdhd dh dh d h dh djh djh djh djh dhj ")
+    console.log(itemId ,  "item_id")
     onUpdate({
       ...section,
       items: section.items.map((item) =>
@@ -43,6 +45,7 @@ export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
       items: section.items.filter((item) => item._id !== itemId),
     })
   }
+
 
   return (
     <>
@@ -68,10 +71,11 @@ export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
           className="flex-1"
           placeholder="Section title"
           variant="bordered"
-          isInvalid={error && !section.title}
-          errorMessage={error && !section.title ? "Section title is required" : ""}
-          color={error && !section.title ? "danger" : "default"}
+          color={error && error.title ? "danger" : "default"}
         />
+        {error?.title && (
+        <p className="text-sm text-danger mt-1">{error.title}</p>
+)}
         <Button isIconOnly variant="light" onClick={onDelete}>
           <Trash2 className="w-4 h-4 text-danger" />
         </Button>
@@ -85,7 +89,7 @@ export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
               item={item}
               onUpdate={(updatedItem) => updateItem(item._id, updatedItem)}
               onDelete={() => deleteItem(item._id)}
-              error={error}
+              error={error?.items[index]}
             />
           ))}
 
@@ -106,6 +110,7 @@ export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
         </div>
       )}
     </div>
+  
     </>
   )
 }

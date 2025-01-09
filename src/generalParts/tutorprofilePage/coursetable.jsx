@@ -19,11 +19,17 @@ const dummyCourses = [
 export default function CourseTable() {
 
 
+ 
+
+
   useEffect(()=>{
+    console.log(" jwenfkjn2f ")
     const fetchcourse = async()=>{
+      
       try {
-        const response = await tutorApi.get("/getallCourse")
-        console.log(response)
+        const response = await tutorApi.get("/getallCourse" , {withCredentials:true})
+        console.log(response.data)
+        setCourses(response.data)
         
       } catch (error) {
         console.log(error)
@@ -40,7 +46,7 @@ export default function CourseTable() {
 
 
 
-  const [courses, setCourses] = useState(dummyCourses)
+  const [courses, setCourses] = useState([])
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [currentPage, setCurrentPage] = useState(1)
@@ -59,17 +65,18 @@ export default function CourseTable() {
 
   const toggleStatus = (courseId) => {
     setCourses(courses.map(course => 
-      course.id === courseId ? { ...course, isPublished: !course.isPublished } : course
+      course._id === courseId ? { ...course, isPublished: !course.isPublished } : course
     ))
   }
 
-  const handleEdit = (courseId) => {
-    // Implement edit functionality
-    console.log('Edit course', courseId)
+  const handleEdit = (course) => {
+    console.log(course)
+    navigate("/tutor/editCourse", {state:{course}})
+    
   }
 
   const handleDelete = (courseId) => {
-    setCourses(courses.filter(course => course.id !== courseId))
+    setCourses(courses.filter(course => course._id !== courseId))
   }
 
   const handleAddNewCourse = () => {
@@ -156,7 +163,7 @@ export default function CourseTable() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button
-                      onClick={() => toggleStatus(course.id)}
+                      onClick={() => toggleStatus(course._id)}
                       className={`px-3 py-1 rounded ${
                         course.isPublished
                           ? 'bg-green-100 text-green-800 hover:bg-green-200'
@@ -168,13 +175,13 @@ export default function CourseTable() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button
-                      onClick={() => handleEdit(course.id)}
+                      onClick={() => handleEdit(course)}
                       className="mr-2 px-3 py-1 rounded bg-blue-100 text-blue-600 hover:bg-blue-200"
                     >
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(course.id)}
+                      onClick={() => handleDelete(course._id)}
                       className="px-3 py-1 rounded bg-red-100 text-red-600 hover:bg-red-200"
                     >
                       Delete

@@ -5,28 +5,6 @@ import { updateCategory } from './updateCategory'
 import { adminApi } from '../../axios/axiosInstance'
 import { handleToggleBlock } from './updateCategory'
 
-// Mock API functions
-const mockCategories = [
-  { id: 1, name: 'Electronics', description: 'Gadgets and devices' },
-  { id: 2, name: 'Books', description: 'Physical and digital books' },
-  { id: 3, name: 'Clothing', description: 'Apparel and accessories' },
-  { id: 4, name: 'Home & Garden', description: 'Items for home and garden' },
-  { id: 5, name: 'Sports', description: 'Sports equipment and accessories' },
-  { id: 6, name: 'Toys', description: 'Children\'s toys and games' },
-  { id: 7, name: 'Beauty', description: 'Cosmetics and personal care' },
-  { id: 8, name: 'Automotive', description: 'Car parts and accessories' },
-  { id: 9, name: 'Food', description: 'Groceries and gourmet food' },
-  { id: 10, name: 'Health', description: 'Health and wellness products' },
-  { id: 11, name: 'Pet Supplies', description: 'Products for pets' },
-  { id: 12, name: 'Jewelry', description: 'Jewelry and watches' },
-  { id: 12, name: 'Jewelry', description: 'Jewelry and watches' },
-  { id: 12, name: 'Jewelry', description: 'Jewelry and watches' },
-  { id: 12, name: 'Jewelry', description: 'Jewelry and watches' },
-  { id: 12, name: 'Jewelry', description: 'Jewelry and watches' },
-  { id: 12, name: 'Jewelry', description: 'Jewelry and watches' },
-]
-
-
 
 
 const deleteCategory = (id) => Promise.resolve(id)

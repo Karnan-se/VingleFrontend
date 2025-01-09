@@ -19,6 +19,7 @@
     "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^2.4.0",
     "axios": "^1.7.7",
+    "cloudinary-video-player": "^2.2.0",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "formik": "^2.4.6",

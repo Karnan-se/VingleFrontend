@@ -8,16 +8,20 @@ import TutorProtectedRoute from "../Components/tutor/tutorPrivateRoute";
 import ProfileMain from "../generalParts/profile/profileMain";
 import CourseTable from "../generalParts/tutorprofilePage/coursetable";
 import { CourseCreator } from "../generalParts/course/CourseCreator";
+import EditCourse from "../generalParts/viewCourse/editCourse";
 
 function TutorLogin(){
     return (
         <Routes>
-            <Route element={<TutorProtectedRoute />}>  
+
+            
+         <Route element={<TutorProtectedRoute />}>  
     <Route path="/" element={<TutorDashboard/>}>
     <Route index element={<DashboardMain/>} />
     <Route path="profile" element={<ProfileMain/>} />
     <Route path="courses" element={<CourseTable/>} />
     <Route path="courseCreate" element={<CourseCreator/>}></Route>
+    <Route path="editCourse" element={<EditCourse/>}></Route>
     </Route>
     </Route>
 
@@ -25,7 +29,6 @@ function TutorLogin(){
     <Route path="/register" element={<RegistrationForm/>}></Route>
     
        </Routes>
-
     )
 }
 export default TutorLogin

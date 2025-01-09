@@ -8,14 +8,17 @@ const axiosBaseConfig = axios.create({
 
 export const userApi = axios.create({
     ...axiosBaseConfig,
-    baseURL:`http://localhost:3000/user`
+    baseURL:`http://localhost:3000/user`,
+    withCredentials:true
 })
 
 export const adminApi = axios.create({
     ...axiosBaseConfig,
-    baseURL : `http://localhost:3000/admin`
+    baseURL : `http://localhost:3000/admin`,
+    withCredentials:true
 })
 export const tutorApi = axios.create({
     ...axiosBaseConfig,
-    baseURL:`http://localhost:3000/tutor`
+    baseURL:`http://localhost:3000/tutor`,
+    withCredentials:true
 })

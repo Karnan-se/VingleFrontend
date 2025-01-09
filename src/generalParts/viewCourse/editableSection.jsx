@@ -3,8 +3,9 @@
 import { useState } from 'react'
 import { ChevronDown, ChevronRight, Plus, Trash2 } from 'lucide-react'
 import { Button, Input } from '@nextui-org/react'
-import { ContentTypeSelector } from './ContentTypeSelector'
-import {CurriculumItem} from  "./Curriculam"
+import { ContentTypeSelector } from '../course/ContentTypeSelector'
+// import { CurriculumItem } from './CurriculamItem'
+import { CurriculumItem } from '../course/Curriculam'
 
 
 export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
@@ -13,7 +14,7 @@ export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
 
   const addItem = (type) => {
     const newItem = {
-      id: Math.random().toString(36).substr(2, 9),
+      _id: Math.random().toString(36).substr(2, 9),
       title: '',
       type,
       description: '',
@@ -27,11 +28,11 @@ export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
   }
 
   const updateItem = (itemId, updatedItem) => {
-    console.log(itemId , "itemId"  , updatedItem , "updated")
+    console.log(itemId ,  "hdhhdhd dh dh d h dh djh djh djh djh dhj ")
     onUpdate({
       ...section,
       items: section.items.map((item) =>
-        item.id === itemId ? updatedItem : item
+        item._id === itemId ? updatedItem : item
       ),
     })
   }
@@ -39,11 +40,14 @@ export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
   const deleteItem = (itemId) => {
     onUpdate({
       ...section,
-      items: section.items.filter((item) => item.id !== itemId),
+      items: section.items.filter((item) => item._id !== itemId),
     })
   }
 
   return (
+    <>
+   
+   
     <div className="border rounded-lg p-4 bg-default-50">
       <div className="flex items-center gap-4 mb-4">
         <Button
@@ -57,6 +61,7 @@ export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
             <ChevronRight className="w-4 h-4" />
           )}
         </Button>
+
         <Input
           value={section.title}
           onChange={(e) => onUpdate({ ...section, title: e.target.value })}
@@ -76,15 +81,15 @@ export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
         <div className="space-y-4 ml-8">
           {section.items.map((item, index) => (
             <CurriculumItem
-              key={item.id}
+              key={index}
               item={item}
-              onUpdate={(updatedItem) => updateItem(item.id, updatedItem)}
-              onDelete={() => deleteItem(item.id)}
+              onUpdate={(updatedItem) => updateItem(item._id, updatedItem)}
+              onDelete={() => deleteItem(item._id)}
               error={error}
             />
           ))}
 
-          {canAddContent && (
+          {
             showContentTypeSelector ? (
               <ContentTypeSelector onSelect={addItem} />
             ) : (
@@ -97,10 +102,11 @@ export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
                 Add Content
               </Button>
             )
-          )}
+          }
         </div>
       )}
     </div>
+    </>
   )
 }
 

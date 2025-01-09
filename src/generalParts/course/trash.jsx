@@ -1,17 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus } from 'lucide-react';
 import { Button } from "@nextui-org/react";
 import { Section } from "./section";
 import { Input } from "@nextui-org/react";
-import { Check } from "lucide-react";
+import { Check } from 'lucide-react';
 import { Textarea } from "@nextui-org/react";
 import { tutorApi } from "../../axios/axiosInstance";
 import { useSelector } from "react-redux";
 import { createformData } from "../../features/formData/createFormData";
+import { Formik, Form, ErrorMessage } from 'formik';
+import { useLoading } from "../preloader/LoadingContext";
+
+import * as Yup from 'yup';
+import { useNavigate } from "react-router-dom";
 
 export function CourseCreator() {
+
+
+  const {isLoading, setLoading} =  useLoading()
+  const navigate =useNavigate(); 
+ 
   const tutorInfo = useSelector((state) => state.tutor.tutorInfo);
 
   const [course, setCourse] = useState({
@@ -27,6 +37,9 @@ export function CourseCreator() {
   const [newObjective, setNewObjective] = useState("");
 
   const [validationErrors, setValidationErrors] = useState({});
+
+
+ 
 
   const categories = [
     { value: "development", label: "Development" },
@@ -47,8 +60,6 @@ export function CourseCreator() {
 
   useEffect(()=>{
     console.log(course)
-    
-
   },[course])
 
   const handleAddObjective = () => {
@@ -95,9 +106,6 @@ export function CourseCreator() {
   };
 
   const deleteSection = (sectionId) => {
-    // setCourse({
-    //   sections: course.sections.filter((section) => section.id !== sectionId),
-    // })
     setCourse((prevCourse) => ({
       ...prevCourse,
       sections: prevCourse.sections.filter(
@@ -130,36 +138,43 @@ export function CourseCreator() {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSaveCourse = async (e) => {
-    e.preventDefault();
-    
+  const handleSaveCourse = async (values, { setSubmitting }) => {
     if (validateCourse()) {
-      
-      
-      const updatedCourse = { ...course, tutorId: tutorInfo._id };
+      setLoading(true)
+      const updatedCourse = { ...values, tutorId: tutorInfo._id };
       const form = createformData(updatedCourse)
-      for(let [key, value] of form.entries()){
-        console.log(key , value , "Form Data Display")
-      }
-      
      
       try {
-      const response = await tutorApi.post("/createCourse",form,{withCredentials:true} ,{
-        headers: {
-          "Content-Type": "multipart/form-data", 
-        },})
+        const response = await tutorApi.post("/createCourse",form,{withCredentials:true} ,{
+          headers: {
+            "Content-Type": "multipart/form-data", 
+          },
+        })
+        if(response){
+          setLoading(false);
+          swal({
+            icon:"success",
+            title:"Success",
+            text:"course Saved Sucessfully",
+          })
+          navigate("/tutor/courses")
+          
+        }
         console.log(response);
       } catch (error) {
         console.log(error);
+      }finally{
+        setLoading(false)
       }
-
     } else {
       swal({
         icon: "error",
-        text: "some field are empty",
+        text: "some fields are empty",
         title: "validation Error",
       });
+      navigate("tutor/course")
     }
+    
   };
 
   const { totalSections, totalLectures } = getTotalStats();
@@ -175,222 +190,275 @@ export function CourseCreator() {
       )
   );
 
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().trim().required('Course name is required'),
+    description: Yup.string().trim().required('Description is required'),
+    category: Yup.string().required('Category is required'),
+    price: Yup.number().positive('Price must be positive').required('Price is required'),
+    learningObjectives: Yup.array().of(Yup.string().trim().required('Learning objective cannot be empty')),
+    thumbnail: Yup.mixed()
+    .required('Thumbnail is required')
+    .test('fileType', 'Only image files are allowed', (value) => {
+      return value && ['image/jpeg', 'image/png', 'image/jpg'].includes(value.type);
+    })
+    .test('fileSize', 'File size must be less than 2MB', (value) => {
+      return value && value.size <=   1 * 1024 * 1024; // 2MB
+    }),
+    sections: Yup.array().of(
+      Yup.object().shape({
+        title: Yup.string().trim().required('Section title is required'),
+        items: Yup.array().of(
+          Yup.object().shape({
+            title: Yup.string().trim().required('Item title is required'),
+            description: Yup.string().trim().required('Item description is required'),
+            fileUrl: Yup.string().required('File is required'),
+          })
+        ),
+      })
+    ),
+  });
+
   return (
-    <>
-    <form action="" encType="multipart/form-data"  onSubmit={handleSaveCourse}>
+    <Formik
+      initialValues={course}
+      validationSchema={validationSchema}
+      onSubmit={handleSaveCourse}
+      enableReinitialize
+    >
+      {({ values, errors, touched, handleChange, handleBlur, setFieldValue }) => {
+        const addName = (e) => {
+          handleChange(e); 
+          setCourse((prev)=> ({...prev, name:e.target.value}))
+          console.log("New Name Added:", e.target.value); 
+        };
+        const addDescription =(e)=>{
+          handleChange(e)
+          setCourse((prev)=> ({...prev, description:e.target.value}))
+        }
 
-   
-      <div className="max-w-3xl mx-auto py-8 px-4 border focus-visible:bg-none my-20 shadow-md space-y-10">
-        <div className="w-full flex justify-center">
-        <h1 className="font-bold ">Create Course</h1>
-        </div>
-       
-        <Input
-          placeholder="Enter the course Name"
-          className="w-1/2 border "
-          labelPlacement="outside"
-          
-          value={course.name}
-          onChange={(e) => setCourse({ ...course, name: e.target.value })}
-        />
-        <Textarea
-          label="Description"
-          placeholder={course.description}
-          className="border px-2 "
-          onChange={(e) =>
-            setCourse({ ...course, description: e.target.value })
-          }
-          variant="bordered"
-          minRows={3}
-        />
+        const addSelect =(e)=>{
+          handleChange(e)
+          setCourse((prev)=> ({...prev, category:e.target.value}))
+        }
+        const addPrice =(e)=>{
+          handleChange(e)
+          setCourse((prev)=> ({...prev, price:e.target.value}))
 
-        <div className="flex gap-9">
-          <select
-            className="w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            value={course.category}
-            onChange={(e) => setCourse({ ...course, category: e.target.value })}
-          >
-            <option value="" disabled>
-              Select course category
-            </option>
-            {categories.map((category) => (
-              <option key={category.value} value={category.value}>
-                {category.label}
-              </option>
-            ))}
-          </select>
 
-          <div className="w-1/2 relative flex items-center">
-            <span className="absolute left-3 text-gray-500 pointer-events-none">
-              $
-            </span>
-            <input
-              type="number"
-              placeholder="Enter course price"
-              value={course.price}
-              onChange={(e) => setCourse({ ...course, price: e.target.value })}
-              className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-        </div>
+        }
 
-        <div className="space-y-2">
-          <p className="text-sm font-medium">Course Thumbnail</p>
-          <div className="flex items-center gap-4">
-            {course.thumbnail && (
-              <img
-                src={URL.createObjectURL(course.thumbnail)}
-                alt="Course thumbnail preview"
-                className="w-32 h-32 object-cover rounded-lg"
-              />
-            )}
-            <div className="flex-1">
+  
+        return (
+          <Form encType="multipart/form-data">
+            <div className="max-w-3xl mx-auto py-8 px-4 border focus-visible:bg-none my-20 border-black space-y-10 shadow-2xl">
+              <div className="w-full flex justify-center">
+                <h1 className="font-bold text-2xl ">Create Course</h1>
+              </div>
+  
               <Input
-                type="file"
-                accept="image/*"
-                onChange={handleThumbnailChange}
-                variant="bordered"
-                isInvalid={validationErrors.thumbnail}
-                description="Upload a 16:9 image (recommended size: 1280x720px)"
+                placeholder="Enter the course Name"
+                className="w-full border  rounded-md shadow-md focus-visible:not-sr-only"
+                labelPlacement="outside"
+                name="name"
+                value={values.name}
+                onChange={addName} 
+                onBlur={handleBlur}
               />
-            </div>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <p className="text-sm font-medium">What Students Will Learn</p>
-          <div className="flex gap-2">
-            <Input
-              className="flex-1"
-              placeholder="Enter a learning objective"
-              value={newObjective}
-              onChange={(e) => setNewObjective(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === "Enter") {
-                  handleAddObjective();
-                }
-              }}
-              variant="bordered"
-              isInvalid={
-                validationErrors.learningObjectives &&
-                course.learningObjectives.length === 0
-              }
-            />
-            <Button
-              onClick={handleAddObjective}
-              className="flex items-center gap-1"
-            >
-              <Plus className="w-4 h-4" />
-              Add
-            </Button>
-          </div>
-
-          {course.learningObjectives?.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              {course.learningObjectives?.map((objective, index) => (
-                <div key={index} className="flex items-start gap-2 group">
-                  <Check className="w-4 h-4 mt-1 flex-shrink-0 text-blue-500" />
-                  <p className="text-sm flex-1">{objective}</p>
+              <ErrorMessage name="name" component="div" className="text-red-500" />
+  
+              <Textarea
+                label="Description"
+                placeholder={values.description}
+                className="border px-2  rounded-2xl"
+                name="description"
+                onChange={addDescription}
+                onBlur={handleBlur}
+                variant="bordered"
+                minRows={3}
+              />
+              <ErrorMessage name="description" component="div" className="text-red-500" />
+  
+              <div className="flex gap-9">
+                <select
+                  className="w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  value={values.category}
+                  name="category"
+                  onChange={addSelect}
+                  onBlur={handleBlur}
+                >
+                  <option value="" disabled>
+                    Select course category
+                  </option>
+                  {categories.map((category) => (
+                    <option key={category.value} value={category.value}>
+                      {category.label}
+                    </option>
+                  ))}
+                </select>
+                <ErrorMessage name="category" component="div" className="text-red-500" />
+  
+                <div className="w-1/2 relative flex items-center">
+                  <span className="absolute left-3 text-gray-500 pointer-events-none">
+                    $
+                  </span>
+                  <input
+                    type="number"
+                    placeholder="Enter course price"
+                    name="price"
+                    value={values.price}
+                    onChange={addPrice}
+                    onBlur={handleBlur}
+                    className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <ErrorMessage name="price" component="div" className="text-red-500" />
+              </div>
+  
+              <div className="space-y-2">
+                <p className="text-sm font-medium">Course Thumbnail</p>
+                <div className="flex items-center gap-4">
+                  {values.thumbnail && (
+                    <img
+                      src={URL.createObjectURL(values.thumbnail)}
+                      alt="Course thumbnail preview"
+                      className="w-32 h-32 object-cover rounded-lg"
+                    />
+                  )}
+                  <div className="flex-1">
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      
+                      onChange={(e) => {
+                        handleThumbnailChange(e);
+                        setFieldValue("thumbnail", e.currentTarget.files[0]);
+                      }}
+                      variant="bordered"
+                      isInvalid={validationErrors.thumbnail}
+                      description="Upload a 16:9 image (recommended size: 1280x720px)"
+                    />
+               
+                  </div>
+                </div>
+              </div>
+  
+              <div className="space-y-4">
+                <p className="text-sm font-medium">What Students Will Learn</p>
+                <div className="flex gap-2">
+                  <Input
+                    className="flex-1"
+                    placeholder="Enter a learning objective"
+                    value={newObjective}
+                    onChange={(e) => setNewObjective(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter") {
+                        handleAddObjective();
+                      }
+                    }}
+                    variant="bordered"
+                    isInvalid={
+                      validationErrors.learningObjectives &&
+                      values.learningObjectives.length === 0
+                    }
+                  />
                   <Button
-                    isIconOnly
-                    variant="light"
-                    size="sm"
-                    color="danger"
-                    className="opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={() => removeObjective(index)}
+                    onClick={handleAddObjective}
+                    className="flex items-center gap-1"
                   >
-                    ×
+                    <Plus className="w-4 h-4" />
+                    Add
                   </Button>
                 </div>
-              ))}
+  
+                {values.learningObjectives?.length > 0 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    {values.learningObjectives?.map((objective, index) => (
+                      <div key={index} className="flex items-start gap-2 group">
+                        <Check className="w-4 h-4 mt-1 flex-shrink-0 text-blue-500" />
+                        <p className="text-sm flex-1">{objective}</p>
+                        <Button
+                          isIconOnly
+                          variant="light"
+                          size="sm"
+                          color="danger"
+                          className="opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => removeObjective(index)}
+                        >
+                          ×
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
-          )}
-        </div>
-      </div>
-
-      <div className="max-w-3xl mx-auto px-4 border my-5 py-20 mb-28 shadow-md">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-2xl font-bold mb-2">Course Content</h1>
-            <p className="text-default-500">
-              {totalSections} sections • {totalLectures} lectures
-            </p>
-          </div>
-         
-        </div>
-
-        <div className="space-y-4">
-          {course.sections.map((section, index) => (
-            <Section
-              key={section.id}
-              section={section}
-              onUpdate={(updatedSection) =>
-                updateSection(section.id, updatedSection)
-              }
-              onDelete={() => deleteSection(section.id)}
-              error={
-                !!validationErrors[`section_${index}`] ||
-                section.items.some(
-                  (_, itemIndex) =>
-                    !!validationErrors[`item_${index}_${itemIndex}`]
-                )
-              }
-              canAddContent={
-                section.title.trim() !== "" &&
-                section.items.every(
-                  (item) =>
-                    item.title.trim() !== "" &&
-                    item.description.trim() !== "" &&
-                    item.fileUrl !== ""
-                )
-              }
-            />
-          ))}
-
-          {canAddNewSection && (
-            <Button
-              color="primary"
-              onClick={addSection}
-              className="flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4 border" />
-              Add Section
-            </Button>
-          )}
-
-          {course.sections.length === 0 && (
-            <div className="text-center py-12 bg-default-50 rounded-lg">
-              <p className="text-default-500 mb-4">No sections added yet</p>
-              <Button
-                color="primary"
-                onClick={addSection}
-                className="flex items-center gap-2"
-              >
-                <Plus className="w-4 h-4" />
-                Add Your First Section
-              </Button>
+  
+            {/* <div className="max-w-3xl mx-auto px-4 border my-5 py-20 mb-28  border-black shadow-2xl">
+              <div className="flex items-center justify-between mb-8">
+                <div>
+                  <h1 className="text-2xl font-bold mb-2">Course Content</h1>
+                  <p className="text-default-500">
+                    {totalSections} sections • {totalLectures} lectures
+                  </p>
+                </div>
+              </div>
+  
+              <div className="space-y-4">
+                {values.sections.map((section, index) => (
+                  <Section
+                    key={section.id}
+                    section={section}
+                    onUpdate={(updatedSection) => {
+                      updateSection(section.id, updatedSection);
+                      setFieldValue(`sections.${index}`, updatedSection);
+                    }}
+                    onDelete={() => deleteSection(section.id)}
+                    error={
+                      !!validationErrors[`section_${index}`] ||
+                      section.items.some(
+                        (_, itemIndex) =>
+                          !!validationErrors[`item_${index}_${itemIndex}`]
+                      )
+                    }
+                    canAddContent={
+                      section.title.trim() !== "" &&
+                      section.items.every(
+                        (item) =>
+                          item.title.trim() !== "" &&
+                          item.description.trim() !== "" &&
+                          item.fileUrl !== ""
+                      )
+                    }
+                  />
+                ))}
+  
+                {canAddNewSection && (
+                  <Button
+                    color="primary"
+                    onClick={addSection}
+                    className="flex items-center gap-2"
+                  >
+                    <Plus className="w-4 h-4 border" />
+                    Add Section
+                  </Button>
+                )}
+              </div>
+            </div> */}
+  
+            <div className="max-w-3xl  mx-auto  h-20 ">
+              {values.sections.length > 0 && (
+                <Button
+                  color="primary"
+                  type="submit"
+                  className="float-right gap-2 border mb-20 hover:bg-yellow-500 bg-gray-400 text-white"
+                >
+                  Save Course
+                </Button>
+              )}
             </div>
-          )}
-        </div>
-
-        
-      </div>
-<div className="max-w-3xl  mx-auto  h-20 ">
-
-
-      {course.sections.length > 0 && (
-            <Button
-              color="primary"
-              type="submit"
-              
-              className=" float-right gap-2 border mb-20  hover:bg-yellow-500 bg-gray-400 text-white "
-            >
-              Save Course
-            </Button>
-          )}
-</div>
-</form>
-      
-    </>
-  );
-}
+          </Form>
+        );
+      }}
+    </Formik>
+  ) };
+  

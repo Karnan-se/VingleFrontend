@@ -21,7 +21,8 @@ return (
 <Routes>
     <Route path="/register" element={<AdminRegistrationForm/>}/> 
 
-    <Route path={"/login"} element={<LoginPage/>}/>
+    <Route path={"/login"} element={<LoginPage/>}/>''
+    
     <Route  element={<AdminPrivateRoute/>}> 
 
     <Route path="/" element={<Dashboard/>}> 

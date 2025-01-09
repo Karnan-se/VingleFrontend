@@ -11,13 +11,47 @@ import {useNavigate} from  "react-router-dom"
 
 
 const validationSchema = Yup.object().shape({
-  headline: Yup.string().required("Headline is required"),
-  skills: Yup.array().min(1, "At least one skill is required"),
-  degree: Yup.string().required("Degree is required"),
-  qualification: Yup.string().required("Qualification is required"),
-  experience: Yup.string().required("Experience is required"),
+  headline: Yup.string()
+    .trim() 
+    .matches(/.*\S.*/, "Headline cannot be empty or contain only spaces")
+    .required("Headline is required"),
+  skills: Yup.array()
+    .of(
+      Yup.string()
+        .trim()
+        .matches(/.*\S.*/, "Skill cannot be empty or contain only spaces")
+    )
+    .min(1, "At least one skill is required"),
+  degree: Yup.string()
+    .trim()
+    .matches(/.*\S.*/, "Degree cannot be empty or contain only spaces")
+    .required("Degree is required"),
+  qualification: Yup.string()
+    .trim()
+    .matches(/.*\S.*/, "Qualification cannot be empty or contain only spaces")
+    .required("Qualification is required"),
+  experience: Yup.string()
+    .trim()
+    .matches(/.*\S.*/, "Experience cannot be empty or contain only spaces")
+    .required("Experience is required"),
   resume: Yup.mixed().required("Resume is required"),
+  certifications: Yup.array().of(
+    Yup.object().shape({
+      title: Yup.string()
+        .trim()
+        .matches(/.*\S.*/, "Certification title cannot be empty or contain only spaces")
+        .required("Title is required"),
+      issuer: Yup.string()
+        .trim()
+        .matches(/.*\S.*/, "Issuer cannot be empty or contain only spaces")
+        .required("Issuer is required"),
+      date: Yup.date().required("Date is required")
+      .max(new Date(), "Future dates are not allowed"),
+      
+    })
+  ),
 });
+
 
 const CustomInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -185,6 +219,7 @@ export default function InstructorApplicationForm() {
           navigate("/")
   
         } catch (error) {
+          console.log(error)
           
         }
       

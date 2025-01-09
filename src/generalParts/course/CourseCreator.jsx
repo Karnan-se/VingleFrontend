@@ -202,7 +202,7 @@ export function CourseCreator() {
       return value && ['image/jpeg', 'image/png', 'image/jpg'].includes(value.type);
     })
     .test('fileSize', 'File size must be less than 2MB', (value) => {
-      return value && value.size <=   1 * 1024 * 1024; // 2MB
+      return value && value.size <=   5 * 1024 * 1024; // 2MB
     }),
     sections: Yup.array().of(
       Yup.object().shape({

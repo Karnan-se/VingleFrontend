@@ -90,7 +90,7 @@ export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
               onUpdate={(updatedItem) => updateItem(item._id, updatedItem)}
               onDelete={() => deleteItem(item._id)}
               error={error?.items[index]}
-            />
+            />  
           ))}
 
           {

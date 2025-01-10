@@ -2,6 +2,8 @@ import { ChevronDown, ChevronUp, Play, FileText } from "lucide-react";
 import { Section } from "./editableSection";
 import { X } from 'lucide-react';
 import { validateSectionData } from "./validateSectionData";
+import { sectionValidation } from "./sectionValidation";
+import { updateSectionDetail } from "./updateSectionDetail";
 
 import React, { useEffect, useState } from "react";
 import VideoPlayer from "./VideoPlayer";
@@ -11,7 +13,13 @@ export default function CourseSection({ sectionData , setSection }) {
 
   const [error, setError] = useState([]);
   const [editable , setEditable] = useState()
-  const [newSection ,  setNewSection] = useState()
+  const [expandedSections, setExpandedSections] = useState([]);
+  const [item, setItem] = useState();
+  const [isExpanded , setExpanded] = useState(false)
+  const [isAdded , setAdded] = useState(false)
+  const [newSection ,  setNewSection] = useState({title:"" , items:[{title:"", type:"video" ,  duration:"", description:""}]})
+  const [newError, setNewError] = useState({title:"", items:[]})
+ 
 
   const deleteSection =(sectionid)=>{
     const afterDetele = sectionData.filter((section)=> section._id !== sectionid)
@@ -26,21 +34,31 @@ export default function CourseSection({ sectionData , setSection }) {
     setExpanded(true)
   };
 
-  const handleSave = (e )  =>{
+  const handleSave = (e)  =>{
     e.preventDefault();
     
     console.log("saved")
     validateSectionData(setError , sectionData)
-    console.log(error , "Error in form ");
-  }
 
+    const hasError = error.some((err)=> {
+      if(err.title) return true;
+      if(Array.isArray(err.items)){
+        return error.some((itemError)=> itemError.title?.length >0 || itemError.description?.length > 0)
+      }
+      return false;
+    
+  })
+  if(hasError){
+    console.log("form submission is failed")
+    return 
+  } 
 
-
-  const [expandedSections, setExpandedSections] = useState([]);
-  const [item, setItem] = useState();
-  const [isExpanded , setExpanded] = useState(false)
-  const [isAdded , setAdded] = useState(false)
+  //here i can update entire section Data as single otherWise I can choose to update Entire ;
+  updateSectionDetail(editable , sectionData)
   
+
+}
+
 
   const toggleSection = (sectionId) => {
     setExpandedSections((prev) =>
@@ -56,9 +74,17 @@ export default function CourseSection({ sectionData , setSection }) {
    setSection(updated)
   };
 
-  const addnewSection =() =>{
-    const newSect = [{title:"" , items:[{title:"", type:"video" ,  duration:"", description:""}]}]
-    setNewSection(newSect)
+  const updateNewSection = (updatedSection) =>{
+    setNewSection((prevSection) => ({
+      ...prevSection,
+      ...updatedSection,
+    }));
+  }
+
+  const createNewSection =()=>{
+    console.log(newSection , "newSection")
+    sectionValidation(setNewError, newSection)
+    
   }
 
 
@@ -71,147 +97,178 @@ export default function CourseSection({ sectionData , setSection }) {
   );
   const totalDuration = "3h 45m";
 
-  return (
+  
 
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg overflow-hidden">
-
-        {!isAdded ? (  
-          <> 
-
-        {!isExpanded ? (
-          <div className="p-6">
-            <h2 className="text-3xl font-bold mb-6 text-center">Course content</h2>
-            <div className="flex justify-between items-center mb-6 text-sm text-gray-600">
-              <span>
-                {totalSections} sections • {totalLectures} lectures • {totalDuration} total length
-              </span>
-              <button
-                className="text-blue-600 hover:underline"
-                onClick={() => setExpandedSections(expandedSections.length ? [] : sectionData.map((s) => s._id))}
-              >
-                {expandedSections.length ? "Collapse all sections" : "Expand all sections"}
-              </button>
-            </div>
-
-            {sectionData.map((section) => (
-              <div key={section._id} className="mb-4 border border-gray-200 rounded-lg overflow-hidden">
-                <button
-                  onClick={() => toggleSection(section._id)}
-                  className="w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
-                >
-                  <div className="flex items-center">
-                    {expandedSections.includes(section._id) ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-                    <span className="ml-2 font-semibold">{section.title}</span>
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+        <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg overflow-hidden">
+          {!isAdded ? (
+            <>
+              {!isExpanded ? (
+                <div className="p-6">
+                  <h2 className="text-3xl font-bold mb-6 text-center">Course content</h2>
+                  <div className="flex justify-between items-center mb-6 text-sm text-gray-600">
+                    <span>
+                      {totalSections} sections • {totalLectures} lectures • {totalDuration} total length
+                    </span>
+                    <button
+                      className="text-blue-600 hover:underline"
+                      onClick={() =>
+                        setExpandedSections(
+                          expandedSections.length ? [] : sectionData.map((s) => s._id)
+                        )
+                      }
+                    >
+                      {expandedSections.length ? "Collapse all sections" : "Expand all sections"}
+                    </button>
                   </div>
-                  <span className="text-sm text-gray-600">
-                    {section.items.length} lecture{section.items.length !== 1 ? "s" : ""}
-                  </span>
-                </button>
-
-                {expandedSections.includes(section._id) && (
-                  <div className="bg-white">
-                    {section.items.map((item) => (
-                      <div key={item._id} className="flex items-center p-4 hover:bg-gray-50 border-t border-gray-200">
-                        {item.type === "video" ? <Play className="w-5 h-5" /> : <FileText className="w-5 h-5" />}
-                        <div className="ml-3 flex-grow">
-                          <h3 className="font-medium">{item.title}</h3>
-                          {item.description && (
-                            <p className="text-sm text-gray-600 mt-1 cursor-pointer" onClick={() => setItem(item)}>
-                              {item.description}
-                            </p>
+    
+                  {sectionData.map((section) => (
+                    <div
+                      key={section._id}
+                      className="mb-4 border border-gray-200 rounded-lg overflow-hidden"
+                    >
+                      <button
+                        onClick={() => toggleSection(section._id)}
+                        className="w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
+                      >
+                        <div className="flex items-center">
+                          {expandedSections.includes(section._id) ? (
+                            <ChevronUp className="w-5 h-5" />
+                          ) : (
+                            <ChevronDown className="w-5 h-5" />
                           )}
+                          <span className="ml-2 font-semibold">{section.title}</span>
                         </div>
-                        {item.duration && (
-                          <span className="text-sm text-gray-600">{item.duration}</span>
-                        )}
+                        <span className="text-sm text-gray-600">
+                          {section.items.length} lecture
+                          {section.items.length !== 1 ? "s" : ""}
+                        </span>
+                      </button>
+    
+                      {expandedSections.includes(section._id) && (
+                        <div className="bg-white">
+                          {section.items.map((item) => (
+                            <div
+                              key={item._id}
+                              className="flex items-center p-4 hover:bg-gray-50 border-t border-gray-200"
+                            >
+                              {item.type === "video" ? (
+                                <Play className="w-5 h-5" />
+                              ) : (
+                                <FileText className="w-5 h-5" />
+                              )}
+                              <div className="ml-3 flex-grow">
+                                <h3 className="font-medium">{item.title}</h3>
+                                {item.description && (
+                                  <p
+                                    className="text-sm text-gray-600 mt-1 cursor-pointer"
+                                    onClick={() => setItem(item)}
+                                  >
+                                    {item.description}
+                                  </p>
+                                )}
+                              </div>
+                              {item.duration && (
+                                <span className="text-sm text-gray-600">{item.duration}</span>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      <button
+                        className="w-full bg-gray-800 text-white py-2 px-4 hover:bg-gray-700 transition-colors"
+                        onClick={(e) => handleEdit(e, section._id)}
+                      >
+                        Edit
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    className="w-full bg-gray-800 text-white py-2 px-4 hover:bg-gray-700 transition-colors"
+                    onClick={() => {
+                      setAdded(true); // Enable add mode
+                    }}
+                  >
+                    Add new Section
+                  </button>
+                </div>
+              ) : (
+                <div className="p-6 bg-gray-100 border shadow-lg border-black">
+                  {sectionData
+                    .filter((section) => editable === section._id)
+                    .map((section, index) => (
+                      <div key={section._id} className="mb-6">
+                        <Section
+                          key={section._id}
+                          section={section}
+                          onUpdate={(updatedSection) => {
+                            updateSection(section._id, updatedSection);
+                          }}
+                          canAddContent={""}
+                          error={error[index]}
+                          onDelete={() => deleteSection(section._id)}
+                        />
                       </div>
                     ))}
-                   
+                  <div className="mt-6 text-center">
+                    <button
+                      className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-lg font-semibold"
+                      onClick={handleSave}
+                    >
+                      Save Changes
+                    </button>
                   </div>
-                  
-                )}
-                <button
-                  className="w-full bg-gray-800 text-white py-2 px-4 hover:bg-gray-700 transition-colors"
-                  onClick={(e) => handleEdit(e, section._id)}
-                >
-                  Edit
-                </button>
-
-              </div>
-               
-            ))}
-             <button 
-             className="w-full bg-gray-800 text-white py-2 px-4
-              hover:bg-gray-700
-               transition-colors" onClick={()=>addnewSection()}>Add new Section</button>
-          </div>
-          
-
-        ) : (
-          
-          <div className="p-6 bg-gray-100 border shadow-lg border-black">
-            {sectionData
-              .filter((section) => editable === section._id)
-              .map((section, index) => (
-                <div key={section._id} className="mb-6">
-                  <Section
-                    key={section._id}
-                    section={section}
-                    onUpdate={(updatedSection) => {
-                      updateSection(section._id, updatedSection);
-                    }}
-                    canAddContent={""}
-                    error={error[index]}
-                    onDelete={() => deleteSection(section._id)}
-                  />
                 </div>
-              ))}
-            <div className="mt-6 text-center">
-              <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-lg font-semibold" onClick={handleSave}>
-                Save Changes
-              </button>
-
+              )}
+            </>
+          ) : (
+            <>
+           
+            <div className="p-6 bg-gray-100 border shadow-lg border-black">
+              <Section
+                key="new-section"
+                section={newSection} // Empty initial values for new section
+                onUpdate={(newSection) => {
+                  updateNewSection(newSection) // Add new section to the existing data
+                 
+                }}
+                canAddContent={true} // Enable adding content
+                error={newError  } // Empty error object for new section
+                onDelete={() => setAdded(false)} // Cancel add mode
+              />
             </div>
-          </div>
-        )  
-        }
-        </>
 
-      ) :( <>
-      
+            <button
+            className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-lg font-semibold"
+             onClick={createNewSection}
+            >
+                      Save Changes
+                    </button>
 
-      
-      
-      </>) }
-
-
-
-
-
-
-
-      </div>
-
-      {item && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-6 max-w-3xl w-full">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold">{item.title}</h3>
-              <button onClick={() => setItem(null)} className="text-gray-500 hover:text-gray-700">
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-            <VideoPlayer fileUrl={item.fileUrl} />
-          </div>
+            </>
+            
+          ) }
         </div>
-      )}
-    </div>
-  );
-};
+    
+        {item && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-lg p-6 max-w-3xl w-full">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold">{item.title}</h3>
+                <button
+                  onClick={() => setItem(null)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              <VideoPlayer fileUrl={item.fileUrl} />
+            </div>
+          </div>
+        )}
+      </div>
+    );
+    
 
-
-
-
-
-
+  }

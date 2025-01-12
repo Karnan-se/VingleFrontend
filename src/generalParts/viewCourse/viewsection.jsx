@@ -4,12 +4,14 @@ import { X } from 'lucide-react';
 import { validateSectionData } from "./validateSectionData";
 import { sectionValidation } from "./sectionValidation";
 import { updateSectionDetail } from "./updateSectionDetail";
+import { useLoading } from "../preloader/LoadingContext";
 
 import React, { useEffect, useState } from "react";
 import VideoPlayer from "./VideoPlayer";
 
 export default function CourseSection({ sectionData , setSection }) {
   console.log(sectionData, "sectionData");
+  const {isLoading, setLoading} =  useLoading()
 
   const [error, setError] = useState([]);
   const [editable , setEditable] = useState()
@@ -34,29 +36,51 @@ export default function CourseSection({ sectionData , setSection }) {
     setExpanded(true)
   };
 
-  const handleSave = (e)  =>{
+  const handleSave = async (e)  =>{
     e.preventDefault();
     
     console.log("saved")
-    validateSectionData(setError , sectionData)
+   const validationErrors =  validateSectionData(sectionData)
 
-    const hasError = error.some((err)=> {
-      if(err.title) return true;
-      if(Array.isArray(err.items)){
-        return error.some((itemError)=> itemError.title?.length >0 || itemError.description?.length > 0)
-      }
-      return false;
+   const hasError = validationErrors.some((err) => {
+    if (err.title?.length > 0) return true;
+    if (Array.isArray(err.items)) {
+      return err.items.some(
+        (itemError) =>
+          itemError.title?.length > 0 || itemError.description?.length > 0
+      );
+    }
+    return false;
+  });
+
+  if (hasError) {
+    console.log("Form submission failed due to validation errors.");
+    setError(validationErrors); 
+    console.log(validationErrors)
+    return;
+  }
+
+  try {
+
+    setLoading(true);
+    const updatedSection = await  updateSectionDetail(editable , sectionData)
+    console.log(updatedSection , "updatedSection")
+    console.log(sectionData , "section Data is gthe thiosg kjbnkjb")
+    setSection([...updatedSection])
+    setExpanded(false)
+ 
     
-  })
-  if(hasError){
-    console.log("form submission is failed")
-    return 
-  } 
-
-  //here i can update entire section Data as single otherWise I can choose to update Entire ;
-  updateSectionDetail(editable , sectionData)
+  } catch (error) {
+    console.log(error)
+    
+  }finally{
+    setLoading(false)
+  }
+ 
   
 
+
+  
 }
 
 

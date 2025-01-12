@@ -11,7 +11,7 @@ import { setTutorCredentials } from "../../features/authSlice"
 export default function TutorDashboard() {
 
   const tutorInfo = useSelector((state)=> state.tutor.tutorInfo)
-  console.log(tutorInfo, "TutorInfo")
+  
 
   
 

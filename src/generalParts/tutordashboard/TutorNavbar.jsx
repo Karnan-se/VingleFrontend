@@ -19,11 +19,11 @@ const TutorNavbar = () => {
   const userInfo = useSelector((state) => state.user.tutorInfo);
 
   useEffect(() => {
-    console.log(userInfo, "hello tthis is navbar ");
+   
     setState(userInfo);
   }, [userInfo]);
   useEffect(() => {
-    console.log(currState, "chaneged");
+   
   }, [currState]);
 
   // useEffect(()=>{

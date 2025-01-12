@@ -16,7 +16,7 @@ export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
 
   const addItem = (type) => {
     const newItem = {
-      _id: Math.random().toString(36).substr(2, 9),
+      id:Math.floor(Math.random() * 1000000),
       title: '',
       type,
       description: '',
@@ -34,7 +34,7 @@ export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
     onUpdate({
       ...section,
       items: section.items.map((item) =>
-        item._id === itemId ? updatedItem : item
+        item._id === itemId || item.id == itemId ? updatedItem : item
       ),
     })
   }
@@ -42,7 +42,7 @@ export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
   const deleteItem = (itemId) => {
     onUpdate({
       ...section,
-      items: section.items.filter((item) => item._id !== itemId),
+      items: section.items.filter((item) => item._id !== itemId || item.id == itemId),
     })
   }
 
@@ -87,8 +87,8 @@ export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
             <CurriculumItem
               key={index}
               item={item}
-              onUpdate={(updatedItem) => updateItem(item._id, updatedItem)}
-              onDelete={() => deleteItem(item._id)}
+              onUpdate={(updatedItem) => updateItem(item._id || item.id, updatedItem)}
+              onDelete={() => deleteItem(item._id || item.id)}
               error={error?.items[index]}
             />  
           ))}

@@ -5,21 +5,25 @@ import { validateSectionData } from "./validateSectionData";
 import { sectionValidation } from "./sectionValidation";
 import { updateSectionDetail } from "./updateSectionDetail";
 import { useLoading } from "../preloader/LoadingContext";
+import { addNewSection } from "./addnewSection";
+import { useRef } from "react";
 
 import React, { useEffect, useState } from "react";
 import VideoPlayer from "./VideoPlayer";
 
-export default function CourseSection({ sectionData , setSection }) {
+export default function CourseSection({ sectionData , setSection  , course_id}) {
   console.log(sectionData, "sectionData");
   const {isLoading, setLoading} =  useLoading()
 
   const [error, setError] = useState([]);
+  const sectionRef = useRef(null);
   const [editable , setEditable] = useState()
   const [expandedSections, setExpandedSections] = useState([]);
   const [item, setItem] = useState();
   const [isExpanded , setExpanded] = useState(false)
   const [isAdded , setAdded] = useState(false)
   const [newSection ,  setNewSection] = useState({title:"" , items:[{title:"", type:"video" ,  duration:"", description:""}]})
+  
   const [newError, setNewError] = useState({title:"", items:[]})
  
 
@@ -65,6 +69,7 @@ export default function CourseSection({ sectionData , setSection }) {
     setLoading(true);
     const updatedSection = await  updateSectionDetail(editable , sectionData)
     console.log(updatedSection , "updatedSection")
+    sectionRef.current = updatedSection;
     console.log(sectionData , "section Data is gthe thiosg kjbnkjb")
     setSection([...updatedSection])
     setExpanded(false)
@@ -99,16 +104,48 @@ export default function CourseSection({ sectionData , setSection }) {
   };
 
   const updateNewSection = (updatedSection) =>{
+    console.log(updatedSection , "updatedSection")
     setNewSection((prevSection) => ({
       ...prevSection,
       ...updatedSection,
     }));
   }
 
-  const createNewSection =()=>{
-    console.log(newSection , "newSection")
+  const createNewSection = async ()=>{
+ 
     sectionValidation(setNewError, newSection)
-    
+
+
+
+    const hasError = () => {
+      if (newError.title.length > 0) return true;
+      return newError.items.some(
+        (itemError) => itemError.title.length > 0 || itemError.description.length > 0
+      );
+    };
+
+  
+  
+    if (hasError()) {
+      console.log("Form submission failed due to validation errors.");
+      
+      return;
+    }
+    console.log(newSection, "goiung to save")
+
+    const updatedSection = {...newSection}
+    console.log(updatedSection , "updated Section")
+    setLoading(true);
+
+    if(updatedSection){
+      const newSection = await addNewSection(course_id ,  updatedSection)
+      setLoading(false);
+      setExpanded(false)
+      
+    }
+
+  
+  
   }
 
 
@@ -252,14 +289,14 @@ export default function CourseSection({ sectionData , setSection }) {
             <div className="p-6 bg-gray-100 border shadow-lg border-black">
               <Section
                 key="new-section"
-                section={newSection} // Empty initial values for new section
+                section={newSection} 
                 onUpdate={(newSection) => {
-                  updateNewSection(newSection) // Add new section to the existing data
+                  updateNewSection(newSection) 
                  
                 }}
-                canAddContent={true} // Enable adding content
-                error={newError  } // Empty error object for new section
-                onDelete={() => setAdded(false)} // Cancel add mode
+                canAddContent={true} 
+                error={newError  } 
+                onDelete={() => setAdded(false)} 
               />
             </div>
 

@@ -35,7 +35,7 @@ export default function EditCourse(){
     return (
         <>
         {section.length >0 && (  
-        <CourseSection sectionData={section} setSection={setSection}/>
+        <CourseSection sectionData={section} setSection={setSection} course_id={course._id}/>
     )}
 
         </>

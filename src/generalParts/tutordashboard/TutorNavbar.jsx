@@ -16,22 +16,14 @@ const TutorNavbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [currState, setState] = useState();
   const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.user.tutorInfo);
+  const userInfo = useSelector((state) => state.tutor.tutorInfo);
 
   useEffect(() => {
-   
+    console.log("User Info:", userInfo);
     setState(userInfo);
   }, [userInfo]);
-  useEffect(() => {
-   
-  }, [currState]);
+  
 
-  // useEffect(()=>{
-  //   if(!userInfo){
-  //     navigate("/tutor/login")
-  //   }
-
-  // },[])
 
 
 
@@ -40,7 +32,12 @@ const TutorNavbar = () => {
 
   } 
 
+  if(!userInfo){
+    return null;
+  }
+
   return (
+   
     <nav className="bg-black p-4">
       <div className="flex items-center justify-between flex-wrap">
         <div className="flex mx-4">
@@ -75,7 +72,7 @@ const TutorNavbar = () => {
           <Dropdown>
             <DropdownTrigger>
               <img
-                src={userInfo?.photo || ""}
+                src={userInfo.photo}
                 alt="profile"
                 className="w-8 h-8 rounded-full border border-gray-200 cursor-pointer"
               />
@@ -85,7 +82,7 @@ const TutorNavbar = () => {
                 key="profile"
                 className="py-3 hover:bg-slate-200 px-5"
               >
-                <NavLink to="/profile" className="w-full">
+                <NavLink to="/tutor/profile" className="w-full">
                   View Profile
                 </NavLink>
               </DropdownItem>
@@ -109,7 +106,9 @@ const TutorNavbar = () => {
         </div>
       </div>
     </nav>
+  
   );
+  
 };
 
 export default TutorNavbar;

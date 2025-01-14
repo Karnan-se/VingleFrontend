@@ -156,6 +156,9 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
   const totalDuration = "3h 45m";
 
   return (
+    <>
+    
+    
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg overflow-hidden">
         {!isAdded ? (
@@ -331,5 +334,6 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
         </div>
       )}
     </div>
+    </>
   );
 }

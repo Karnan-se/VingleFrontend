@@ -7,11 +7,12 @@ import { Section } from "./section";
 import { Input } from "@nextui-org/react";
 import { Check } from 'lucide-react';
 import { Textarea } from "@nextui-org/react";
-import { tutorApi } from "../../axios/axiosInstance";
+import { adminApi, tutorApi } from "../../axios/axiosInstance";
 import { useSelector } from "react-redux";
 import { createformData } from "../../features/formData/createFormData";
 import { Formik, Form, ErrorMessage } from 'formik';
 import { useLoading } from "../preloader/LoadingContext";
+
 
 import * as Yup from 'yup';
 import { useNavigate } from "react-router-dom";
@@ -23,6 +24,7 @@ export function CourseCreator() {
   const navigate =useNavigate(); 
  
   const tutorInfo = useSelector((state) => state.tutor.tutorInfo);
+  const [categories , setCategories] = useState()
 
   const [course, setCourse] = useState({
     name: "",
@@ -38,15 +40,24 @@ export function CourseCreator() {
 
   const [validationErrors, setValidationErrors] = useState({});
 
+useEffect(()=>{
+ const fetchCategory = async ()=>{
+  const categoriesStored = await adminApi.get("/getCategories")
+  
+  const category =categoriesStored.data.data.map((category)=> ({ ...category, value:category.name,  }))
 
+  setCategories(category)
+  console.log(category , "category")
+  
+  return category
+
+ }
+ fetchCategory()
+
+},[])
  
 
-  const categories = [
-    { value: "development", label: "Development" },
-    { value: "business", label: "Business" },
-    { value: "design", label: "Design" },
-    { value: "marketing", label: "Marketing" },
-  ];
+
 
   const handleThumbnailChange = (e) => {
     const file = e.target.files?.[0];
@@ -202,7 +213,7 @@ export function CourseCreator() {
       return value && ['image/jpeg', 'image/png', 'image/jpg'].includes(value.type);
     })
     .test('fileSize', 'File size must be less than 2MB', (value) => {
-      return value && value.size <=   5 * 1024 * 1024; // 2MB
+      return value && value.size <=   5 * 1024 * 1024; 
     }),
     sections: Yup.array().of(
       Yup.object().shape({
@@ -249,8 +260,14 @@ export function CourseCreator() {
 
   
         return (
+          <>
+          <div className="w-full">
+
+          
+          
+        
           <Form encType="multipart/form-data">
-            <div className="max-w-3xl mx-auto py-8 px-4 border focus-visible:bg-none my-20 border-black space-y-10 shadow-2xl">
+            <div className="max-w-3xl mx-auto py-8 px-4 border focus-visible:bg-none my-20 border-black space-y-10 shadow-2xl ">
               <div className="w-full flex justify-center">
                 <h1 className="font-bold text-2xl ">Create Course</h1>
               </div>
@@ -279,6 +296,7 @@ export function CourseCreator() {
               <ErrorMessage name="description" component="div" className="text-red-500" />
   
               <div className="flex gap-9">
+                {categories && ( 
                 <select
                   className="w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={values.category}
@@ -290,11 +308,12 @@ export function CourseCreator() {
                     Select course category
                   </option>
                   {categories.map((category) => (
-                    <option key={category.value} value={category.value}>
-                      {category.label}
+                    <option key={category.value} value={category._id}>
+                      {category.value}
                     </option>
                   ))}
                 </select>
+                )}
                 <ErrorMessage name="category" component="div" className="text-red-500" />
   
                 <div className="w-1/2 relative flex items-center">
@@ -457,8 +476,11 @@ export function CourseCreator() {
               )}
             </div>
           </Form>
+          </div>
+          </>
         );
       }}
     </Formik>
+    
   ) };
   

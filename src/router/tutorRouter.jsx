@@ -9,6 +9,7 @@ import ProfileMain from "../generalParts/profile/profileMain";
 import CourseTable from "../generalParts/tutorprofilePage/coursetable";
 import { CourseCreator } from "../generalParts/course/CourseCreator";
 import EditCourse from "../generalParts/viewCourse/editCourse";
+import PhotoMain from "../generalParts/profile/photoMain";
 
 function TutorLogin(){
     return (
@@ -20,6 +21,8 @@ function TutorLogin(){
     <Route index element={<DashboardMain/>} />
     <Route path="profile" element={<ProfileMain/>} />
     <Route path="courses" element={<CourseTable/>} />
+    <Route path="photo" element={<PhotoMain/>} />
+
     <Route path="courseCreate" element={<CourseCreator/>}></Route>
     <Route path="editCourse" element={<EditCourse/>}></Route>
     </Route>

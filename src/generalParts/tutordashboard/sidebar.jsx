@@ -17,6 +17,12 @@ const navItems = [
     icon: User
   },
   {
+    name: 'photo',
+    href: '/tutor/photo',
+    icon: User
+  },
+
+  {
     name: 'Courses',
     href: '/tutor/courses',
     icon: BookOpen
@@ -36,7 +42,7 @@ const navItems = [
 
 export default function Sidebar() {
   return (
-    <Card className="h-screen w-64 rounded-none border-r border-divider bg-background">
+    <Card className="h-full  w-72 rounded-none border-r border-divider ">
       <div className="flex flex-col gap-2 p-4">
         {navItems.map((item) => (
           <NavLink

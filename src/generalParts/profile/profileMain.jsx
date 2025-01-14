@@ -31,13 +31,31 @@ export default function ProfileMain({}){
         validationSchema: Yup.object({
           firstName: Yup.string()
             .required('First name is required')
-            .matches(/^[A-Za-z\s]+$/, 'First name should not contain numbers'),
+            .matches(/^[A-Za-z\s]+$/, 'First name should not contain numbers')
+            .test(
+              'not-empty-space',
+              'Only empty space is not valid',
+              (value) => value?.trim().length > 0
+            ),
+        
           lastName: Yup.string()
             .required('Last name is required')
-            .matches(/^[A-Za-z\s]+$/, 'Last name should not contain numbers'),
+            .matches(/^[A-Za-z\s]+$/, 'Last name should not contain numbers')
+            .test(
+              'not-empty-space',
+              'Only empty space is not valid',
+              (value) => value?.trim().length > 0
+            ),
+        
           phoneNumber: Yup.string()
             .required('Phone number is required')
-            .matches(/^[+]?\d{10,15}$/, 'Enter a valid phone number'),
+            .matches(/^[+]?\d{10,15}$/, 'Enter a valid phone number')
+            .test(
+              'not-empty-space',
+              'Only empty space is not valid',
+              (value) => value?.trim().length > 0
+            ),
+        
           twitter: Yup.string()
             .url('Invalid URL format')
             .matches(
@@ -49,8 +67,10 @@ export default function ProfileMain({}){
             .matches(
               /^https?:\/\/(www\.)?linkedin\.com\/[a-zA-Z0-9\-_\/]+$/,
               'Enter a valid LinkedIn URL'
-            ),
+            )
+           
         }),
+        
         
     
         onSubmit: async (values) => {

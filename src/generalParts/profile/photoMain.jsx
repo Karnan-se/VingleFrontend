@@ -5,16 +5,18 @@ import { userApi } from "../../axios/axiosInstance";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setUserCredentials } from "../../features/authSlice";
+import { useOutletContext } from "react-router-dom";
 
 export default function PhotoMain() {
 
 
   const dispatch = useDispatch()
+  const {userUpdate , userDetail, setUserCredentials } = useOutletContext()
   
-  const [image, setImage] = useState(null); // Image preview
-  const [file, setFile] = useState(null); // Raw file for upload
+  const [image, setImage] = useState(null); 
+  const [file, setFile] = useState(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null); 
-  const userInfo = useSelector((state=> state.user.userInfo))
+  
 
   const UPLOAD_PRESET = "ml_default";
   const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/deubjmlf3/image/upload";
@@ -59,7 +61,7 @@ export default function PhotoMain() {
       setUploadedImageUrl(data.secure_url); 
       const photo = data.secure_url;
       let  values  ={
-        emailAddress:userInfo.emailAddress,
+        emailAddress:userDetail.emailAddress,
         photo : data.secure_url
       }
       const backend = await userUpdate(values)
@@ -82,7 +84,7 @@ export default function PhotoMain() {
   };
 
   return (
-    <div className="bg-white border rounded-lg p-6 w-screen">
+    <div className="bg-white border rounded-lg p-6 w-full">
       <div className="mb-8">
         <h1 className="text-2xl font-semibold mb-2">Photo</h1>
         <p className="text-gray-600">Add a nice photo of yourself</p>

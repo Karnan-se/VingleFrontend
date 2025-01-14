@@ -20,9 +20,7 @@ const Navbar = () => {
    setState(userInfo)
 
    },[userInfo])
-   useEffect(()=>{
-    
-   },[currState])
+ 
   
 
   const dispatch = useDispatch()

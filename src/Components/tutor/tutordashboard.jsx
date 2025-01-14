@@ -16,16 +16,25 @@ export default function TutorDashboard() {
   
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
+    
       
       <main className="flex-1">
-      <TutorNavbar/>
+        <div>
+          <TutorNavbar/>
 
+        </div>
+        <div className="flex ">
+      <Sidebar />
+      
+      <div className="w-full">
+
+     
       <Outlet context={{userUpdate : tutorUpdate, userDetail:tutorInfo, setUserCredentials: setTutorCredentials}}/>
+      </div>
+      </div>
         
       </main>
-    </div>
+  
   )
 }
 

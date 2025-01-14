@@ -42,9 +42,13 @@ export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
   const deleteItem = (itemId) => {
     onUpdate({
       ...section,
-      items: section.items.filter((item) => item._id !== itemId || item.id == itemId),
-    })
-  }
+      items: section.items.filter(
+        (item) =>
+          !(item._id === itemId || item.id === itemId) // Only exclude when either `_id` or `id` matches
+      ),
+    });
+  };
+  
 
 
   return (

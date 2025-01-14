@@ -97,10 +97,11 @@ export function CurriculumItem({ item, onUpdate, onDelete, error }) {
               accept={item.type === 'video' ? 'video/*' : 'application/pdf'}
               onChange={saveVideo}
               variant="bordered"
-              isInvalid={error && !item.fileUrl}
-              errorMessage={error && !item.fileUrl ? "Content file is required" : ""}
-              color={error && !item.fileUrl ? "danger" : "default"}
+             
             />
+            {error?.fileUrl && (
+            <p className="text-sm text-danger mt-1">{error.fileUrl}</p> )}
+            
           </div>
           <div className="flex items-center space-x-2">
           

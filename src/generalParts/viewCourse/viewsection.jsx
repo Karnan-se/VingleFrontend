@@ -33,9 +33,7 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
 
   const [newError, setNewError] = useState({ title: "", items: [] });
 
-  useEffect(() => {
-    setLoading(false);
-  }, [sectionData]);
+
 
   const deleteSection = (sectionid) => {
     const afterDetele = sectionData.filter(
@@ -115,11 +113,11 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
   };
 
   const createNewSection = async () => {
-    sectionValidation(setNewError, newSection);
+   const addError = sectionValidation(newSection);
 
     const hasError = () => {
-      if (newError.title.length > 0) return true;
-      return newError.items.some(
+      if (addError.title.length > 0) return true;
+      return addError.items.some(
         (itemError) =>
           itemError.title.length > 0 || itemError.description.length > 0
       );
@@ -127,7 +125,7 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
 
     if (hasError()) {
       console.log("Form submission failed due to validation errors.");
-
+      setNewError(addError)
       return;
     }
     console.log(newSection, "goiung to save");
@@ -140,12 +138,13 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
       if (updatedSection) {
         const newSection = await addNewSection(course_id, updatedSection)
       }
-      navigate("tutor/editCourse")
+      setExpanded(false);
+      
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
-      setExpanded(false);
+    
     }
   };
 

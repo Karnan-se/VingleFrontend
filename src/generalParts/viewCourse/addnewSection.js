@@ -19,12 +19,11 @@ export const addNewSection =  async (course_id, newSection)=>{
     try {
         console.log("sent")
         const response = await tutorApi.post("/addnewSection" ,formData , {headers:{"Content-Type": "multipart/form-data", } })
-        console.log(response)
+        console.log(response.data)
         return response
         
     } catch (error) {
         console.log(error)
 
-        
     }
 }

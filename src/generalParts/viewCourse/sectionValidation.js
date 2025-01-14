@@ -1,4 +1,4 @@
-export const sectionValidation = (setNewError, newSection) => {
+export const sectionValidation = (newSection) => {
     console.log(newSection, "New Section Data from validation");
   
     const newError = { title: "", items: [] };
@@ -16,19 +16,13 @@ export const sectionValidation = (setNewError, newSection) => {
         if (!item.title || item.title.trim().length === 0) {
           itemErrors.title = "Item title is required.";
         }
-  
-      
-        if (!item.type || item.type.trim().length === 0) {
-          itemErrors.type = "Item type is required.";
-        }
-  
-
-        if (!item.duration || item.duration.trim().length === 0) {
-          itemErrors.duration = "Item duration is required.";
-        }
  
         if (!item.description || item.description.trim().length === 0) {
           itemErrors.description = "Item description is required.";
+        }
+
+        if(!item.fileUrl){
+          itemErrors.fileUrl = "please choose the file "
         }
   
         return itemErrors;
@@ -38,6 +32,6 @@ export const sectionValidation = (setNewError, newSection) => {
     }
   
     console.log(newError, "Generated Errors for New Section");
-    setNewError(newError);
+    return newError;
   };
   

@@ -2,10 +2,10 @@ import { userApi } from "../../axios/axiosInstance"
 
 
 
-export const confirmPayment = async (price, courseName , courseImage)=>{
+export const confirmPayment = async (price, courseName , courseImage , userInfo, course)=>{
     console.log("api call ")
     try {
-        const confirm = await userApi.post("/create-checkout-session",{price,courseName , courseImage })
+        const confirm = await userApi.post("/create-checkout-session",{price,courseName , courseImage , userInfo, course })
         console.log(confirm.data)
         return confirm.data
 

@@ -18,6 +18,7 @@ import {loadStripe} from  "@stripe/stripe-js"
 import {Elements, CardElement , useStripe, useElements} from "@stripe/react-stripe-js"
 const PublishableKey = import.meta.env.VITE_Publishable_key
 const stripePromise = loadStripe(PublishableKey)
+import ThankYouPage from "../generalParts/thankyou/success.jsx";
 
 
 
@@ -49,6 +50,7 @@ function UserRouter(){
                 </Route>
                 <Route path="/courseDetail" element={<Elements stripe={stripePromise}>  <CourseDetails/>   </Elements>  }></Route>
                 <Route path="/beaInstructor"  element={<InstructorApplicationForm/>}></Route>
+                <Route path="/success" element={<ThankYouPage/>}></Route>
 
                 
                 

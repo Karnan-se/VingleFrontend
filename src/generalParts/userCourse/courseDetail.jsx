@@ -38,6 +38,17 @@ export default function CourseDetail({userInfo}) {
         : [...prev, sectionId]
     );
   };
+
+  useEffect(()=>{
+    async function fetchOrderDetails(){
+      const orders = await isOrderPlaced(course._id, userInfo._id)
+
+    }
+    fetchOrderDetails();
+
+  },[])
+
+
  
 
 
@@ -46,12 +57,14 @@ export default function CourseDetail({userInfo}) {
     
    
   try {
-    const paymentDetail = await confirmPayment(course.price , course.name , course.thumbnail)
+    const paymentDetail = await confirmPayment(course.price , course.name , course.thumbnail , userInfo , course )
            if(paymentDetail){
             console.log(paymentDetail)
+            window.location.href =paymentDetail.url
            }
     
   } catch (error) {
+    console.log(error)
     
   }
   //  setModalOpen(true)
@@ -163,6 +176,9 @@ export default function CourseDetail({userInfo}) {
             
           </div>
         </div>
+
+
+
 
 
 

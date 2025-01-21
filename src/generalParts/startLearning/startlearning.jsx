@@ -1,88 +1,18 @@
-'use client'
-
-import React, { useState } from 'react'
-import Navbar from '../landipage/Navbar'
-import { lazy  } from 'react'
+import React, { useEffect, useState } from 'react'
 import VideoPlayer from '../viewCourse/VideoPlayer'
+import { isProgressTracked } from '../../features/api/isProgreesTracked'
+import { createProgress } from '../../features/api/isProgreesTracked'
+import { useSelector } from 'react-redux'
 
+import {Star,PlayCircle, ChevronDown} from 'lucide-react'
 
-import {
-    Star,
-    PlayCircle, ChevronDown} from 'lucide-react'
-
-
-
-const course = {
-  name: "MERN Stack Development",
-  sections: [
-    {
-      _id: 1,
-      title: "Getting Started with MERN",
-      items: [
-        {
-          _id: 101,
-          title: "Introduction to MERN Stack",
-          description: "Overview of MongoDB, Express, React, and Node.js",
-          duration: 15
-        },
-        {
-          _id: 102,
-          title: "Setting Up Your Development Environment",
-          description: "Installing necessary tools and configurations",
-          duration: 20
-        }
-      ]
-    },
-    {
-      _id: 2,
-      title: "Backend Development",
-      items: [
-        {
-          _id: 201,
-          title: "Node.js Fundamentals",
-          description: "Core concepts of Node.js and server-side JavaScript",
-          duration: 25,
-          fileUrl: "https://res.cloudinary.com/deubjmlf3/video/upload/v1735822852/Video_uploads/all-new-honda-elevate-you-re-the-chase-1080-publer.io.mp4-1735822842969._bpqcv3.mp4"
-        },
-        {
-          _id: 202,
-          title: "MongoDB Database Design",
-          description: "Creating and managing MongoDB databases",
-          duration: 30
-        }
-      ]
-    },
-    {
-      _id: 3,
-      title: "Frontend Development",
-      items: [
-        {
-          _id: 301,
-          title: "React Components and Props",
-          description: "Building reusable React components",
-          duration: 35
-        },
-        {
-          _id: 302,
-          title: "State Management with Redux",
-          description: "Managing application state effectively",
-          duration: 40
-        }
-      ]
-    }
-  ],
-  tutor: {
-    _id: "t123",
-    name: "Robert James",
-    role: "UI/UX Designer",
-    courses: 56,
-    rating: 4.9,
-    reviews: 76235,
-    avatar: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-31pAZmxEGjPANbrsNdTUJrMSKGzbrT.png"
-  }
-}
 
 export default function LearningComponent({course}) {
+
+  const userInfo = useSelector((state)=> state.user.userInfo)
+  const [progress, setProgress] = useState()
+
+
 
   console.log(course , "course")
 
@@ -95,6 +25,36 @@ export default function LearningComponent({course}) {
         : [...prev, sectionId]
     );
   };
+
+  useEffect(() => {
+    async function getProgress() {
+      try {
+        const progress = await isProgressTracked(userInfo._id, course._id);
+        if (progress?.message === "not tracked") {
+          const create = await createProgress(userInfo._id, course._id);
+          console.log(create, "create");
+          return create?.Progress; 
+        }
+
+        return progress?.Progress;
+      } catch (error) {
+        console.error("Error fetching or creating progress:", error);
+        return null; 
+      }
+    }
+ 
+    getProgress().then((result) => {
+      if (result) {
+        setProgress(result); 
+      }
+    });
+  }, [userInfo._id, course._id]);
+
+  console.log(progress, "progreress")
+
+  const updatePercentage = (percentage)=>{
+
+  }
   return (
     <>
     
@@ -171,7 +131,7 @@ export default function LearningComponent({course}) {
             </div>
             <div className='flex p-5 min-w-3xl'>
               {fileUrl  && ( <>
-                <VideoPlayer fileUrl={fileUrl}></VideoPlayer>
+                <VideoPlayer fileUrl={fileUrl} updatePercentage ={(percentage)=>updatePercentage(percentage)} />
               </>)}
            
 

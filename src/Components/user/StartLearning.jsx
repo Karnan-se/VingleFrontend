@@ -9,15 +9,14 @@ export default function StartLearning(){
 
     const location = useLocation();
     const {course } = location.state || {}
-    useEffect(()=>{
-        function getCourseDetails(){
-            
+    // useEffect(()=>{
+    //     async function getCourseDetails(){
+    //         const isProgressTracked =  await isProgressTracked()
 
+    //     }
+    //     getCourseDetails();
 
-        }
-        getCourseDetails();
-
-    },[])
+    // },[])
     return (
         <>
         <Navbar></Navbar>

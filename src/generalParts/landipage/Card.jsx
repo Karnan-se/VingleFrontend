@@ -1,6 +1,8 @@
-import { Card, CardBody, CardFooter, Button } from "@nextui-org/react"
+import {  CardBody,  } from "@nextui-org/react"
 
 export default function ImageCard({ImageLink , navigate}){
+
+  console.log(ImageLink, "image Link")
 
 
     return(

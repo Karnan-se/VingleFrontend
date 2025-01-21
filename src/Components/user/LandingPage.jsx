@@ -69,18 +69,6 @@ const courseDetail =(courseDetail) =>{
 
 
 
-
-
-
-  // const courseData = {
-  //   name: "The Complete AI-powered Copywriting Course & ChatGPT",
-  //   tutorId: {firstname: "karnan"},
-  //   rating: 4.5,
-  //   students: 3099,
-  //   price: 599,
-  //   thumbnail:"https://nextui.org/images/hero-card.jpeg"
-  // }
-
   return (
     <>
     { course && (

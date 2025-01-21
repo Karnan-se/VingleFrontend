@@ -10,7 +10,11 @@ export default function VideoPlayer({ fileUrl }) {
             className="w-full"
           />
         ) : (
-          <p>Invalid or missing video URL</p>
+          <div className="items-center w-full bg-black text-center  ">
+             <p>Invalid or missing video URL</p>
+
+          </div>
+         
         )}
       </div>
     );

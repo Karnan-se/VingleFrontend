@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { Trash2, GripVertical, FileVideo, FileText } from 'lucide-react'
 import { Button, Input, Switch, Textarea } from '@nextui-org/react'
-import VideoPlayer from '../viewCourse/VideoPlayer'
+// import VideoPlayer from '../viewCourse/VideoPlayer'
+import VideoPlayer1 from '../viewCourse/VideoPlayerEditCourse'
 
 export function CurriculumItem({ item, onUpdate, onDelete, error }) {
   const [isExpanded, setIsExpanded] = useState(false)
@@ -87,7 +88,7 @@ export function CurriculumItem({ item, onUpdate, onDelete, error }) {
 
             {item.fileUrl ? (<>
             <div className='w-120'>
-            <VideoPlayer fileUrl={video? video : item.fileUrl || ""} />
+            <VideoPlayer1 fileUrl={video? video : item.fileUrl || ""} />
 
             </div>
             </>):("")}

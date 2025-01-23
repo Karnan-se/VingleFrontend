@@ -1,70 +1,84 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react"
 
-export default function VideoPlayer({ fileUrl, updatePercentage}) {
-  const videoRef = useRef(null);
-  const [watchedRanges, setWatchedRanges] = useState([]); 
-  const [percentageWatched, setPercentageWatched] = useState(0);
-  const [totalDuration, setTotalDuration] = useState(0);
+export default function VideoPlayer({ fileUrl, updatePercentage, initialPercentage, itemId }) {
+  const videoRef = useRef(null)
+  const [watchedRanges, setWatchedRanges] = useState([])
+  const [percentageWatched, setPercentageWatched] = useState(initialPercentage || 0)
+  const [totalDuration, setTotalDuration] = useState(0)
+  const initialPercentageRef = useRef(initialPercentage)
 
+  useEffect(() => {
+    initialPercentageRef.current = initialPercentage
+    setPercentageWatched(initialPercentage || 0)
+  }, [initialPercentage, itemId])
 
   const mergeRanges = (ranges) => {
-    if (ranges.length === 0) return [];
-    const sorted = [...ranges].sort((a, b) => a.start - b.start);
-    const merged = [sorted[0]];
+    if (ranges.length === 0) return []
+    const sorted = [...ranges].sort((a, b) => a.start - b.start)
+    const merged = [sorted[0]]
 
     for (let i = 1; i < sorted.length; i++) {
-      const last = merged[merged.length - 1];
+      const last = merged[merged.length - 1]
       if (sorted[i].start <= last.end) {
-        last.end = Math.max(last.end, sorted[i].end); 
+        last.end = Math.max(last.end, sorted[i].end)
       } else {
-        merged.push(sorted[i]);
+        merged.push(sorted[i])
       }
     }
 
-    return merged;
-  };
+    return merged
+  }
 
-  
   const calculateWatchedTime = (ranges) => {
-    return ranges.reduce((sum, range) => sum + (range.end - range.start), 0);
-  };
+    return ranges.reduce((sum, range) => sum + (range.end - range.start), 0)
+  }
 
   const handleTimeUpdate = () => {
-    const currentTime = videoRef.current?.currentTime || 0;
-
-    
-    setWatchedRanges((prev) => {
-      const updatedRanges = [...prev, { start: currentTime, end: currentTime + 1 }];
-      return mergeRanges(updatedRanges);
-    });
-  };
+    if (videoRef.current && totalDuration > 0) {
+      const currentTime = videoRef.current.currentTime
+      const percentage = Math.min((currentTime / totalDuration) * 100, 100)
+      setPercentageWatched(Math.max(percentage, initialPercentageRef.current).toFixed(2))
+    }
+  }
 
   const handleSeek = () => {
-    const currentTime = videoRef.current?.currentTime || 0;
-
-    
-    setWatchedRanges((prev) =>
-      mergeRanges([...prev, { start: currentTime, end: currentTime }])
-    );
-  };
+    const currentTime = videoRef.current?.currentTime || 0
+    setWatchedRanges((prev) => mergeRanges([...prev, { start: currentTime, end: currentTime }]))
+  }
 
   const handleLoadedMetadata = () => {
-    const duration = videoRef.current?.duration || 0;
-    setTotalDuration(duration);
-  };
+    const duration = videoRef.current?.duration || 0
+    setTotalDuration(duration)
+
+    if (initialPercentageRef.current > 0 && videoRef.current) {
+      videoRef.current.currentTime = (initialPercentageRef.current / 100) * duration
+    }
+  }
+
+  useEffect(() => {
+    if (totalDuration > 0 && videoRef.current) {
+      const watchedTime = videoRef.current.currentTime
+      const percentage = Math.min((watchedTime / totalDuration) * 100, 100)
+      setPercentageWatched(Math.max(percentage, initialPercentageRef.current).toFixed(2))
+    }
+  }, [totalDuration])
 
   useEffect(() => {
     if (totalDuration > 0) {
-      const watchedTime = calculateWatchedTime(watchedRanges);
-      const percentage = Math.min((watchedTime / totalDuration) * 100, 100); // Cap at 100%
-      setPercentageWatched(percentage.toFixed(2));
+      const watchedTime = calculateWatchedTime(watchedRanges)
+      const percentage = Math.min((watchedTime / totalDuration) * 100, 100)
+      setPercentageWatched(Math.max(percentage, initialPercentageRef.current).toFixed(2))
     }
-  }, [watchedRanges, totalDuration]);
+  }, [watchedRanges, totalDuration])
 
   useEffect(() => {
-    console.log(`Watched Ranges: `, watchedRanges);
-    console.log(`Percentage Watched: ${percentageWatched}%`);
-  }, [watchedRanges, percentageWatched]);
+    const intervalId = setInterval(() => {
+      updatePercentage(percentageWatched, itemId )
+    }, 1000)
+   
+
+    return () => clearInterval(intervalId)
+  }, [percentageWatched, updatePercentage, itemId])
 
   return (
     <div>
@@ -88,5 +102,6 @@ export default function VideoPlayer({ fileUrl, updatePercentage}) {
         <p>Percentage Watched: {percentageWatched}%</p>
       </div>
     </div>
-  );
+  )
 }
+

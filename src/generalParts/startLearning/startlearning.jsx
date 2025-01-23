@@ -1,23 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import VideoPlayer from '../viewCourse/VideoPlayer'
-import { isProgressTracked } from '../../features/api/isProgreesTracked'
-import { createProgress } from '../../features/api/isProgreesTracked'
-import { useSelector } from 'react-redux'
+import React, { useEffect, useState } from "react";
+import VideoPlayer from "../viewCourse/VideoPlayer";
+import { isProgressTracked } from "../../features/api/isProgreesTracked";
+import { createProgress } from "../../features/api/isProgreesTracked";
+import { useSelector } from "react-redux";
+import { updateProgress } from "../../features/api/isProgreesTracked";
+import ProgressBar from "./ProgressBar";
 
-import {Star,PlayCircle, ChevronDown} from 'lucide-react'
+import { Star, PlayCircle, ChevronDown } from "lucide-react";
 
-
-export default function LearningComponent({course}) {
-
-  const userInfo = useSelector((state)=> state.user.userInfo)
-  const [progress, setProgress] = useState()
-
-
-
-  console.log(course , "course")
+export default function LearningComponent({ course }) {
+  const userInfo = useSelector((state) => state.user.userInfo);
+  const [progress, setProgress] = useState();
+  const [itemsId, setItems] = useState();
 
   const [openSections, setOpenSections] = useState([]);
-  const [fileUrl, setFileUrl] =useState();
+  const [fileUrl, setFileUrl] = useState();
   const toggleSection = (sectionId) => {
     setOpenSections((prev) =>
       prev.includes(sectionId)
@@ -26,40 +23,91 @@ export default function LearningComponent({course}) {
     );
   };
 
+  let itemId;
+  if (course) {
+    itemId = course.sections
+      .flatMap((section) => section.items)
+      .map((item) => item._id);
+  }
+
   useEffect(() => {
     async function getProgress() {
       try {
-        const progress = await isProgressTracked(userInfo._id, course._id);
+        const progress = await isProgressTracked(
+          userInfo._id,
+          course._id,
+          itemId
+        );
         if (progress?.message === "not tracked") {
-          const create = await createProgress(userInfo._id, course._id);
+          const create = await createProgress(userInfo._id, course._id, itemId);
           console.log(create, "create");
-          return create?.Progress; 
+          return create?.Progress;
         }
 
         return progress?.Progress;
       } catch (error) {
         console.error("Error fetching or creating progress:", error);
-        return null; 
+        return null;
       }
     }
- 
+
     getProgress().then((result) => {
       if (result) {
-        setProgress(result); 
+        console.log(result, "result tesult");
+        const newProgress = result;
+
+        console.log(newProgress, "progress Progress");
+
+        setProgress(newProgress);
       }
     });
   }, [userInfo._id, course._id]);
 
-  console.log(progress, "progreress")
+  const updatePercentage = async (percentage, itemId) => {
+    console.log(percentage, "percentage");
+    const numericPercentage = Number(percentage);
+    if (!progress) return;
 
-  const updatePercentage = (percentage)=>{
+    const updatedProgress = {
+      ...progress,
+      completedItems: progress.completedItems.map((item) =>
+        item.itemId.toString() === itemId.toString()
+          ? { ...item, percentageCompleted: Number.parseFloat(percentage) }
+          : item
+      ),
+    };
+    console.log(updatedProgress, "updted Progrress");
 
-  }
+    setProgress(updatedProgress);
+    try {
+      const updatedProgress = await updateProgress(
+        userInfo._id,
+        course._id,
+        itemId,
+        numericPercentage
+      );
+    } catch (error) {
+      console.error("Error updating progress:", error);
+    }
+  };
+
+  const handlefileUrl = (fileUrl, itemId) => {
+    setFileUrl(fileUrl);
+    setItems(itemId);
+  };
+
+  const getCurrentItemPercentage = () => {
+    // if (!progress || !itemsId) return 0
+    const currentItem = progress.completedItems.find(
+      (item) => item.itemId.toString() === itemsId.toString()
+    );
+    console.log(currentItem.percentageCompleted, "total percentage");
+    return currentItem.percentageCompleted;
+  };
   return (
     <>
-    
-      <div className="min-h-screen bg-gray-50"> 
-     <div className="bg-black text-white p-8">
+      <div className="min-h-screen bg-gray-50">
+        <div className="bg-black text-white p-8">
           <div className="max-w-6xl mx-auto">
             <h1 className="text-3xl font-bold mb-4">{course.name}</h1>
             <p className="mb-4">{course.description}</p>
@@ -78,43 +126,50 @@ export default function LearningComponent({course}) {
             <p className="mt-2">Created by: {""}</p>
           </div>
         </div>
-       
-        <div className=' flex  p-10'> 
-        <div className="mb-8 w-1/2 ">
-              <h2 className="text-xl font-bold mb-4">Course Content</h2>
-              <div className="border rounded-lg divide-y">
-                {course.sections.map((section) => (
-                  <div key={section._id} className="bg-white">
-                    <button
-                      onClick={() => toggleSection(section._id)  }
-                      className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50"
-                    >
-                      <span className="font-medium">{section.title}</span>
-                      <ChevronDown
-                        className={`w-5 h-5 transition-transform ${
-                          openSections.includes(section._id)
-                            ? "transform rotate-180"
-                            : ""
-                        }`}
-                      />
-                    </button>
-                    {openSections.includes(section._id) && (
-                      <div className="px-4 py-2 bg-gray-50">
-                        {section.items.map((item) => (
+
+        <div className=" flex  p-10">
+          <div className="mb-8 w-1/2 ">
+            <h2 className="text-xl font-bold mb-4">Course Content</h2>
+            <div className="border rounded-lg divide-y">
+              {course.sections.map((section) => (
+                <div key={section._id} className="bg-white">
+                  <button
+                    onClick={() => toggleSection(section._id)}
+                    className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50"
+                  >
+                    <span className="font-medium">{section.title}</span>
+                    <ChevronDown
+                      className={`w-5 h-5 transition-transform ${
+                        openSections.includes(section._id)
+                          ? "transform rotate-180"
+                          : ""
+                      }`}
+                    />
+                  </button>
+                  {openSections.includes(section._id) && (
+                    <div className="px-4 py-2 bg-gray-50">
+                      {section.items.map((item) => (
+                        <>
                           <div
                             key={item._id}
                             className="py-2 flex items-start gap-3 "
                           >
                             <PlayCircle className="w-5 h-5 mt-1" />
                             <div>
-                              <label htmlFor="" onClick={()=>setFileUrl(item.fileUrl)}>
-                              <p className="font-medium cursor-pointer" >{item.title}</p>
-                              <p className="text-sm text-gray-600 cursor-pointer">
-                                {item.description}
-                              </p>
-
+                              <label
+                                htmlFor=""
+                                onClick={() =>
+                                  handlefileUrl(item.fileUrl, item._id)
+                                }
+                              >
+                                <p className="font-medium cursor-pointer">
+                                  {item.title}
+                                </p>
+                                <p className="text-sm text-gray-600 cursor-pointer">
+                                  {item.description}
+                                </p>
                               </label>
-                             
+
                               {item.duration && (
                                 <span className="text-sm text-gray-500">
                                   {item.duration} min
@@ -122,28 +177,39 @@ export default function LearningComponent({course}) {
                               )}
                             </div>
                           </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+                          {progress && (
+                            <ProgressBar
+                              progress={
+                                progress.completedItems.find(
+                                  (c) => c.itemId == item._id
+                                )?.percentageCompleted || 0
+                              }
+                            />
+                          )}
+                        </>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
-            <div className='flex p-5 min-w-3xl'>
-              {fileUrl  && ( <>
-                <VideoPlayer fileUrl={fileUrl} updatePercentage ={(percentage)=>updatePercentage(percentage)} />
-              </>)}
-           
-
-            </div>
-            
-
-
-
-            </div>
-
-            </div>
+          </div>
+          <div className="flex p-5 min-w-3xl">
+            {fileUrl && progress && (
+              <>
+                <VideoPlayer
+                  fileUrl={fileUrl}
+                  updatePercentage={(percentage, itemId) =>
+                    updatePercentage(percentage, itemId)
+                  }
+                  initialPercentage={getCurrentItemPercentage()}
+                  itemId={itemsId}
+                />
+              </>
+            )}
+          </div>
+        </div>
+      </div>
     </>
-  )
+  );
 }
-

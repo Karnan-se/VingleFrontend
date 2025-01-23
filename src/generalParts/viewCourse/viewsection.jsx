@@ -10,7 +10,7 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import React, { useEffect, useState } from "react";
-import VideoPlayer from "./VideoPlayer";
+import VideoPlayer1 from "./VideoPlayerEditCourse";
 
 export default function CourseSection({ sectionData, setSection, course_id }) {
   console.log(sectionData, "sectionData");
@@ -329,7 +329,7 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
                 <X className="w-6 h-6" />
               </button>
             </div>
-            <VideoPlayer fileUrl={item.fileUrl} />
+            <VideoPlayer1 fileUrl={item.fileUrl} />
           </div>
         </div>
       )}

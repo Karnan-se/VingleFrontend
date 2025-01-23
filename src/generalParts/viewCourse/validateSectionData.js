@@ -61,7 +61,7 @@ export const validateSectionData = (sectionData) => {
         if (!item.description || item.description.trim().length === 0) {
           itemErrors.description = "Item description is required.";
         }
-        if (!item.fileUrl || item.fileUrl.trim().length === 0) {
+        if (!item.fileUrl) {
           itemErrors.fileUrl = "please choose any file";
         }
 

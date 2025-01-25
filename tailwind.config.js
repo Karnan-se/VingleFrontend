@@ -19,4 +19,5 @@ export default {
 
   darkMode:"class",
   plugins: [require("@nextui-org/react")],
+  plugins: [require("tailwind-scrollbar-hide")],
 };

@@ -20,6 +20,7 @@ const PublishableKey = import.meta.env.VITE_Publishable_key
 const stripePromise = loadStripe(PublishableKey)
 import ThankYouPage from "../generalParts/thankyou/success.jsx";
 import StartLearning from "../Components/user/StartLearning.jsx";
+import ChatAndVIdeoCall from "../Components/user/ChatvideoCall.jsx";
 
 
 
@@ -53,6 +54,7 @@ function UserRouter(){
                 <Route path="/beaInstructor"  element={<InstructorApplicationForm/>}></Route>
                 <Route path="/success" element={<ThankYouPage/>}></Route>
                 <Route path="/StartLearning" element={<StartLearning/>}></Route>
+                <Route path="/chatInterface" element={<ChatAndVIdeoCall/>}/>
 
                 
                 

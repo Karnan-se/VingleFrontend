@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import Navbar from "../../generalParts/landipage/Navbar"
 import LearningComponent from "../../generalParts/startLearning/startlearning"
 import { useLocation } from "react-router-dom"
+import VisitComponent from "../../generalParts/chatAndvideocall/visitProfile";
 
 
 export default function StartLearning(){
@@ -21,6 +22,8 @@ export default function StartLearning(){
         <>
         <Navbar></Navbar>
         <LearningComponent  course={course}/>
+        <VisitComponent tutorId={course.tutorId}/>
+       
 
         </>
     )

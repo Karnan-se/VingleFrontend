@@ -8,7 +8,7 @@ import TutorProtectedRoute from "../Components/tutor/tutorPrivateRoute";
 import ProfileMain from "../generalParts/profile/profileMain";
 import CourseTable from "../generalParts/tutorprofilePage/coursetable";
 import { CourseCreator } from "../generalParts/course/CourseCreator";
-import EditCourse from "../generalParts/viewCourse/editCourse";
+import EditCourse from "../generalParts/viewCourse/EditCourse";
 import PhotoMain from "../generalParts/profile/photoMain";
 
 function TutorLogin(){

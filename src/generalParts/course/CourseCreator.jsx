@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { createformData } from "../../features/formData/createFormData";
 import { Formik, Form, ErrorMessage } from 'formik';
 import { useLoading } from "../preloader/LoadingContext";
+import { sectionValidation } from "../viewCourse/sectionValidation";
 
 
 import * as Yup from 'yup';
@@ -150,6 +151,8 @@ useEffect(()=>{
   };
 
   const handleSaveCourse = async (values, { setSubmitting }) => {
+
+    console.log("going to save")
     if (validateCourse()) {
       setLoading(true)
       const updatedCourse = { ...values, tutorId: tutorInfo._id };
@@ -424,6 +427,7 @@ useEffect(()=>{
   
               <div className="space-y-4">
                 {values.sections.map((section, index) => (
+                  
                   <Section
                     key={section.id}
                     section={section}

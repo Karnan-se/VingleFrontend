@@ -17,6 +17,7 @@ export default function LandingPage() {
 
     const scrollref = useRef(null);
     const [categories , setCategories] = useState()
+    const [filteredCourses, setFilteredCourses] = useState(null)
     const [course, setCourse] = useState()
     const navigate = useNavigate()
     
@@ -46,8 +47,18 @@ export default function LandingPage() {
     
     },[])
 
-const getCourse = (id)=>{
+const filterCourseByCategory = (id)=>{
   console.log(id)
+  
+  if (filteredCourses && filteredCourses[0]?.category === id) {
+    
+    setFilteredCourses(null)
+  } else {
+    
+    const filtered = course.filter((c) => c.category == id)
+    setFilteredCourses(filtered)
+  }
+  
 }
 
 useEffect(()=>{
@@ -89,7 +100,7 @@ const courseDetail =(courseDetail) =>{
                     key={category}
                     variant="flat"
                     className="bg-gray-200 hover:bg-gray-300 rounded-md"
-                    onClick={() => getCourse(category._id)}
+                    onClick={() => filterCourseByCategory(category._id)}
                   >
                     {category.value}
                   </Button>
@@ -106,7 +117,7 @@ const courseDetail =(courseDetail) =>{
     
           <div className="relative">
             <div className="flex gap-4 pb-4 overflow-x-hidden" ref={scrollref}>
-              {course.map((courseData, i) => (
+              {(filteredCourses || course).map((courseData, i) => (
                 <Card key={i} className="min-w-[300px]">
                   <ImageCard ImageLink={courseData}  navigate={courseDetail}/>
                   <CardFooter courseData={courseData} />

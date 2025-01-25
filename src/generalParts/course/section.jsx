@@ -7,7 +7,11 @@ import { ContentTypeSelector } from './ContentTypeSelector'
 import {CurriculumItem} from  "./Curriculam"
 
 
+
 export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
+
+
+  console.log(error, "it is  error in section part where teh cpoiurse is")
   const [isExpanded, setIsExpanded] = useState(true)
   const [showContentTypeSelector, setShowContentTypeSelector] = useState(false)
 

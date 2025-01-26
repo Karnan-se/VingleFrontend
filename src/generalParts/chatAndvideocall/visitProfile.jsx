@@ -1,10 +1,55 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { userApi } from "../../axios/axiosInstance"
+import { totalCourse } from "../../features/api/visitProfile"
+import { getInStructorDetails } from "../../features/api/visitProfile"
 
 export default function VisitComponent({tutorId}){
 
-    useEffect(()=>{
+    const [CourseCount, setTotalCourse] = useState();
+    const [instructorDetails, setInstructorDetails] = useState()
 
-    },[tutorId])
+    console.log(tutorId, "tutorId")
+
+
+    useEffect(()=>{
+        
+    async function getTotalCourse() {
+        try {
+            console.log(tutorId.id, "tutorID");
+            console.log(tutorId._id, "tutorId");
+    
+          
+            if (!tutorId || !tutorId._id) {
+                throw new Error("Invalid tutorId provided");
+            }
+    
+            const [totalCourseResult, instructorDetailsResult] = await Promise.all([
+                totalCourse(tutorId._id),
+                getInStructorDetails(tutorId._id),
+            ]);
+    
+    
+            return { totalCourseResult, instructorDetailsResult };
+        } catch (error) {
+            console.error("Error in getTotalCourse:", error.message);
+            throw error; 
+        }
+    }
+    
+  
+    getTotalCourse()
+        .then((result) => {
+            setTotalCourse(result.totalCourseResult)
+            console.log(result.totalCourseResult , "totalCourse")
+            setInstructorDetails(result.instructorDetailsResult)
+            console.log(result.instructorDetailsResult, "instructor result ")
+
+        })
+        .catch((error) => console.error("Error in API calls:", error.message));
+    
+
+
+    },[])
 
     
 
@@ -17,17 +62,22 @@ export default function VisitComponent({tutorId}){
 
     return (
         <>
-        <div className="mx-10 flex w-1/4 mb-10 gap-5">
+        {CourseCount &&  instructorDetails && (
+        <div className="mx-10 flex w-1/2 mb-10 gap-5 items-center">
+               <div className="bg-red-300 rounded-full w-28 h-28 " >
+                <img src={tutorId.photo} alt="" />
+               </div>
 
        
-         <div className="">
+         <div className="items-center">
             <h2 className="text-xl font-semibold">Iam the Course Creator</h2>
+         
             <div className="text-gray-600">{tutorId.firstName}</div>
-            <div className="text-gray-600">UI/UX Designer</div>
+            <div className="text-gray-600">{instructorDetails.headline}</div>
             <div className="flex items-center space-x-4 mt-2">
-              <div className="text-blue-600">56 Courses</div>
+              <div className="text-blue-600"> {CourseCount.length} Courses</div>
               <div className="flex items-center">
-                <span className="text-gray-400">(76,335)</span>
+                {/* <span className="text-gray-400">(76,335)</span> */}
               </div>
             </div>
           </div>
@@ -40,6 +90,7 @@ export default function VisitComponent({tutorId}){
             contact me
           </button>
           </div>
+           )}
         </>
     )
 }

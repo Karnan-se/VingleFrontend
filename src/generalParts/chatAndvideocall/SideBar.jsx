@@ -1,4 +1,8 @@
-export default function ChatSideBar(){
+export default function ChatSideBar({participants , selectChat}){
+
+  
+
+
 
     return (
         <>
@@ -9,17 +13,19 @@ export default function ChatSideBar(){
             </div>
 
             <div className="bg-black text-white p-4 rounded-lg">
-              <div className="flex items-center space-x-3">
+              {participants.map((participant) => (   
+              <div key={participant._id} className="flex items-center space-x-3" onClick={()=>selectChat(participant)}>
                 <img
                   src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ez5Owl2cTM6rhC5S36r2Qbof0Othu9.png"
                   alt=""
                   className="w-8 h-8 rounded-full"
                 />
-                <span>Robert James</span>
+                <span>{participant.firstName}</span>
               </div>
+              ) )}
             </div>
 
-            <div className="bg-gray-100 p-4 rounded-lg">
+            {/* <div className="bg-gray-100 p-4 rounded-lg">
               <div className="flex items-center space-x-3">
                 <img
                   src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ez5Owl2cTM6rhC5S36r2Qbof0Othu9.png"
@@ -28,7 +34,7 @@ export default function ChatSideBar(){
                 />
                 <span>Robert James</span>
               </div>
-            </div>
+            </div> */}
           </div>
         </>
     )

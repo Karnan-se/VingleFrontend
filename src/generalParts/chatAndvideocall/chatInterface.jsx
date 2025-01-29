@@ -5,14 +5,47 @@ import { Phone, Video, Info, Send, Mic } from "lucide-react";
 import ChatSideBar from "./SideBar";
 import { useRef } from "react";
 import ChatHeader from "./chatHeader";
+import { sendMessage } from "../../features/api/conversation";
+import { fetchMessage } from "../../features/api/conversation";
 
-export default function ChatInterface() {
-  const [messages, setMessages] = useState([
-    { id: 1, text: "Hello, Hoe Are You Doing ?", sender: "them" },
-    { id: 2, text: "Fine", sender: "me" },
-    { id: 3, text: "Okay", sender: "them" },
-    { id: 4, text: "Hello, Hoe Are You Doing ?", sender: "me" },
-  ]);
+
+export default function ChatInterface({participants , sender}) {
+  const [messages, setMessages] = useState([]);
+  const [participant , setParticipant] =useState()
+  console.log(participants , "tutorId")
+  console.log(sender , "sender")
+
+
+       useEffect(()=>{
+        
+
+      async  function findConversation(senderId, participantId){
+        if(!senderId || !participantId){
+          return null
+        }
+        
+        try {
+          const messages  = await fetchMessage(senderId , participantId)
+          console.log(messages.messages , "Messages ")
+          setMessages([...messages.messages])
+          
+        } catch (error) {
+          console.log(error)
+          
+        }
+
+       }
+       findConversation(sender?._id , participant?._id)
+     },[participant, sender])
+
+
+  const selectChat =(participant)=>{
+    setParticipant(participant)
+  }
+
+
+ 
+  
 
   const scrollRef = useRef();
 
@@ -24,36 +57,41 @@ export default function ChatInterface() {
     }
   }, [newMessage]);
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async(e) => {
     e.preventDefault();
     if (newMessage.trim()) {
-      const message = {
-        text: newMessage,
-        sender: "me",
-      };
-      setMessages([...messages, message]);
+      let Message ={
+        message:newMessage,
+        senderId:sender._id,
+        receiverId:participants[0]._id,
+      }
+      const message = await sendMessage(Message)
+      console.log(message, "values reached here ")
+
+      setMessages([...messages, Message]);
       setNewMessage("");
     }
   };
 
+
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
+     
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold mb-4">Messages</h1>
         <p className="text-gray-600 mb-8">You have 0 unread messages.</p>
 
         <div className="grid grid-cols-[300px,1fr] gap-8">
-          {/* Sidebar */}
-          <ChatSideBar />
+          
+          <ChatSideBar participants={participants} selectChat={(participant)=>selectChat(participant)} />
 
-          {/* Chat Area */}
+          {participant && (  
           <div className="border rounded-lg">
-            {/* Chat Header */}
-            <ChatHeader></ChatHeader>
+           
+            <ChatHeader participant={participant}></ChatHeader>
 
-            {/* Messages */}
+       
             <div
               className="p-4 space-y-4 h-[400px] overflow-y-auto scrollbar-hide"
               ref={scrollRef}
@@ -62,23 +100,22 @@ export default function ChatInterface() {
                 <div
                   key={message.id}
                   className={`flex ${
-                    message.sender === "me" ? "justify-end" : "justify-start"
+                    message.senderId === sender._id ? "justify-end" : "justify-start"
                   }`}
                 >
                   <div
                     className={`max-w-[80%] p-3 rounded-lg ${
-                      message.sender === "me"
+                      message.senderId === sender._id
                         ? "bg-gray-600 text-white"
                         : "bg-gray-200"
                     }`}
                   >
-                    {message.text}
+                    {message.message}
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Input Area */}
             <div className="border-t p-4">
               <form
                 onSubmit={handleSendMessage}
@@ -104,32 +141,10 @@ export default function ChatInterface() {
               </form>
             </div>
           </div>
+           )}
         </div>
 
-        {/* Profile Section */}
-        <div className="mt-8 flex items-start space-x-4">
-          <img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ez5Owl2cTM6rhC5S36r2Qbof0Othu9.png"
-            alt=""
-            className="w-16 h-16 rounded-full"
-          />
-          <div>
-            <h2 className="text-xl font-semibold">Iam the Course Creator</h2>
-            <div className="text-gray-600">Robert James</div>
-            <div className="text-gray-600">UI/UX Designer</div>
-            <div className="flex items-center space-x-4 mt-2">
-              <div className="text-blue-600">56 Courses</div>
-              <div className="flex items-center">
-                <span className="text-yellow-400">★</span>
-                <span>4.9</span>
-                <span className="text-gray-400">(76,335)</span>
-              </div>
-            </div>
-          </div>
-          <button className="px-6 py-2 bg-gray-200 rounded-lg ml-auto">
-            Visit Profile
-          </button>
-        </div>
+    
       </div>
     </div>
   );

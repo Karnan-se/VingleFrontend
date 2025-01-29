@@ -2,13 +2,15 @@ import { useEffect, useState } from "react"
 import { userApi } from "../../axios/axiosInstance"
 import { totalCourse } from "../../features/api/visitProfile"
 import { getInStructorDetails } from "../../features/api/visitProfile"
+import {useNavigate} from "react-router-dom"
 
 export default function VisitComponent({tutorId}){
 
     const [CourseCount, setTotalCourse] = useState();
     const [instructorDetails, setInstructorDetails] = useState()
+    const navigate = useNavigate()
 
-    console.log(tutorId, "tutorId")
+
 
 
     useEffect(()=>{
@@ -54,8 +56,7 @@ export default function VisitComponent({tutorId}){
     
 
     const startChat = ()=>{
-        
-        console.log(tutorId)
+        navigate("/chatInterface", {state:{tutorId}})
     }
 
     

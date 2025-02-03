@@ -23,7 +23,14 @@ export default function ChatInterface({ participants, sender }) {
 
   useEffect(() => {
     const handleNewMessage = (message) => {
-      setMessages((prevMessages) => [...prevMessages, message])
+      if (
+        (message.senderId === participant?._id && message.receiverId === sender._id) ||
+        (message.senderId === sender._id && message.receiverId === participant?._id)
+      ) {
+        setMessages((prevMessages) => [...prevMessages, message]);
+      }else{
+        console.log("condition Error")
+      }
     }
 
     const handleNotification = (newNotification) => {
@@ -38,7 +45,7 @@ export default function ChatInterface({ participants, sender }) {
       socket.off("message", handleNewMessage)
       socket.off("notification", handleNotification)
     }
-  }, [sender._id])
+  }, [sender._id , messages])
 
 
 
@@ -96,10 +103,29 @@ export default function ChatInterface({ participants, sender }) {
     }
     setNotifications((prevNotifications) =>
       prevNotifications.filter((notif) => notif.sender !== selectedParticipant._id),
-    
-
     )
+
+    const notificationTodeleted = [...new Set(notifications.filter((notif)=> notif.sender ==  selectedParticipant._id).map((notif)=> notif.sender))] 
+    console.log(notificationTodeleted , "notification to be deleted")
+     socket.emit("isRead" , notificationTodeleted[0], sender?._id )
   }
+
+
+
+
+
+  useEffect(()=>{
+    if(participant){
+      const notificationTodeleted = [...new Set(notifications.filter((notif)=> notif.sender ==  participant?._id).map((notif)=> notif.sender))] 
+      console.log(notificationTodeleted , "notification to be deleted")
+       socket.emit("isRead" , notificationTodeleted[0], sender?._id )
+
+    }
+   
+
+  },[participant , messages])
+
+ 
 
   const handleSendMessage = async (e) => {
     e.preventDefault()
@@ -111,6 +137,7 @@ export default function ChatInterface({ participants, sender }) {
         timestamp: new Date().toISOString(),
       }
       const message = await sendMessage(Message)
+    
       setNewMessage("")
     }
   }
@@ -137,7 +164,7 @@ export default function ChatInterface({ participants, sender }) {
                 {messages.map((message) => (
                   <div
                     key={message._id}
-                    className={`flex ${message.senderId === sender._id ? "justify-end" : "justify-start"}`}
+                    className={`flex ${message.senderId === sender?._id ? "justify-end" : "justify-start"}`}
                   >
                     <div
                       className={`max-w-[80%] p-3 rounded-lg ${

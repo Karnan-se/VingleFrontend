@@ -1,9 +1,20 @@
-import { Search } from "lucide-react"
+import { useState, useEffect } from "react";
+import { Search } from "lucide-react";
 
 export default function ChatSideBar({ participants, selectChat, notifications }) {
-  const getNotificationCount = (participantId) => {
-    return notifications.filter((notif) => notif.sender === participantId).length
-  }
+  const [notificationCounts, setNotificationCounts] = useState({});
+
+  // Calculate notification counts on notifications change
+  useEffect(() => {
+    const counts = {};
+    notifications.forEach((notif) => {
+      if (!notif.isRead) {
+        counts[notif.sender] = (counts[notif.sender] || 0) + 1;
+      }
+    });
+    console.log(counts)
+    setNotificationCounts(counts);
+  }, [notifications]);
 
   return (
     <div className="bg-gray-50 rounded-lg shadow-lg overflow-hidden">
@@ -19,32 +30,36 @@ export default function ChatSideBar({ participants, selectChat, notifications })
       </div>
 
       <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
-        {participants.map((participant, index) => (
-          <div key={participant._id}>
-            <div
-              className="flex items-center space-x-3 cursor-pointer hover:bg-gray-100 p-4 transition-colors"
-              onClick={() => selectChat(participant)}
-            >
-              <img
-                src={participant.photo || "/placeholder.svg?height=48&width=48"}
-                alt={participant.firstName}
-                className="w-12 h-12 rounded-full object-cover"
-              />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">{participant.firstName}</p>
-                <p className="text-sm text-gray-500 truncate">{participant.lastMessage || "No messages yet"}</p>
-              </div>
-              {getNotificationCount(participant._id) > 0 && (
-                <div className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
-                  {getNotificationCount(participant._id)}
+        {participants.map((participant, index) => {
+          const count = notificationCounts[participant._id] || 0;
+          return (
+            <div key={participant._id}>
+              <div
+                className="flex items-center space-x-3 cursor-pointer hover:bg-gray-100 p-4 transition-colors"
+                onClick={() => selectChat(participant)}
+              >
+                <img
+                  src={participant.photo || "/placeholder.svg?height=48&width=48"}
+                  alt={participant.firstName}
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate">{participant.firstName}</p>
+                  <p className="text-sm text-gray-500 truncate">
+                    {participant.lastMessage || "No messages yet"}
+                  </p>
                 </div>
-              )}
+                {count > 0 && (
+                  <div className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
+                    {count}
+                  </div>
+                )}
+              </div>
+              {index < participants.length - 1 && <div className="mx-4 border-t border-gray-200"></div>}
             </div>
-            {index < participants.length - 1 && <div className="mx-4 border-t border-gray-200"></div>}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
-  )
+  );
 }
-

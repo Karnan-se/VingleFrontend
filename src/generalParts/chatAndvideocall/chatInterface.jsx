@@ -13,13 +13,14 @@ export default function ChatInterface({ participants, sender }) {
   const [participant, setParticipant] = useState(null)
   const [newMessage, setNewMessage] = useState("")
   const [notifications, setNotifications] = useState([])
+  const [isActive , setIsOnline] = useState(false)
   const scrollRef = useRef()
 
   useEffect(() => {
     if (sender?._id) {
       socket.emit("joinRoom", sender._id)
     }
-  }, [sender])
+  }, [sender , participant])
 
   useEffect(() => {
     const handleNewMessage = (message) => {
@@ -46,8 +47,6 @@ export default function ChatInterface({ participants, sender }) {
       socket.off("notification", handleNotification)
     }
   }, [sender._id , messages])
-
-
 
   useEffect(() => {
     async function findConversation(senderId, participantId) {
@@ -81,9 +80,6 @@ export default function ChatInterface({ participants, sender }) {
     }
   }, [participant, sender])
 
-
-
-
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
@@ -110,10 +106,6 @@ export default function ChatInterface({ participants, sender }) {
      socket.emit("isRead" , notificationTodeleted[0], sender?._id )
   }
 
-
-
-
-
   useEffect(()=>{
     if(participant){
       const notificationTodeleted = [...new Set(notifications.filter((notif)=> notif.sender ==  participant?._id).map((notif)=> notif.sender))] 
@@ -124,8 +116,6 @@ export default function ChatInterface({ participants, sender }) {
    
 
   },[participant , messages])
-
- 
 
   const handleSendMessage = async (e) => {
     e.preventDefault()
@@ -147,6 +137,21 @@ export default function ChatInterface({ participants, sender }) {
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
   }
 
+
+
+  useEffect(() => {
+    socket.on("onlineUsers", (onlineUsers) => {
+      console.log(onlineUsers, participant?._id, "Checking if participant is online");
+    
+      setIsOnline(participant?._id && onlineUsers[participant._id] ? true : false);
+    });
+     
+    return () => {
+      socket.off("onlineUsers", );
+    };
+  },[participant?._id , messages]);
+  
+
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -158,7 +163,7 @@ export default function ChatInterface({ participants, sender }) {
 
           {participant && (
             <div className="border rounded-lg">
-              <ChatHeader participant={participant}></ChatHeader>
+              <ChatHeader participant={participant} isActive={isActive}></ChatHeader>
 
               <div className="p-4 space-y-4 h-[400px] overflow-y-auto scrollbar-hide" ref={scrollRef}>
                 {messages.map((message) => (

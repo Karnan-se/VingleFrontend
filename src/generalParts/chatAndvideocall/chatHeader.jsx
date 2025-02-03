@@ -1,6 +1,31 @@
 import { Phone, Video, Info } from "lucide-react";
+import socket from "../../features/socket/socket.io";
+import { useEffect, useState } from "react";
 
-export default function ChatHeader({ participant }) {
+export default function ChatHeader({ participant , isActive }) {
+
+
+  // const [isActive , setIsOnline] = useState(false)
+
+  // useEffect(() => {
+  //   const handleOnlineStatus = (userId) => {
+  //     console.log(userId, participant._id  ,"userID is a participant ID");
+  //     if (userId === participant._id) {
+  //       setIsOnline(true);
+  //     }else{
+  //       setIsOnline(false)
+  //     }
+  //   };
+
+  //   socket.on("isOnline", handleOnlineStatus);
+
+  //   return () => {
+  //     socket.off("isOnline", handleOnlineStatus);
+  //   };
+  // }, [participant._id]);
+
+
+
   return (
     <>
       <div className="flex items-center justify-between p-4 border-b bg-black text-white">
@@ -16,10 +41,16 @@ export default function ChatHeader({ participant }) {
            
               <div>
                 <div>{participant?.firstName}</div>
+
+              
+                {isActive &&  isActive == true ? (
                 <div className="flex items-center text-sm">
                   <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
                   Active Now
                 </div>
+                ) : (<></>)}
+
+
               </div>
           
           </div>

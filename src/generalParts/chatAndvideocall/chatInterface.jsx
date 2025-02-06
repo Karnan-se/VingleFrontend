@@ -6,23 +6,31 @@ import ChatSideBar from "./SideBar"
 import { useRef } from "react"
 import ChatHeader from "./chatHeader"
 import { sendMessage, fetchMessage } from "../../features/api/conversation"
-import socket from "../../features/socket/socket.io"
+import { useSocket } from "../../Components/context/socketContext"
+import { useOutletContext } from "react-router-dom"
+
 
 export default function ChatInterface({ participants, sender }) {
+  const {socket} = useSocket()
   const [messages, setMessages] = useState([])
   const [participant, setParticipant] = useState(null)
   const [newMessage, setNewMessage] = useState("")
   const [notifications, setNotifications] = useState([])
   const [isActive , setIsOnline] = useState(false)
   const scrollRef = useRef()
+  const { onlineUsers}  = useOutletContext();
+
+
+  useEffect(()=>{
+    
+    
+    console.log(onlineUsers , "Online Users")
+  },[onlineUsers])
+
+
 
   useEffect(() => {
-    if (sender?._id) {
-      socket.emit("joinRoom", sender._id)
-    }
-  }, [sender , participant])
-
-  useEffect(() => {
+    if(!socket)return;
     const handleNewMessage = (message) => {
       if (
         (message.senderId === participant?._id && message.receiverId === sender._id) ||
@@ -48,6 +56,8 @@ export default function ChatInterface({ participants, sender }) {
     }
   }, [sender._id , messages])
 
+
+  // findConversation
   useEffect(() => {
     async function findConversation(senderId, participantId) {
       if (!senderId || !participantId) { 
@@ -80,6 +90,7 @@ export default function ChatInterface({ participants, sender }) {
     }
   }, [participant, sender])
 
+  // scrollRef
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
@@ -87,6 +98,7 @@ export default function ChatInterface({ participants, sender }) {
   }, [messages])
 
   const selectChat = async (selectedParticipant) => {
+    if(!socket)return;
     if (selectedParticipant._id !== participant?._id) {
       setParticipant(selectedParticipant)
       try {
@@ -102,14 +114,15 @@ export default function ChatInterface({ participants, sender }) {
     )
 
     const notificationTodeleted = [...new Set(notifications.filter((notif)=> notif.sender ==  selectedParticipant._id).map((notif)=> notif.sender))] 
-    console.log(notificationTodeleted , "notification to be deleted")
+    
      socket.emit("isRead" , notificationTodeleted[0], sender?._id )
   }
 
   useEffect(()=>{
+    if(!socket)return;
     if(participant){
       const notificationTodeleted = [...new Set(notifications.filter((notif)=> notif.sender ==  participant?._id).map((notif)=> notif.sender))] 
-      console.log(notificationTodeleted , "notification to be deleted")
+      
        socket.emit("isRead" , notificationTodeleted[0], sender?._id )
 
     }
@@ -140,16 +153,13 @@ export default function ChatInterface({ participants, sender }) {
 
 
   useEffect(() => {
-    socket.on("onlineUsers", (onlineUsers) => {
-      console.log(onlineUsers, participant?._id, "Checking if participant is online");
-    
-      setIsOnline(participant?._id && onlineUsers[participant._id] ? true : false);
-    });
-     
-    return () => {
-      socket.off("onlineUsers", );
-    };
-  },[participant?._id , messages]);
+    if(!participant?._id){
+      return
+    }
+    console.log(onlineUsers ,  "ONline Usewkmenddkm ewcrs")
+     setIsOnline(Object.keys(onlineUsers).includes(participant._id)? true: false)
+  
+  },[participant?._id  , onlineUsers]);
   
 
   return (

@@ -1,6 +1,5 @@
 import { Phone, Video, Info } from "lucide-react";
-import socket from "../../features/socket/socket.io";
-import { useEffect, useState } from "react";
+
 
 export default function ChatHeader({ participant , isActive }) {
 

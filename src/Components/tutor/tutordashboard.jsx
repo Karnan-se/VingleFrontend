@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, useOutletContext } from "react-router-dom"
 import Sidebar from "../../generalParts/tutordashboard/sidebar"
 import TutorNavbar from "../../generalParts/tutordashboard/TutorNavbar"
 import { useSelector } from "react-redux"
@@ -11,6 +11,7 @@ import { setTutorCredentials } from "../../features/authSlice"
 export default function TutorDashboard() {
 
   const tutorInfo = useSelector((state)=> state.tutor.tutorInfo)
+  const onlineUsers = useOutletContext()
   
 
   
@@ -29,7 +30,7 @@ export default function TutorDashboard() {
       <div className="w-full">
 
      
-      <Outlet context={{userUpdate : tutorUpdate, userDetail:tutorInfo, setUserCredentials: setTutorCredentials}}/>
+      <Outlet context={{userUpdate : tutorUpdate, userDetail:tutorInfo, setUserCredentials: setTutorCredentials,onlineUsers}}/>
       </div>
       </div>
         

@@ -18,8 +18,8 @@ function TutorLogin(){
 
             
          <Route element={<TutorProtectedRoute />}>  
-    <Route path="/" element={<TutorDashboard/>}>
-    <Route index element={<DashboardMain/>} />
+       <Route path="/" element={<TutorDashboard/>}>
+       <Route index element={<DashboardMain/>} />
     <Route path="profile" element={<ProfileMain/>} />
     <Route path="courses" element={<CourseTable/>} />
     <Route path="photo" element={<PhotoMain/>} />

@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
+import { NotificationProvider } from "./Components/context/notificationContext.jsx";
 
 import App from "./App.jsx";
 import { Provider } from "react-redux";
@@ -17,7 +18,9 @@ createRoot(document.getElementById("root")).render(
       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
         <Provider store={store}>
           <SocketProvider>
+            {/* <NotificationProvider>  */}
             <App />
+            {/* </NotificationProvider> */}
           </SocketProvider>
         </Provider>
       </GoogleOAuthProvider>

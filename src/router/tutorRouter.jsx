@@ -11,19 +11,18 @@ import { CourseCreator } from "../generalParts/course/CourseCreator";
 import EditCourse from "../generalParts/viewCourse/EditCourse";
 import PhotoMain from "../generalParts/profile/photoMain";
 import TChatAndVIdeoCall from "../Components/tutor/TChatAndVideoCall";
+import VideoCall from "../generalParts/chatAndvideocall/videocall";
 
 function TutorLogin(){
     return (
         <Routes>
-
-            
-         <Route element={<TutorProtectedRoute />}>  
-       <Route path="/" element={<TutorDashboard/>}>
-       <Route index element={<DashboardMain/>} />
+      
+    <Route element={<TutorProtectedRoute />}>  
+    <Route path="/" element={<TutorDashboard/>}>
+    <Route index element={<DashboardMain/>} />
     <Route path="profile" element={<ProfileMain/>} />
     <Route path="courses" element={<CourseTable/>} />
     <Route path="photo" element={<PhotoMain/>} />
-
     <Route path="courseCreate" element={<CourseCreator/>}></Route>
     <Route path="editCourse" element={<EditCourse/>}></Route>
     <Route path="chat" element={<TChatAndVIdeoCall/>}></Route>
@@ -32,6 +31,7 @@ function TutorLogin(){
 
     <Route path= "/login" element={<LoginPage/>}></Route>
     <Route path="/register" element={<RegistrationForm/>}></Route>
+    <Route path="/videocall" element={<VideoCall/>}></Route>
     
        </Routes>
     )

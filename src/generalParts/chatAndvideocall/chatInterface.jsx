@@ -8,6 +8,8 @@ import ChatHeader from "./chatHeader"
 import { sendMessage, fetchMessage } from "../../features/api/conversation"
 import { useSocket } from "../../Components/context/socketContext"
 import { useOutletContext } from "react-router-dom"
+import { useNotification } from "../../Components/context/notificationContext"
+
 
 
 export default function ChatInterface({ participants, sender }) {
@@ -18,40 +20,57 @@ export default function ChatInterface({ participants, sender }) {
   const [notifications, setNotifications] = useState([])
   const [isActive , setIsOnline] = useState(false)
   const scrollRef = useRef()
+ 
   const { onlineUsers}  = useOutletContext();
+  const  { showMessageNotification, showCallNotification , setIsVideoCallActive , isVideoCallActive   }= useNotification()
 
 
   useEffect(()=>{
-    
-    
+    console.log(sender ,  "sender sender ")
+
+  },[sender])
+
+ 
+
+  useEffect(() => {
+    if (!socket) return;
+  
+    const handleSavedMessage = (message) => {
+      console.log("New saved message received:", message);
+      setMessages((prevMessages) => [...prevMessages, message]);
+      
+    };
+  
+    socket.on("savedMessage", handleSavedMessage);
+  
+    return () => {
+      socket.off("savedMessage", handleSavedMessage);
+    };
+  }, [socket]);
+  
+  
+
+
+  useEffect(()=>{ 
     console.log(onlineUsers , "Online Users")
   },[onlineUsers])
 
-
+ 
 
   useEffect(() => {
     if(!socket)return;
-    const handleNewMessage = (message) => {
-      if (
-        (message.senderId === participant?._id && message.receiverId === sender._id) ||
-        (message.senderId === sender._id && message.receiverId === participant?._id)
-      ) {
-        setMessages((prevMessages) => [...prevMessages, message]);
-      }else{
-        console.log("condition Error")
-      }
-    }
+    
+    
 
     const handleNotification = (newNotification) => {
       console.log("New notification received:", newNotification)
       setNotifications((prevNotifications) => [...prevNotifications, ...newNotification])
     }
 
-    socket.on("message", handleNewMessage)
     socket.on("notification", handleNotification)
 
     return () => {
-      socket.off("message", handleNewMessage)
+  
       socket.off("notification", handleNotification)
     }
   }, [sender._id , messages])
@@ -97,6 +116,8 @@ export default function ChatInterface({ participants, sender }) {
     }
   }, [messages])
 
+
+  //select chat
   const selectChat = async (selectedParticipant) => {
     if(!socket)return;
     if (selectedParticipant._id !== participant?._id) {
@@ -118,6 +139,7 @@ export default function ChatInterface({ participants, sender }) {
      socket.emit("isRead" , notificationTodeleted[0], sender?._id )
   }
 
+  //read notiffication
   useEffect(()=>{
     if(!socket)return;
     if(participant){
@@ -130,6 +152,7 @@ export default function ChatInterface({ participants, sender }) {
 
   },[participant , messages])
 
+
   const handleSendMessage = async (e) => {
     e.preventDefault()
     if (newMessage.trim()) {
@@ -139,8 +162,11 @@ export default function ChatInterface({ participants, sender }) {
         receiverId: participant._id,
         timestamp: new Date().toISOString(),
       }
-      const message = await sendMessage(Message)
-    
+      // const message = await sendMessage(Message)
+      socket.emit("sendMessage" , (Message))
+      setMessages((prev)=> [...prev , Message])
+      socket.on("savedMessage", (messages)=>{
+        console.log(messages ,  "messages Recievved") })
       setNewMessage("")
     }
   }
@@ -156,7 +182,7 @@ export default function ChatInterface({ participants, sender }) {
     if(!participant?._id){
       return
     }
-    console.log(onlineUsers ,  "ONline Usewkmenddkm ewcrs")
+   
      setIsOnline(Object.keys(onlineUsers).includes(participant._id)? true: false)
   
   },[participant?._id  , onlineUsers]);
@@ -173,7 +199,7 @@ export default function ChatInterface({ participants, sender }) {
 
           {participant && (
             <div className="border rounded-lg">
-              <ChatHeader participant={participant} isActive={isActive}></ChatHeader>
+              <ChatHeader participant={participant} isActive={isActive}  onlineUsers={onlineUsers}  sender={sender} ></ChatHeader>
 
               <div className="p-4 space-y-4 h-[400px] overflow-y-auto scrollbar-hide" ref={scrollRef}>
                 {messages.map((message) => (
@@ -187,7 +213,7 @@ export default function ChatInterface({ participants, sender }) {
                       }`}
                     >
                       <p>{message.message}</p>
-                      <p className="text-xs text-right mt-1 opacity-70">{formatTimestamp(message.createdAt)}</p>
+                      <p className="text-xs text-right mt-1 opacity-70">{formatTimestamp(message.createdAt || message.timestamp)}</p>
                     </div>
                   </div>
                 ))}

@@ -4,6 +4,7 @@ export const sendMessage = async (message)=>{
     try {
         const response = await userApi.post("/sendMessage",{message})
         console.log(response.data, "message Response")
+        return response.data.saveMessage 
         
     } catch (error) {
         console.log(error)

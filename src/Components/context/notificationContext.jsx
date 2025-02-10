@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 import VideoCall from "../../generalParts/chatAndvideocall/videocall";
 import { useState } from "react";
 import { useRef } from "react";
+import showRingingStatus from "./userCallNotification";
+import  UserCallingNotification  from "./userCallNotification";
 
 
 
@@ -50,13 +52,37 @@ export const NotificationProvider = ({children}) => {
             closeButton: false,
             
         })
+
     }
+
+    let toastId = null
+    const showRinging = (participant, dismissRingingNotification)=>{
+      if(toastId)  return 
+      toastId=toast.info(<UserCallingNotification participant={participant} onCancel={dismissRingingNotification} />, { 
+          position: "top-center",
+          hideProgressBar:true,
+          closeOnClick:false,
+          pauseOnHover:true,
+          draggable:true,
+          closeButton:false,
+          autoClose:false
+      })
+  }
+  const dismissRingingNotification =() =>{{
+    if(toastId){
+      toast.dismiss(toastId)
+      toastId = null;
+    }
+  }}
+
+  
+    
 //sendingMessage
  useEffect(() => {
     if (!socket) return;
     const handleSavedMessage = (message) => {
       console.log("New saved message received:", message);
-      showMessageNotification(message.message , message.sender)
+      showMessageNotification(message.message , message.senderId)
          
     };
 
@@ -72,8 +98,10 @@ export const NotificationProvider = ({children}) => {
     setParticipant(sender.sender)
     setSender(sender.receiverId)
     setIsVideoCallActive(true)
+    dismissRingingNotification()
 
     socket.emit("isCallAttended", (sender))
+    socket.off("isRinging")
 
     if(toastcallRef.current){
       toast.dismiss(toastcallRef.current)
@@ -82,7 +110,7 @@ export const NotificationProvider = ({children}) => {
   };
 
  
-
+// isRinging is capturing here
 useEffect(()=>{
     if(!socket) return 
     socket.on("isRinging", (sender)=>{
@@ -98,7 +126,7 @@ useEffect(()=>{
 
 
     return (
-        <NotificationContext.Provider value={{showMessageNotification , showCallNOtification , setIsVideoCallActive , isVideoCallActive }}>
+        <NotificationContext.Provider value={{showMessageNotification , showCallNOtification , setIsVideoCallActive , isVideoCallActive ,showRinging }}>
             {children}
             <ToastContainer/>
             {isVideoCallActive && sender && participant && (

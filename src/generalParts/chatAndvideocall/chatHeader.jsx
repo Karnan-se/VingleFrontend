@@ -13,7 +13,7 @@ export default function ChatHeader({ participant, isActive  , onlineUsers , send
   const [isRinging , setisRinging] = useState(false)
   const {socket} = useSocket()
   const [isVideoCallActive , setIsVideoCallActive ] = useState(false)
-  // const {showCallNOtification} =useNotification()
+  const {showRinging} =useNotification()
 
   const handleVideoCall = () => {
     
@@ -25,6 +25,7 @@ export default function ChatHeader({ participant, isActive  , onlineUsers , send
       return 
     }
     socket.emit("isRinging", { receiverId: participant, sender });
+    showRinging(participant.firstName, )
 
 
     return () => {
@@ -48,6 +49,8 @@ export default function ChatHeader({ participant, isActive  , onlineUsers , send
     }
 
   },[socket , ])
+
+  
   
 
   return (

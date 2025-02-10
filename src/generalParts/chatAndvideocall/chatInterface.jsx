@@ -31,7 +31,7 @@ export default function ChatInterface({ participants, sender }) {
   },[sender])
 
  
-
+//handle save Messages and state uodation on new Message
   useEffect(() => {
     if (!socket) return;
   
@@ -51,17 +51,17 @@ export default function ChatInterface({ participants, sender }) {
   
 
 
-  useEffect(()=>{ 
-    console.log(onlineUsers , "Online Users")
-  },[onlineUsers])
+  // useEffect(()=>{ 
+  //   console.log(onlineUsers , "Online Users")
+  // },[onlineUsers])
 
  
-
+// handleNotification
   useEffect(() => {
     if(!socket)return;
     
     
-
+// handleNotification
     const handleNotification = (newNotification) => {
       console.log("New notification received:", newNotification)
       setNotifications((prevNotifications) => [...prevNotifications, ...newNotification])

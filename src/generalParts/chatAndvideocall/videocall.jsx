@@ -6,6 +6,7 @@ import SimplePeer from 'vite-compatible-simple-peer';
 import { useSocket } from '../../Components/context/socketContext';
 import { useCallback } from 'react';
 
+
 export default function VideoCall({ participant, onClose, sender }) {
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
@@ -13,6 +14,8 @@ export default function VideoCall({ participant, onClose, sender }) {
   const [peer, setPeer] = useState(null);
   const [isMuted, setIsMuted] = useState(false);
   const [isVideoOff, setIsVideoOff] = useState(false);
+
+  
 
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);

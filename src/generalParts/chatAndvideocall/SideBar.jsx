@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 
-export default function ChatSideBar({ participants, selectChat, notifications }) {
+export default function ChatSideBar({ participants, selectChat, notifications, lastMessage }) {
   const [notificationCounts, setNotificationCounts] = useState({});
 
   // Calculate notification counts on notifications change
@@ -46,7 +46,8 @@ export default function ChatSideBar({ participants, selectChat, notifications })
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 truncate">{participant.firstName}</p>
                   <p className="text-sm text-gray-500 truncate">
-                    {participant.lastMessage || "No messages yet"}
+                  {(lastMessage?.senderId === participant._id || lastMessage?.receiverId === participant._id) ? lastMessage.message : ""}
+
                   </p>
                 </div>
                 {count > 0 && (

@@ -8,7 +8,7 @@ import { useNotification } from "../../Components/context/notificationContext"
 
 
 
-export default function ChatHeader({ participant, isActive  , onlineUsers , sender }) {
+export default function ChatHeader({ participant, isActive  , onlineUsers , sender  }) {
 
   const [isRinging , setisRinging] = useState(false)
   const {socket} = useSocket()

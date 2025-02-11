@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 
  const UserCallingNotification = ({ participant, onCancel }) => {
-  const [timeLeft, setTimeLeft] = useState(30); // Auto-hide after 30 seconds
+  const [timeLeft, setTimeLeft] = useState(30); 
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prev) => prev - 1);
     }, 1000);
 
-    // Auto-cancel after 30 seconds
+
     const autoCancel = setTimeout(() => {
       onCancel();
     }, 30000);

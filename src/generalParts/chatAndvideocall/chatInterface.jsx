@@ -19,6 +19,7 @@ export default function ChatInterface({ participants, sender }) {
   const [newMessage, setNewMessage] = useState("")
   const [notifications, setNotifications] = useState([])
   const [isActive , setIsOnline] = useState(false)
+  const [lastMessage , setLastMessage] = useState()
   const scrollRef = useRef()
  
   const { onlineUsers}  = useOutletContext();
@@ -36,8 +37,9 @@ export default function ChatInterface({ participants, sender }) {
     if (!socket) return;
   
     const handleSavedMessage = (message) => {
-      console.log("New saved message received:", message);
-      setMessages((prevMessages) => [...prevMessages, message]);
+      const {Message, firstName} = message
+      setMessages((prevMessages) => [...prevMessages, Message]);
+    
       
     };
   
@@ -163,10 +165,10 @@ export default function ChatInterface({ participants, sender }) {
         timestamp: new Date().toISOString(),
       }
       // const message = await sendMessage(Message)
-      socket.emit("sendMessage" , (Message))
+      console.log(sender.firstName , "firsttName")
+      const firstName = sender.firstName
+      socket.emit("sendMessage" , ({Message , firstName }))
       setMessages((prev)=> [...prev , Message])
-      socket.on("savedMessage", (messages)=>{
-        console.log(messages ,  "messages Recievved") })
       setNewMessage("")
     }
   }
@@ -186,6 +188,19 @@ export default function ChatInterface({ participants, sender }) {
      setIsOnline(Object.keys(onlineUsers).includes(participant._id)? true: false)
   
   },[participant?._id  , onlineUsers]);
+
+
+
+  
+  useEffect(()=>{
+    const lastMessage  = messages.filter((msg)=> msg.receiverId == 
+    participant._id && msg.senderId  == sender._id || 
+    msg.receiverId == sender._id && msg.senderId == participant._id).reverse().slice(0, 1)
+    setLastMessage(lastMessage[0])
+
+    console.log(lastMessage , "lastMessage LastMEssage LAstMEssage ")
+
+  },[messages , participant?._id])
   
 
   return (
@@ -195,11 +210,11 @@ export default function ChatInterface({ participants, sender }) {
         <p className="text-gray-600 mb-8">You have {notifications.length} unread messages.</p>
 
         <div className="grid grid-cols-[300px,1fr] gap-8">
-          <ChatSideBar participants={participants} selectChat={selectChat} notifications={notifications} />
+          <ChatSideBar participants={participants} selectChat={selectChat} notifications={notifications}  lastMessage={lastMessage} />
 
           {participant && (
             <div className="border rounded-lg">
-              <ChatHeader participant={participant} isActive={isActive}  onlineUsers={onlineUsers}  sender={sender} ></ChatHeader>
+              <ChatHeader participant={participant} isActive={isActive}  onlineUsers={onlineUsers}  sender={sender}  ></ChatHeader>
 
               <div className="p-4 space-y-4 h-[400px] overflow-y-auto scrollbar-hide" ref={scrollRef}>
                 {messages.map((message) => (

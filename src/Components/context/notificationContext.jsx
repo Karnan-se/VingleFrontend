@@ -6,6 +6,7 @@ import { useSocket } from "./socketContext";
 import { useNavigate } from "react-router-dom";
 import VideoCall from "../../generalParts/chatAndvideocall/videocall";
 import UserCallingNotification from "./userCallNotification";
+import MessageNotification from "./MessageNotification";
 
 
 const NotificationContext = createContext();
@@ -19,15 +20,35 @@ export const NotificationProvider = ({ children }) => {
   const toastIdRef = useRef(null); // 🔥 Store toastId persistently
 
   const showMessageNotification = (message, sender) => {
-    toast.info(`${sender}: ${message}`, {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
+   
+    document.getElementById("custom-toast")?.remove();
+  
+
+    const toastContainer = document.createElement("div");
+    toastContainer.id = "custom-toast";
+    toastContainer.className =
+      "fixed top-5 left-1/2 transform -translate-x-1/2 z-50 flex justify-center";
+  
+
+    const root = document.createElement("div");
+    toastContainer.appendChild(root);
+    document.body.appendChild(toastContainer);
+  
+    import("react-dom").then((ReactDOM) => {
+      ReactDOM.createRoot(root).render(
+        <MessageNotification message={message} sender={sender} />
+      );
     });
+  
+
+    setTimeout(() => {
+      toastContainer.remove();
+    }, 5000);
   };
+  
+
+
+
 
   const showCallNotification = (caller, onAnswer, onDecline) => {
     toastcallRef.current = toast.info(
@@ -97,13 +118,13 @@ export const NotificationProvider = ({ children }) => {
   },[socket])
 
 
-//handlee svae message
+//handlee svae message notIYFICATION
   useEffect(() => {
     if (!socket) return;
 
     const handleSavedMessage = (message) => {
-      console.log("New saved message received:", message);
-      showMessageNotification(message.message, "");
+      const {Message, firstName} = message
+      showMessageNotification(Message.message, firstName);
     };
 
     socket.on("savedMessage", handleSavedMessage);

@@ -21,7 +21,7 @@ import { useState, useEffect } from "react";
 
   return (
     <div className="fixed top-5 right-5 bg-gray-900 text-white p-4 rounded-lg shadow-lg flex items-center gap-3">
-      <span className="animate-pulse">📞 Calling {participant}... ({timeLeft}s)</span>
+      <span className="animate-pulse">📞 Calling {participant.firstName}... ({timeLeft}s)</span>
       <button
         className="bg-red-500 px-3 py-1 rounded"
         onClick={onCancel}

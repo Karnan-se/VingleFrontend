@@ -22,7 +22,7 @@ export default function ChatInterface({ participants, sender }) {
   const scrollRef = useRef()
  
   const { onlineUsers}  = useOutletContext();
-  const  { showMessageNotification, showCallNotification , setIsVideoCallActive , isVideoCallActive   }= useNotification()
+  const  { showMessageNotification, showCallNotification , setIsVideoCallActive , isVideoCallActive   } = useNotification()
 
 
   useEffect(()=>{

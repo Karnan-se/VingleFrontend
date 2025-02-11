@@ -1,93 +1,113 @@
-import { children, createContext , useContext } from "react";
-import {ToastContainer , toast} from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+import { createContext, useContext, useState, useRef, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { CallNotification } from "./callNotification";
 import { useSocket } from "./socketContext";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import VideoCall from "../../generalParts/chatAndvideocall/videocall";
-import { useState } from "react";
-import { useRef } from "react";
-import showRingingStatus from "./userCallNotification";
-import  UserCallingNotification  from "./userCallNotification";
+import UserCallingNotification from "./userCallNotification";
 
 
+const NotificationContext = createContext();
 
+export const NotificationProvider = ({ children }) => {
+  const { socket } = useSocket();
+  const [isVideoCallActive, setIsVideoCallActive] = useState(false);
+  const [participant, setParticipant] = useState(null);
+  const [sender, setSender] = useState(null);
+  const toastcallRef = useRef(null);
+  const toastIdRef = useRef(null); // 🔥 Store toastId persistently
 
+  const showMessageNotification = (message, sender) => {
+    toast.info(`${sender}: ${message}`, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  };
 
+  const showCallNotification = (caller, onAnswer, onDecline) => {
+    toastcallRef.current = toast.info(
+      <CallNotification caller={caller} onAnswer={onAnswer} onDecline={onDecline} />,
+      {
+        position: "top-right",
+        autoClose: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: false,
+        closeButton: false,
+      }
+    );
+  };
 
+  const showRinging = (participant) => {
+    if (toastIdRef.current) return;
+    toastIdRef.current = toast.info(
+      <UserCallingNotification participant={participant} onCancel={()=>dismissRingingNotification(participant)} />,
+      {
+        position: "top-center",
+        hideProgressBar: true,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        closeButton: false,
+        autoClose: false,
+      }
+    );
+  };
 
-const NotificationContext = createContext()
-
-
-
-export const NotificationProvider = ({children}) => {
-      const navigate = useNavigate()
-      const {socket} = useSocket()
-      const [isVideoCallActive, setIsVideoCallActive] = useState(false)
-      const [participant , setParticipant] = useState()
-      const [sender , setSender] = useState()
-      const toastcallRef =useRef(null)
-      
-
-    const showMessageNotification = (message , sender)=>{
-        toast.info(`${sender} :${message}`, { 
-            position: "top-center",
-            autoClose:5000,
-            hideProgressBar:false,
-            closeOnClick:true,
-            pauseOnHover:true,
-            draggable:true
-        })
+// Notification dismissal Logic
+  const dismissRingingNotification = (participant) => {
+    console.log("Call cancelled from the user side");
+    console.log(participant ,   "sender and reciever when the call is canecelled")
+    if (toastIdRef.current) {
+      toast.dismiss(toastIdRef.current);
+      toastIdRef.current = null;
+      console.log("user canelled the call")
+     if(socket){
+      socket.emit("userCallCancelled", participant)
+      console.log("is Emmitting ")
+     }
     }
-
-    const showCallNOtification =(caller , onAnswer, onDecline) =>{
-      toastcallRef.current =  toast.info(<CallNotification caller={caller} onAnswer={onAnswer} onDecline={onDecline}/> ,{
-            position: "top-right",
-            autoClose: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: false,
-            closeButton: false,
-            
-        })
-
+    if (toastcallRef.current) {
+      toast.dismiss(toastcallRef.current);
+      toastcallRef.current = null;
+      console.log(participant.sender ,  "parteicpiknat ")
+      if(socket){
+        socket.emit("userCallCancelled", participant.sender )
+        console.log("isEmmiting from the otherside")
+      }
+     
     }
+  };
 
-    let toastId = null
-    const showRinging = (participant, dismissRingingNotification)=>{
-      if(toastId)  return 
-      toastId=toast.info(<UserCallingNotification participant={participant} onCancel={dismissRingingNotification} />, { 
-          position: "top-center",
-          hideProgressBar:true,
-          closeOnClick:false,
-          pauseOnHover:true,
-          draggable:true,
-          closeButton:false,
-          autoClose:false
-      })
-  }
-  const dismissRingingNotification =() =>{{
-    if(toastId){
-      toast.dismiss(toastId)
-      toastId = null;
-    }
-  }}
+  //when user Call cancelled by socket 
+  useEffect(()=>{
+    if(!socket) return 
+    socket.on("userCallCancelled" , (participant)=>{
+      console.log(participant, "when user Call canelled")
+      toast.dismiss(toastIdRef.current);
+      toastIdRef.current = null;
+      toast.dismiss(toastcallRef.current);
+      toastcallRef.current = null;
+    })
+  },[socket])
 
-  
-    
-//sendingMessage
- useEffect(() => {
+
+//handlee svae message
+  useEffect(() => {
     if (!socket) return;
+
     const handleSavedMessage = (message) => {
       console.log("New saved message received:", message);
-      showMessageNotification(message.message , message.senderId)
-         
+      showMessageNotification(message.message, "");
     };
 
     socket.on("savedMessage", handleSavedMessage);
-  
+
     return () => {
       socket.off("savedMessage", handleSavedMessage);
     };
@@ -95,51 +115,43 @@ export const NotificationProvider = ({children}) => {
 
   const handleAnswer = (sender) => {
     console.log(sender);
-    setParticipant(sender.sender)
-    setSender(sender.receiverId)
-    setIsVideoCallActive(true)
-    dismissRingingNotification()
+    setParticipant(sender.sender);
+    setSender(sender.receiverId);
+    setIsVideoCallActive(true);
+    dismissRingingNotification();
 
-    socket.emit("isCallAttended", (sender))
-    socket.off("isRinging")
-
-    if(toastcallRef.current){
-      toast.dismiss(toastcallRef.current)
-      toastcallRef.current = null;
-    }
+    socket.emit("isCallAttended", sender);
   };
 
- 
-// isRinging is capturing here
-useEffect(()=>{
-    if(!socket) return 
-    socket.on("isRinging", (sender)=>{
-        console.log(sender)
-        showCallNOtification(sender.sender.firstName, ()=>handleAnswer(sender), "" )
-      })
 
-      return () => {
-        socket.off("isRinging");
-      };
+  //handle Incomming Call // showuserSide Notifications
+  useEffect(() => {
+    if (!socket) return;
 
-},[socket])
+    const handleIncomingCall = (sender) => {
+      console.log(sender);
+      setSender(sender);
+      showCallNotification(sender.sender.firstName, () => handleAnswer(sender), ()=>dismissRingingNotification(sender));
+    };
 
+    socket.on("isRinging", handleIncomingCall);
 
-    return (
-        <NotificationContext.Provider value={{showMessageNotification , showCallNOtification , setIsVideoCallActive , isVideoCallActive ,showRinging }}>
-            {children}
-            <ToastContainer/>
-            {isVideoCallActive && sender && participant && (
-              <VideoCall participant={participant} onClose={()=> setIsVideoCallActive(false)} sender={participant}  />
-            )}
-        </NotificationContext.Provider>
-    )
-    
-}
+    return () => {
+      socket.off("isRinging", handleIncomingCall);
+    };
+  }, [socket]);
 
-export const useNotification =() =>{
-    return  useContext(NotificationContext)
-}
+  return (
+    <NotificationContext.Provider value={{ showMessageNotification, showCallNotification, setIsVideoCallActive, isVideoCallActive, showRinging, dismissRingingNotification }}>
+      {children}
+      <ToastContainer />
+      {isVideoCallActive && sender && participant && (
+        <VideoCall participant={participant} onClose={() => setIsVideoCallActive(false)} sender={participant} />
+      )}
+    </NotificationContext.Provider>
+  );
+};
 
-
-
+export const useNotification = () => {
+  return useContext(NotificationContext);
+};

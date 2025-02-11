@@ -17,7 +17,7 @@ export const NotificationProvider = ({ children }) => {
   const [participant, setParticipant] = useState(null);
   const [sender, setSender] = useState(null);
   const toastcallRef = useRef(null);
-  const toastIdRef = useRef(null); // 🔥 Store toastId persistently
+  const toastIdRef = useRef(null); 
 
   const showMessageNotification = (message, sender) => {
    
@@ -134,13 +134,21 @@ export const NotificationProvider = ({ children }) => {
     };
   }, [socket]);
 
+
+
+  //handle Answerr and toast dismissal
   const handleAnswer = (sender) => {
-    console.log(sender);
+    // console.log(sender , "sender from  handle Answer");
     setParticipant(sender.sender);
     setSender(sender.receiverId);
     setIsVideoCallActive(true);
-    dismissRingingNotification();
-
+    if (toastIdRef.current) {
+      toast.dismiss(toastIdRef.current) }
+      if (toastcallRef.current) {
+        toast.dismiss(toastcallRef.current) }
+    
+        console.log(sender.sender , "sender, sender. sender")
+    socket.emit("userCallCancelled", sender.sender)
     socket.emit("isCallAttended", sender);
   };
 

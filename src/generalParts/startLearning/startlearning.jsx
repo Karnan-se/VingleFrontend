@@ -12,9 +12,10 @@ export default function LearningComponent({ course }) {
   const userInfo = useSelector((state) => state.user.userInfo);
   const [progress, setProgress] = useState();
   const [itemsId, setItems] = useState();
-
-  const [openSections, setOpenSections] = useState([]);
+  const [openSections, setOpenSections] = useState([])
   const [fileUrl, setFileUrl] = useState();
+
+
   const toggleSection = (sectionId) => {
     setOpenSections((prev) =>
       prev.includes(sectionId)
@@ -97,13 +98,19 @@ export default function LearningComponent({ course }) {
   };
 
   const getCurrentItemPercentage = () => {
-    // if (!progress || !itemsId) return 0
+    
     const currentItem = progress.completedItems.find(
       (item) => item.itemId.toString() === itemsId.toString()
     );
     console.log(currentItem.percentageCompleted, "total percentage");
     return currentItem.percentageCompleted;
   };
+
+
+  useEffect(()=>{
+    console.log(course ,  "course which is need to be set")
+
+  },[course])
   return (
     <>
       <div className="min-h-screen bg-gray-50">
@@ -123,7 +130,7 @@ export default function LearningComponent({ course }) {
                 />
               ))}
             </div>
-            <p className="mt-2">Created by: {""}</p>
+            <p className="mt-2">Created by: {course.tutorId.firstName || "" }</p>
           </div>
         </div>
 

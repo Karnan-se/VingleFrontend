@@ -4,7 +4,7 @@ import { totalCourse } from "../../features/api/visitProfile"
 import { getInStructorDetails } from "../../features/api/visitProfile"
 import {useNavigate} from "react-router-dom"
 
-export default function VisitComponent({tutorId}){
+export default function VisitComponent({tutorId , openRatingsModals}){
 
     const [CourseCount, setTotalCourse] = useState();
     const [instructorDetails, setInstructorDetails] = useState()
@@ -59,6 +59,11 @@ export default function VisitComponent({tutorId}){
         navigate("/chatInterface", {state:{tutorId}})
     }
 
+
+    const RateMyCourse = () =>{
+        console.log("rateMyCourse")
+    }
+
     
 
     return (
@@ -90,6 +95,12 @@ export default function VisitComponent({tutorId}){
            hover:bg-yellow-500 hover:text-white  shadow-md" onClick={startChat}>
             contact me
           </button>
+          <button className="h-12 items-center p-5 bg-yellow-300 rounded-lg ml-auto flex 
+           hover:bg-yellow-500 hover:text-white  shadow-md" onClick={openRatingsModals}>
+            Rate My course
+          </button>
+
+
           </div>
            )}
         </>

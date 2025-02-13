@@ -5,15 +5,6 @@ import { PlusCircle } from 'lucide-react'
 import { tutorApi } from '../../axios/axiosInstance'
 import {useNavigate} from "react-router-dom"
 
-// Dummy data
-const dummyCourses = [
-  // { id: 1, name: 'Introduction to React', thumbnail: '/placeholder.svg?height=40&width=40', isPublished: true, date: '2023-01-15' },
-  // { id: 2, name: 'Advanced JavaScript', thumbnail: '/placeholder.svg?height=40&width=40', isPublished: false, date: '2023-02-20' },
-  // { id: 3, name: 'Node.js Fundamentals', thumbnail: '/placeholder.svg?height=40&width=40', isPublished: true, date: '2023-03-10' },
-  // { id: 4, name: 'CSS Mastery', thumbnail: '/placeholder.svg?height=40&width=40', isPublished: false, date: '2023-04-05' },
-  // { id: 5, name: 'Python for Beginners', thumbnail: '/placeholder.svg?height=40&width=40', isPublished: true, date: '2023-05-12' },
-]
-
 
 
 export default function CourseTable() {

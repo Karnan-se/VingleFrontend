@@ -12,6 +12,7 @@ import EditCourse from "../generalParts/viewCourse/EditCourse";
 import PhotoMain from "../generalParts/profile/photoMain";
 import TChatAndVIdeoCall from "../Components/tutor/TChatAndVideoCall";
 import VideoCall from "../generalParts/chatAndvideocall/videocall";
+import RevenuePage from "../Components/tutor/revenue";
 
 function TutorLogin(){
     return (
@@ -26,6 +27,7 @@ function TutorLogin(){
     <Route path="courseCreate" element={<CourseCreator/>}></Route>
     <Route path="editCourse" element={<EditCourse/>}></Route>
     <Route path="chat" element={<TChatAndVIdeoCall/>}></Route>
+    <Route path="/revenue" element={<RevenuePage/>} /> 
     </Route>
     </Route>
 

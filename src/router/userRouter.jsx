@@ -22,6 +22,7 @@ import ThankYouPage from "../generalParts/thankyou/success.jsx";
 import StartLearning from "../Components/user/StartLearning.jsx";
 import ChatAndVIdeoCall from "../Components/user/ChatvideoCall.jsx";
 import VideoCall from "../generalParts/chatAndvideocall/videocall.jsx";
+import RevenuePage from "../Components/tutor/revenue.jsx";
 
 
 
@@ -57,9 +58,8 @@ function UserRouter(){
                 <Route path="/StartLearning" element={<StartLearning/>}></Route>
                 <Route path="/chatInterface" element={<ChatAndVIdeoCall/>}/>
                 <Route path="/VideoCall" element={<VideoCall/>}></Route>
+               
 
-                
-                
                 </Route> 
    
             </Routes>

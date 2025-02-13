@@ -120,15 +120,18 @@ export default function LearningComponent({ course }) {
             <p className="mb-4">{course.description}</p>
             <div className="flex items-center gap-2">
               <span className="bg-yellow-400 text-black px-2 py-1 rounded">
-                4.5
+                {Math.floor(course.averageRating)}
               </span>
 
               {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className="w-4 h-4 fill-yellow-400 text-yellow-400"
-                />
-              ))}
+              <Star
+                key={i}
+                className={`w-4 h-4 ${
+                  i < course.averageRating ? "fill-yellow-400 text-yellow-400" : "fill-gray-300 text-gray-300"
+                }`}
+              />
+            ))}
+
             </div>
             <p className="mt-2">Created by: {course.tutorId.firstName || "" }</p>
           </div>

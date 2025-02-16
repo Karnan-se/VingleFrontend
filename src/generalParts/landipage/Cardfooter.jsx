@@ -10,20 +10,18 @@ export default function CardFooter1({courseData}){
     <>
     <CardFooter className="flex flex-col items-start p-4">
                   <h3 className="font-semibold mb-2">{courseData?.name}</h3>
-                  <p className="text-sm text-gray-500 mb-2">{courseData?.tutorId?.firstname}</p>
+                  <p className="text-sm text-gray-500 mb-2">Created By  :{courseData?.tutorId?.firstname || "Tutor"}</p>
                   <div className="flex items-center gap-1 mb-2">
-                    <span className="font-bold">{courseData?.ratings}</span>
+                    <span className="font-bold">Ratings</span>
                     <div className="flex">
                       {[...Array(5)].map((_, i) => (
-                        <StarIcon
-                          key={i}
-                          className={`w-4 h-4 ${
-                            i < Math.floor(courseData.ratings)
-                              ? 'text-yellow-400'
-                              : 'text-gray-300'
-                          }`}
-                        />
-                      ))}
+                                   <StarIcon
+                                     key={i}
+                                     className={`w-4 h-4 ${
+                                       i < courseData.averageRating ? "fill-yellow-400 text-yellow-400" : "fill-gray-300 text-gray-300"
+                                     }`}
+                                   />
+                                 ))}
                     </div>
                   </div>
                   <div className="flex items-center gap-4">

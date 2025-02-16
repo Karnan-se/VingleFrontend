@@ -23,7 +23,9 @@ import StartLearning from "../Components/user/StartLearning.jsx";
 import ChatAndVIdeoCall from "../Components/user/ChatvideoCall.jsx";
 import VideoCall from "../generalParts/chatAndvideocall/videocall.jsx";
 import RevenuePage from "../Components/tutor/revenue.jsx";
-
+import HorizontalNonLinearStepper from "../generalParts/trialCourse/courseStepper.jsx";
+import CourseContext from "../generalParts/trialCourse/ContextCourse.jsx";
+import TrailAddCourse from "../Components/tutor/trialAddCourse.jsx";
 
 
 function UserRouter(){
@@ -58,6 +60,11 @@ function UserRouter(){
                 <Route path="/StartLearning" element={<StartLearning/>}></Route>
                 <Route path="/chatInterface" element={<ChatAndVIdeoCall/>}/>
                 <Route path="/VideoCall" element={<VideoCall/>}></Route>
+
+              
+                <Route path ="/trialStepper" element={<TrailAddCourse />} />
+        
+               
                
 
                 </Route> 

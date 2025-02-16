@@ -13,3 +13,14 @@ export const revenue = async (tutorId)=>{
         
     }
 }
+
+export const tutorsChart = async()=>{
+    try {
+        const getchartDetails = await tutorApi.get("/tutorsChart")
+        return getchartDetails.data.chart
+    } catch (error) {
+        console.log(error)
+    
+        
+    }
+}

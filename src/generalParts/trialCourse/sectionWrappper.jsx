@@ -1,47 +1,44 @@
-import { useCourseContext } from "./ContextCourse"
-import { Section } from "./section"
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import { useCourseContext } from "./ContextCourse";
+import { Section } from './section';
+import { validationSchema } from './service';
+
+export default function SectionWrapper() {
+  const { section, setSection, addSection } = useCourseContext();
+
+  const handleSubmit = (values) => {
+    console.log("Final Form Values:", values);
+  };
+
+  return (
+    <div className='w-full flex flex-col'>
 
 
-export default function SectionWrapper(){
-    const { secondError , setSecondError , section , setSection , addSection}  = useCourseContext()
-        
-    const updateSectionTitle =(e ,sectionId) =>{
-        const newTitle = e.target.value;
-        setSection((prevSection)=>
-        prevSection.map((sect)=> sect.id == sectionId ? {...sect , title: e.target.value} : sect))
-        setSecondError((prevErrors) =>
-            prevErrors.map((err) =>
-              err.id === sectionId ? { ...err, title: newTitle ? "" : "Title required" } : err
-            )
-          );
-          
-    }
+    <Formik
+      initialValues={{ sections: section }}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+      enableReinitialize
+    >
+      {({ values, errors, handleChange, setFieldValue }) => (
+        <Form>
+          <button type="button" onClick={addSection}>Add Content</button>
 
-    const deleteSection =(e, sectionId)=>{
-        console.log(sectionId)
-        setSection((prev)=>(prev.filter((sect)=> sect.id != sectionId)))
-        setSecondError((prev)=> prev.filter((err)=>err.id != sectionId))
-    }
-    
+          {values.sections.map((sect, index) => (
+            <Section
+              key={sect.id}
+              section={sect}
+              sectionIndex={index}
+              setFieldValue={setFieldValue}
+              errors={errors.sections?.[index]}
+            />
+          ))}
 
-    return (
-
-        <>
-        <button  onClick={()=>addSection()}>Add Content</button>
-        {section.map((sect , index)=> (  
-
-            <div key={index} className="w-full">
-            <Section section={sect} 
-            setSection={setSection} 
-            updateSectionTitle={updateSectionTitle}
-            deleteSection={deleteSection}
-            error={secondError.find((err)=>err.id == sect.id
-            )
-                
-            }/>
-            </div>
-        ))}
-        
-        </>
-    )
+          <button type="submit" className='w-full h-10 bg-yellow-600 hover:bg-yellow-300'>Save Course</button>
+        </Form>
+      )}
+    </Formik>
+    </div>
+  );
 }

@@ -1,77 +1,44 @@
+import { FileVideo, FileText, Trash2 } from "lucide-react";
+import { Input, Textarea, Button } from "@nextui-org/react";
+import { Field, ErrorMessage } from "formik";
+import { useState } from "react";
+import VideoPlayer1 from "../viewCourse/VideoPlayerEditCourse";
 
+export function CurriculumItem({ item, sectionIndex, itemIndex, setFieldValue, errors, deleteItem }) {
+  const [video, setVideo] = useState();
+  const [isExpanded, setIsExpanded] = useState(false);
 
-import { useState } from 'react'
-import { Trash2, GripVertical, FileVideo, FileText } from 'lucide-react'
-import { Button, Input, Switch, Textarea } from '@nextui-org/react'
-import VideoPlayer1 from '../viewCourse/VideoPlayerEditCourse'
-
-
-export function CurriculumItem({ item, onUpdate, onDelete, error }) {
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [video , setVideo] = useState()
-
-
-//   id: Math.random().toString(36).substr(2, 9),
-//   title: "",
-//   type,
-//   description: "",
-//   fileUrl: "",
-// };
-
-
-   const saveVideo =(e)=>{
-    onUpdate({
-      ...item,
-      fileUrl: e.target.files?.[0]
-        ? (e.target.files[0])
-        : undefined,
-    })
-    setVideo(URL.createObjectURL(e.target.files[0]))
-   }
-
-   const updateDuration = (duration) =>{
-    console.log(duration , "duration")
-    onUpdate({
-        ...item , duration: duration
-    })
-    console.log(item , "items")
-   }
-   
-
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFieldValue(`sections[${sectionIndex}].items[${itemIndex}].fileUrl`, file);
+    if (file) setVideo(URL.createObjectURL(file));
+  };
 
   return (
-    <div className="border rounded-lg p-4 bg-white">
+    <div className="border rounded-lg p-4 bg-gray-50">
       <div className="flex items-center gap-4">
-        <GripVertical className="w-5 h-5 text-default-400 cursor-move" />
-        {item.type === 'video' ? (
+        {item.type === "video" ? (
           <FileVideo className="w-5 h-5 text-primary" />
         ) : (
           <FileText className="w-5 h-5 text-success" />
         )}
-        
-        <Input
-          value={item.title}
-          onChange={(e) => onUpdate({ ...item, title: e.target.value })}
-          className="flex-1 border"
-          placeholder="Lesson title"
-          variant="bordered"
-          color={error && error.title ? "danger" : "default"}
-        />
-        <div>
-        {error?.title && (
-        <p className="text-sm text-danger mt-1">{error.title}</p>
-      )}
 
-        </div>
-      
-        <Button
-          isIconOnly
-          variant="light"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          {isExpanded ? '-' : '+'}
+        <Field
+          name={`sections[${sectionIndex}].items[${itemIndex}].title`}
+          as={Input}
+          placeholder="Lesson title"
+        />
+        <ErrorMessage
+          name={`sections[${sectionIndex}].items[${itemIndex}].title`}
+          component="p"
+          className="text-danger"
+        />
+
+        <Button isIconOnly variant="light" onClick={() => setIsExpanded(!isExpanded)}>
+          {isExpanded ? "-" : "+"}
         </Button>
-        <Button isIconOnly variant="light" onClick={onDelete}>
+
+        <Button isIconOnly variant="light" onClick={() => deleteItem(item.id)}>
           <Trash2 className="w-4 h-4 text-danger" />
         </Button>
       </div>
@@ -80,50 +47,44 @@ export function CurriculumItem({ item, onUpdate, onDelete, error }) {
         <div className="mt-4 space-y-4">
           <div className="space-y-2">
             <p className="text-sm">Description</p>
-            <Textarea
-              value={item.description}
-              onChange={(e) =>
-                onUpdate({ ...item, description: e.target.value })
-              }
+            <Field
+              name={`sections[${sectionIndex}].items[${itemIndex}].description`}
+              as={Textarea}
               placeholder="Enter lesson description..."
-              variant="bordered"
             />
-             {error?.description && (
-            <p className="text-sm text-danger mt-1">{error.description}</p>
-      )}
+            <ErrorMessage
+              name={`sections[${sectionIndex}].items[${itemIndex}].description`}
+              component="p"
+              className="text-danger"
+            />
           </div>
+
           <div className="space-y-2">
             <p className="text-sm">Content File</p>
+            {item.fileUrl && (
+              <div className="w-full border" style={{ height: "400px", overflow: "hidden" }}>
+                {item.type === "video" ? (
+                  <VideoPlayer1 fileUrl={video || item.fileUrl} />
+                ) : (
+                  <embed src={video || item.fileUrl} type="application/pdf" width="100%" height="100%" />
+                )}
+              </div>
+            )}
 
-            {item.type == "video"  && item.fileUrl? (<>
-            <div className='w-120'>
-            <VideoPlayer1 fileUrl={video? video : item.fileUrl || ""} updateDuration={updateDuration} />
-
-            </div>
-            </>):(<>
-            {item.fileUrl && ( 
-                <div style={{height: "400px", overflow: "hidden", border: "1px solid #ccc" } } className='w-full'>
-      <embed src={video} type="application/pdf" width="100%" height="100%" />
-    </div>
-     )}
-            </>)}
             <Input
               type="file"
-              accept={item.type === 'video' ? 'video/*' : 'application/pdf'}
-              onChange={saveVideo}
+              accept={item.type === "video" ? "video/*" : "application/pdf"}
+              onChange={handleFileChange}
               variant="bordered"
-             
             />
-            {error?.fileUrl && (
-            <p className="text-sm text-danger mt-1">{error.fileUrl}</p> )}
-            
-          </div>
-          <div className="flex items-center space-x-2">
-          
+            <ErrorMessage
+              name={`sections[${sectionIndex}].items[${itemIndex}].fileUrl`}
+              component="p"
+              className="text-danger"
+            />
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }
-

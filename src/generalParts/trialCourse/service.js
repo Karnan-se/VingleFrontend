@@ -22,6 +22,30 @@ export const ValidateSchema ={
 }
 
 
+
+export const validationSchema = Yup.object({
+  sections: Yup.array().of(
+    Yup.object({
+      title: Yup.string()
+        .trim()
+        .required("Section title is required"),
+      items: Yup.array().of(
+        Yup.object({
+          title: Yup.string()
+            .trim()
+            .required("Lesson title is required"),
+          description: Yup.string()
+            .trim()
+            .required("Lesson description is required"),
+          fileUrl: Yup.mixed().required("File is required"),
+        })
+      ),
+    })
+  ),
+});
+
+
+
 export const initialValues={
     name: '',
     description: '',

@@ -3,19 +3,34 @@ import { ValidateSchema } from "./service";
 import { initialValues } from "./service";
 import { CircleX } from "lucide-react";
 import { useEffect } from "react";
+import { useCourseContext } from "./ContextCourse";
 
 const CreateCourseForm = () => {
+
+  const {basicError , setBasicError , basicForm , setBasicForm} = useCourseContext()
+
+
+
   const formik = useFormik({
-    initialValues: initialValues,
+    initialValues: basicForm || initialValues,
     validationSchema: ValidateSchema.validationCourseForm,
     onSubmit: (values) => {
-      console.log("Form Submitted:", values);
+      
+      setBasicForm(values)
+      console.log("formSubmitted" ,  values)
+      const formikErrors = formik.errors
+      console.log(formikErrors , "isFinalError updation")
+      setBasicError((prev)=> ( {...prev , formikErrors }))
+
     },
   });
 
   useEffect(() => {
-    console.log(formik.errors);
-  }, [formik.errors]);
+   
+    const formikErrors = formik.errors
+    setBasicError((prev)=> ( {...prev , formikErrors }))
+    console.log(basicError , "basicError from the cintext ")
+  }, [formik.values ]);
 
   return (
     <div className="bg-white p-4 md:p-6 rounded-lg shadow-md w-full max-w-2xl">

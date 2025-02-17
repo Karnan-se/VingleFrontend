@@ -1,6 +1,12 @@
 
 
-export default function VideoPlayer1({ fileUrl}) {
+export default function VideoPlayer1({ fileUrl , updateDuration}) {
+
+
+  const handleMetaData =(event) =>{
+    updateDuration(event.target.duration)
+    
+  }
 
 return (
     <div>
@@ -11,6 +17,7 @@ return (
           controls
           preload="auto"
           className="w-full"
+          onLoadedMetadata={handleMetaData}
    
         />
       ) : (

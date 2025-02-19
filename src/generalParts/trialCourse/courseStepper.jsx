@@ -16,7 +16,7 @@ import SectionWrapper from "./sectionWrappper";
 const steps = ["Add Course Details", "Add Lessons And Sections", "Review"];
 
 export default function HorizontalNonLinearStepper() {
-  const { basicError , section , setSection } = useCourseContext();
+  const { basicError , section , setSection , secondError} = useCourseContext();
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState({  });
   const [activeStepError, setActiveStepError] = useState({});
@@ -62,26 +62,69 @@ export default function HorizontalNonLinearStepper() {
   };
 
   const handleComplete = () => {
-    if (
-      activeStep == 0 &&
-      Object.keys(basicError.formikErrors || {}).length > 0
-    ) {
-      console.log("step1 has Error");
-      setActiveStepError({ ...activeStepError, [activeStep]: true });
-      return;
-    }
+    if (activeStep === 0) {
+      const hasBasicErrors =
+        basicError.formikErrors && Object.keys(basicError.formikErrors).length > 0;
+  
+      if (hasBasicErrors) {
+        console.log("Step 1 has Error");
+        setActiveStepError({ ...activeStepError, [activeStep]: true });
+        return;
+      }
+  
 
+      setActiveStepError((prev) => {
+        const updatedErrors = { ...prev };
+        delete updatedErrors[activeStep];
+        return updatedErrors;
+      });
+    }
+  
+    if (activeStep === 1) {
+      const hasSectionErrors =
+        secondError.sections && Object.keys(secondError.sections).length > 0;
+  
+      if (hasSectionErrors) {
+        console.log("Step 2 has Error");
+        setActiveStepError({ ...activeStepError, [activeStep]: true });
+        return;
+      }
+  
+      // Clear error if no errors exist
+      setActiveStepError((prev) => {
+        const updatedErrors = { ...prev };
+        delete updatedErrors[activeStep];
+        return updatedErrors;
+      });
+    }
+  
     setCompleted({
       ...completed,
       [activeStep]: true,
     });
     handleNext();
   };
+  
 
   const handleReset = () => {
     setActiveStep(0);
     setCompleted({});
   };
+
+  useEffect(()=>{
+    if(!secondError){
+      return
+
+    }
+    if(secondError.sections?.length >0){
+      handleErrorforSection()
+    }
+
+  },[secondError])
+
+  const handleErrorforSection = () =>{
+    setActiveStepError({...activeStepError , [activeStep] : true})
+  }
 
   return (
     <Box className="flex flex-col justify-start bg-slate-100 min-h-screen w-full p-4 md:p-8">
@@ -130,7 +173,7 @@ export default function HorizontalNonLinearStepper() {
           ) : (
             <Box className="w-full flex flex-col items-center">
               {activeStep === 0 && <CreateCourseForm />}
-              {activeStep == 1 && <SectionWrapper/> }
+              {activeStep == 1 && <SectionWrapper /> }
 
               <Box className="w-full flex justify-between items-center mt-6 ">
                 <Button

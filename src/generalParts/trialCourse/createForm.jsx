@@ -13,6 +13,14 @@ const CreateCourseForm = () => {
 
   const formik = useFormik({
     initialValues: basicForm || initialValues,
+    initialErrors:{
+      name: "Course name is required",
+      description: "Description is required",
+      category: "Category is required",
+      price: "Price is required",
+      learningObjectives: "At least one learning objective is required",
+      thumbnail: "Thumbnail is required"
+  },
     validationSchema: ValidateSchema.validationCourseForm,
     onSubmit: (values) => {
       

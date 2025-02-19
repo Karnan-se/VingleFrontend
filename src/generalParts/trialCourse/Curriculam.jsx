@@ -14,6 +14,11 @@ export function CurriculumItem({ item, sectionIndex, itemIndex, setFieldValue, e
     if (file) setVideo(URL.createObjectURL(file));
   };
 
+  const updateDuration =(duration)=>{
+    console.log(duration , "duration")
+    setFieldValue(`sections[${sectionIndex}].items[${itemIndex}].duration` , (duration/60))
+  }
+
   return (
     <div className="border rounded-lg p-4 bg-gray-50">
       <div className="flex items-center gap-4">
@@ -62,9 +67,9 @@ export function CurriculumItem({ item, sectionIndex, itemIndex, setFieldValue, e
           <div className="space-y-2">
             <p className="text-sm">Content File</p>
             {item.fileUrl && (
-              <div className="w-full border" style={{ height: "400px", overflow: "hidden" }}>
+              <div className="w-full border" style={{ height: "auto", overflow: "hidden" }}>
                 {item.type === "video" ? (
-                  <VideoPlayer1 fileUrl={video || item.fileUrl} />
+                  <VideoPlayer1 fileUrl={video || item.fileUrl} updateDuration={updateDuration} />
                 ) : (
                   <embed src={video || item.fileUrl} type="application/pdf" width="100%" height="100%" />
                 )}

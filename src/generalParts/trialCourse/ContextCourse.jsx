@@ -17,9 +17,13 @@ export  default function CourseProvider({ children }) {
           items: [],
         };
         setSection((prev) => [...prev, newSection]); 
-        setSecondError((prevError)=> ([...prevError ,  { id: newSection.id, title: "Title required", items: [] },]))
+        // setSecondError((prevError)=> ([...prevError ,  { id: newSection.id, title: "Title required", items: [] },]))
       };
   
+      useEffect(()=>{
+        console.log(secondError ,  "seconfError")
+
+      },[secondError])
 
     return (
         <CourseContext.Provider value={{ basicForm, setBasicForm, basicError, setBasicError , section , setSection , addSection , secondError , setSecondError}}>

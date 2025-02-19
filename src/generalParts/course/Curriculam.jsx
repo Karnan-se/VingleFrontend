@@ -20,6 +20,10 @@ export function CurriculumItem({ item, onUpdate, onDelete, error }) {
     })
     setVideo(URL.createObjectURL(e.target.files[0]))
    }
+
+   const updateDuration =(duration) =>{
+    console.log("duration")
+   }
    
 
 
@@ -88,7 +92,7 @@ export function CurriculumItem({ item, onUpdate, onDelete, error }) {
 
             {item.fileUrl ? (<>
             <div className='w-120'>
-            <VideoPlayer1 fileUrl={video? video : item.fileUrl || ""} />
+            <VideoPlayer1 fileUrl={video? video : item.fileUrl || ""} updateDuration={updateDuration} />
 
             </div>
             </>):("")}

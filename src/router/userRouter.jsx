@@ -26,6 +26,7 @@ import RevenuePage from "../Components/tutor/revenue.jsx";
 import HorizontalNonLinearStepper from "../generalParts/trialCourse/courseStepper.jsx";
 import CourseContext from "../generalParts/trialCourse/ContextCourse.jsx";
 import TrailAddCourse from "../Components/tutor/trialAddCourse.jsx";
+import PdfWrapper from "../Components/context/pdfRenderContext.jsx";
 
 
 function UserRouter(){
@@ -52,7 +53,9 @@ function UserRouter(){
                 <Route path="/profile" element={<ProfilePage/>}>
                 <Route index element={<ProfileMain/>}></Route>
                 <Route path="/profile/photo" element={<PhotoMain/>}/>
-                <Route path="/profile/course"  element={<CourseMain/>} />
+                
+                <Route path="/profile/course"  element={<PdfWrapper><CourseMain/></PdfWrapper>} />
+                
                 </Route>
                 <Route path="/courseDetail" element={<Elements stripe={stripePromise}>  <CourseDetails/>   </Elements>  }></Route>
                 <Route path="/beaInstructor"  element={<InstructorApplicationForm/>}></Route>

@@ -12,7 +12,7 @@ export default function  AdminHeader({heading}){
     return(
         <>
         
-        <header className="bg-gray-700 text-white py-4 px-6">
+        <header className="bg-gray-700 text-white py-2 px-6">
   <div className="flex justify-between items-center mx-auto">
     <div className="flex-1 flex justify-center">
       <h1 className="text-xl font-semibold p-3.5">{heading}</h1>

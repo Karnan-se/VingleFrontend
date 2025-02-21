@@ -17,7 +17,7 @@ const ThankYouPage = () => {
 
   useEffect(()=>{
     if(sessionId){
-        console.log("kjdkj")
+        
         const paymentUpdate =async()=>{
           const paymentVerify = await verifyPayment(userInfo, sessionId);
           console.log(paymentVerify)

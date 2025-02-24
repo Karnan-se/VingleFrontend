@@ -1,73 +1,74 @@
-import { Card } from "@nextui-org/card";
-import { Tabs, Tab } from "@nextui-org/tabs";
-import { LineChart, Line, ResponsiveContainer, Tooltip } from "recharts";
-import { useState, useEffect } from "react";
-import { revenue, tutorsChart } from "../../features/api/revenue";
-import { useSelector } from "react-redux";
+"use client"
+
+import { Card } from "@nextui-org/card"
+import { Tabs, Tab } from "@nextui-org/tabs"
+import { LineChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import { useState, useEffect } from "react"
+import { revenue, tutorsChart } from "../../features/api/revenue"
+import { useSelector } from "react-redux"
+
+const monthOrder = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 export default function DashboardMain() {
-  const [data, setData] = useState(); // Full data details fetched
-  const [filteredData, setFilteredData] = useState(); // Data displayed in the chart
-  const [selectedRange, setSelectedRange] = useState("all");
-  const [revenueDetails, setRevenueDetails] = useState();
+  const [data, setData] = useState([])
+  const [filteredData, setFilteredData] = useState([])
+  const [selectedRange, setSelectedRange] = useState("all")
+  const [revenueDetails, setRevenueDetails] = useState([])
 
-  const userInfo = useSelector((state) => state.tutor.tutorInfo);
+  const userInfo = useSelector((state) => state.tutor.tutorInfo)
 
   useEffect(() => {
     async function fetchRevenue() {
-      const getRevenue = await revenue(userInfo._id);
-      console.log(getRevenue, "getRevenue");
-      setRevenueDetails(getRevenue);
+      const getRevenue = await revenue(userInfo._id)
+      setRevenueDetails(getRevenue)
     }
-    fetchRevenue();
-  }, []);
+    fetchRevenue()
+  }, [userInfo._id])
 
   useEffect(() => {
     async function fetchChartDetails() {
-      const tutorchart = await tutorsChart();
-      console.log(tutorchart);
-      setData(tutorchart);
-      setFilteredData(tutorchart); // Initially set full data
+      const tutorchart = await tutorsChart()
+      const sortedData = tutorchart.sort((a, b) => monthOrder.indexOf(a.name) - monthOrder.indexOf(b.name))
+      setData(sortedData)
+      setFilteredData(sortedData)
     }
-    fetchChartDetails();
-  }, []);
+    fetchChartDetails()
+  }, [])
 
-  useEffect(() => {
-    console.log(filteredData, "filteredData");
-  }, [filteredData]);
-
-  if (!revenueDetails || !data) return;
-
-  
   const filterChartData = (range) => {
-    setSelectedRange(range);
+    setSelectedRange(range)
 
-    if (range === "all") {
-      setFilteredData(data);
-    } else {
-      const now = new Date();
-      let filtered = [];
+    const currentDate = new Date()
+    const currentMonth = currentDate.getMonth()
+    const currentYear = currentDate.getFullYear()
 
-      switch (range) {
-        case "1m":
-          filtered = data.filter((d) => new Date(d.date) >= new Date(now.setMonth(now.getMonth() - 1)));
-          break;
-        case "6m":
-          filtered = data.filter((d) => new Date(d.date) >= new Date(now.setMonth(now.getMonth() - 6)));
-          break;
-        case "1y":
-          filtered = data.filter((d) => new Date(d.date) >= new Date(now.setFullYear(now.getFullYear() - 1)));
-          break;
-        case "ytd":
-          filtered = data.filter((d) => new Date(d.date).getFullYear() === new Date().getFullYear());
-          break;
-        default:
-          filtered = data;
-      }
+    let filtered = []
 
-      setFilteredData(filtered);
+    switch (range) {
+      case "1m":
+        filtered = data.filter((d) => monthOrder.indexOf(d.name) === currentMonth)
+        break
+      case "6m":
+        const sixMonthsAgo = (currentMonth - 5 + 12) % 12
+        filtered = data.filter((d) => {
+          const monthIndex = monthOrder.indexOf(d.name)
+          return monthIndex >= sixMonthsAgo || monthIndex <= currentMonth
+        })
+        break
+      case "1y":
+        filtered = data
+        break
+      case "ytd":
+        filtered = data.filter((d) => monthOrder.indexOf(d.name) <= currentMonth)
+        break
+      default:
+        filtered = data
     }
-  };
+
+    setFilteredData(filtered)
+  }
+
+  if (!revenueDetails.length || !data.length) return <div>Loading...</div>
 
   return (
     <>
@@ -78,7 +79,7 @@ export default function DashboardMain() {
       <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-3">
         <Card className="p-6 border rounded-sm shadow-md">
           <div className="text-sm text-gray-500">Total Revenue</div>
-          <div className="text-2xl font-bold">{revenueDetails.reduce((acc, rev) => acc + rev.totalRevenue, 0)}</div>
+          <div className="text-2xl font-bold">₹{revenueDetails.reduce((acc, rev) => acc + rev.totalRevenue, 0)}</div>
         </Card>
 
         <Card className="p-6 border shadow-md">
@@ -113,6 +114,8 @@ export default function DashboardMain() {
         <div className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={filteredData}>
+              <XAxis dataKey="name" />
+              <YAxis />
               <Tooltip />
               <Line type="monotone" dataKey="income" stroke="#F5A524" strokeWidth={2} dot={false} />
             </LineChart>
@@ -120,5 +123,6 @@ export default function DashboardMain() {
         </div>
       </Card>
     </>
-  );
+  )
 }
+

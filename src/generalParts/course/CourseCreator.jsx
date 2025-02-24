@@ -277,8 +277,9 @@ useEffect(()=>{
   
               <Input
                 placeholder="Enter the course Name"
-                className="w-full border  rounded-md shadow-md focus-visible:not-sr-only"
+                className="w-full border  rounded-md shadow-md "
                 labelPlacement="outside"
+                variant="flat"
                 name="name"
                 value={values.name}
                 onChange={addName} 

@@ -104,9 +104,6 @@ export default function TutorsTable() {
 
   return (
     <div className="min-h-full bg-gray-50 p-8 mx-auto w-full ">
-     
-   
-
       <div className="mb-6 flex flex-col sm:flex-row gap-6">
         <div className="flex-1">
           <input

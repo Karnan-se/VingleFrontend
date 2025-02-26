@@ -4,10 +4,39 @@ import { initialValues } from "./service";
 import { CircleX } from "lucide-react";
 import { useEffect } from "react";
 import { useCourseContext } from "./ContextCourse";
+import { fetchCategory } from "../../features/api/fetchCategory";
+import { useState } from "react";
 
 const CreateCourseForm = () => {
 
   const {basicError , setBasicError , basicForm , setBasicForm} = useCourseContext()
+
+  const [category, setCategory] = useState([])
+  
+
+
+
+
+  useEffect(()=>{
+    const fetch = async () =>{
+  try {
+    
+    const category = await fetchCategory()
+    console.log(category , "response of category")
+    setCategory(category)
+    
+  } catch (error) {
+    console.log(error)
+    throw error
+    
+  }
+
+    }
+
+    fetch()
+   
+  },[])
+
 
 
 
@@ -39,6 +68,11 @@ const CreateCourseForm = () => {
     setBasicError((prev)=> ( {...prev , formikErrors }))
     console.log(basicError , "basicError from the cintext ")
   }, [formik.values ]);
+
+
+
+
+
 
   return (
     <div className="bg-white p-4 md:p-6 rounded-lg shadow-md w-full max-w-2xl">
@@ -103,10 +137,9 @@ const CreateCourseForm = () => {
               value={formik.values.category}
               onChange={formik.handleChange}
             >
-              <option value="">Select a category</option>
-              <option value="programming">Programming</option>
-              <option value="design">Design</option>
-              <option value="marketing">Marketing</option>
+              {category && category.map((cat)=> ( <option value={cat._id}>{cat.name}</option>  )  )}
+             
+              
             </select>
             {formik.touched.category && formik.errors.category && (
               <p className="text-red-500 text-sm mt-1">

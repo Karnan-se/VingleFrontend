@@ -25,7 +25,7 @@ export default function PdfWrapper({children}){
 
     return (
         <>
-        <pdfContext.Provider value={ { renderPdf } }>
+        <pdfContext.Provider value={ { renderPdf , setOPenPdf , setPdfData  } }>
             {children}
            
             {isOpenPdf &&  pdfData && <PDFViewer pdfData={pdfData} closePDF={closePDF} isOpenPdf={isOpenPdf}/>}

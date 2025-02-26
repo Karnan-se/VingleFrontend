@@ -16,7 +16,7 @@ import InstructorApplicationForm from "../Components/tutor/tutorApplication.jsx"
 import CourseDetails from "../Components/user/courseDetails.jsx";
 
 import {loadStripe} from  "@stripe/stripe-js"
-import {Elements, CardElement , useStripe, useElements} from "@stripe/react-stripe-js"
+import {Elements} from "@stripe/react-stripe-js"
 const PublishableKey = import.meta.env.VITE_Publishable_key
 const stripePromise = loadStripe(PublishableKey)
 

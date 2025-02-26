@@ -12,9 +12,8 @@ export default function LearningComponent({ course }) {
   const userInfo = useSelector((state) => state.user.userInfo);
   const [progress, setProgress] = useState();
   const [itemsId, setItems] = useState();
-  const [openSections, setOpenSections] = useState([])
+  const [openSections, setOpenSections] = useState([]);
   const [fileUrl, setFileUrl] = useState();
-
 
   const toggleSection = (sectionId) => {
     setOpenSections((prev) =>
@@ -98,7 +97,6 @@ export default function LearningComponent({ course }) {
   };
 
   const getCurrentItemPercentage = () => {
-    
     const currentItem = progress.completedItems.find(
       (item) => item.itemId.toString() === itemsId.toString()
     );
@@ -106,11 +104,9 @@ export default function LearningComponent({ course }) {
     return currentItem.percentageCompleted;
   };
 
-
-  useEffect(()=>{
-    console.log(course ,  "course which is need to be set")
-
-  },[course])
+  useEffect(() => {
+    console.log(course, "course which is need to be set");
+  }, [course]);
   return (
     <>
       <div className="min-h-screen bg-gray-50">
@@ -124,16 +120,17 @@ export default function LearningComponent({ course }) {
               </span>
 
               {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={`w-4 h-4 ${
-                  i < course.averageRating ? "fill-yellow-400 text-yellow-400" : "fill-gray-300 text-gray-300"
-                }`}
-              />
-            ))}
-
+                <Star
+                  key={i}
+                  className={`w-4 h-4 ${
+                    i < course.averageRating
+                      ? "fill-yellow-400 text-yellow-400"
+                      : "fill-gray-300 text-gray-300"
+                  }`}
+                />
+              ))}
             </div>
-            <p className="mt-2">Created by: {course.tutorId.firstName || "" }</p>
+            <p className="mt-2">Created by: {course.tutorId.firstName || ""}</p>
           </div>
         </div>
 
@@ -207,6 +204,7 @@ export default function LearningComponent({ course }) {
           <div className="flex p-5 min-w-3xl">
             {fileUrl && progress && (
               <>
+              
                 <VideoPlayer
                   fileUrl={fileUrl}
                   updatePercentage={(percentage, itemId) =>
@@ -219,6 +217,7 @@ export default function LearningComponent({ course }) {
             )}
           </div>
         </div>
+        
       </div>
     </>
   );

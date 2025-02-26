@@ -3,6 +3,7 @@ import { Formik, Form, useFormik } from "formik";
 import { useCourseContext } from "./ContextCourse";
 import { Section } from "./section";
 import { validationSchema } from "./service";
+import { secondFromIntialErrors } from "./service";
 
 export default function SectionWrapper({secondformError}) {
   const { section, setSection, addSection , setSecondError  } = useCourseContext();
@@ -19,6 +20,8 @@ export default function SectionWrapper({secondformError}) {
       <Formik
         initialValues={{ sections: section }}
         validationSchema={validationSchema}
+        initialErrors={secondFromIntialErrors}
+        
         onSubmit={handleSubmit}
         enableReinitialize
       >

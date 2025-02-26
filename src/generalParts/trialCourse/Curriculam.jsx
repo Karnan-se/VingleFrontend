@@ -15,8 +15,9 @@ export function CurriculumItem({ item, sectionIndex, itemIndex, setFieldValue, e
   };
 
   const updateDuration =(duration)=>{
-    console.log(duration , "duration")
-    setFieldValue(`sections[${sectionIndex}].items[${itemIndex}].duration` , (duration/60))
+    console.log(duration)
+    console.log( duration.toFixed(2), "duration")
+    setFieldValue(`sections[${sectionIndex}].items[${itemIndex}].duration` , (parseFloat(duration.toFixed(2))))
   }
 
   return (

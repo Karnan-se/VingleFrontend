@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import { useContext } from 'react'
 import { useLoading } from './LoadingContext'
+import { Spinner } from '@nextui-org/react'
 
 const VinglePreloader = () => {
   const {isLoading} = useLoading();
@@ -61,6 +62,7 @@ const VinglePreloader = () => {
       <svg className="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24"></svg>
         Please wait...
       </div>
+      <Spinner></Spinner>
     </div>
     </div>
     </>

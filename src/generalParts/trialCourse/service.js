@@ -45,6 +45,24 @@ export const validationSchema = Yup.object({
 });
 
 
+const initialErrors = {
+  sections: [
+    {
+      title: "Section title is required",
+      items: [
+        {
+          title: "Lesson title is required",
+          description: "Lesson description is required",
+          fileUrl: "File is required",
+        },
+      ],
+    },
+  ],
+};
+
+
+export const secondFromIntialErrors = initialErrors
+
 
 export const initialValues={
     name: '',

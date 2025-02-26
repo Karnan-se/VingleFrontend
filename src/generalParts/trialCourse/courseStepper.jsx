@@ -12,11 +12,12 @@ import { useState, useEffect } from "react";
 import { useCourseContext } from "./ContextCourse";
 import { Section } from "./section";
 import SectionWrapper from "./sectionWrappper";
+import StudentsView from "./thirdComponent";
 
 const steps = ["Add Course Details", "Add Lessons And Sections", "Review"];
 
 export default function HorizontalNonLinearStepper() {
-  const { basicError , section , setSection , secondError} = useCourseContext();
+  const { basicError , section , setSection , secondError , submitForm} = useCourseContext();
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState({  });
   const [activeStepError, setActiveStepError] = useState({});
@@ -96,6 +97,11 @@ export default function HorizontalNonLinearStepper() {
         delete updatedErrors[activeStep];
         return updatedErrors;
       });
+      
+    }
+    if(completedSteps() == totalSteps()-1){
+      console.log("total Steps Compleated")
+      submitForm()
     }
   
     setCompleted({
@@ -164,16 +170,17 @@ export default function HorizontalNonLinearStepper() {
           {allStepsCompleted() ? (
             <Box className="text-center">
               <Typography className="mt-2 mb-4">
-                All steps completed - you're finished
+                Please Wait while we saving this document to the backEnd
               </Typography>
-              <Button onClick={handleReset} variant="contained" color="primary">
+              {/* <Button onClick={handleReset} variant="contained" color="primary">
                 Reset
-              </Button>
+              </Button> */}
             </Box>
           ) : (
             <Box className="w-full flex flex-col items-center">
               {activeStep === 0 && <CreateCourseForm />}
               {activeStep == 1 && <SectionWrapper /> }
+              {activeStep == 2 && <StudentsView/>}
 
               <Box className="w-full flex justify-between items-center mt-6 ">
                 <Button
@@ -206,7 +213,7 @@ export default function HorizontalNonLinearStepper() {
                         className=""
                       >
                         {completedSteps() === totalSteps() - 1
-                          ? "Finish"
+                          ? "Finish" 
                           : "Complete Step"}
                       </Button>
                     ))}

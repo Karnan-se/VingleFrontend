@@ -9,6 +9,8 @@ import ViewApplication from "../generalParts/admindashboard/viewApplication";
 import TutorsTable from "../generalParts/admindashboard/tutorsTAble";
 import PviewApplication from "../generalParts/admindashboard/higherOrder/PviewApplication";
 import Category from "../generalParts/category/categories";
+import Order from "../Components/admin/order";
+import AdminCourses from "../Components/admin/adminCourses";
 
 
 
@@ -31,6 +33,8 @@ return (
     <Route path="tutors" element={<TutorsTable/>} ></Route>
     <Route path="viewApplication" element={<PviewApplication/>}> </Route>
     <Route path="categories" element={<Category/>}></Route>
+    <Route path="orders" element={<Order/>}></Route>
+    <Route path="courses" element={<AdminCourses/>}></Route>
     </Route>
     
     </Route>

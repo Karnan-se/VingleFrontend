@@ -74,7 +74,7 @@ export default function (){
     </div>
 
     
-    <div className="bg-gray-50 p-4 rounded-lg shadow-inner">
+    {/* <div className="bg-gray-50 p-4 rounded-lg shadow-inner">
       <h2 className="text-lg font-semibold text-gray-700 mb-4">
         Your English AI Course
       </h2>
@@ -128,7 +128,7 @@ export default function (){
       >
         Listening
       </NavLink>
-    </div>
+    </div> */}
   </nav>
 </aside>
 

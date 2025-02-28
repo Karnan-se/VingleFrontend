@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Chart from "./chart";
 import { revenue } from "../../features/api/revenue";
 import { fetchAdminChart } from "../../features/api/fetchAdminChart";
+import { adminRevenue } from "../../features/api/adminRevenue";
 
 const timeRanges = {
   "ALL": 720,
@@ -11,6 +12,9 @@ const timeRanges = {
 };
 
 const generateRevenueForAdmin = async (period) => {
+
+  
+
   try {
     const now = new Date();
     let startDate;
@@ -43,7 +47,7 @@ const generateRevenueForAdmin = async (period) => {
 };
 
 const transformRevenueData = (data, period) => {
-  // Group data by month/year based on period
+ 
   const transformedData = data.reduce((acc, item) => {
     const dateKey = formatDate(item.day, period);
     if (!acc[dateKey]) {
@@ -58,7 +62,7 @@ const transformRevenueData = (data, period) => {
     return acc;
   }, {});
 
-  // Convert object to array and sort by date
+  
   return Object.values(transformedData)
     .sort((a, b) => new Date(a.date) - new Date(b.date));
 };
@@ -68,13 +72,13 @@ const formatDate = (day, period) => {
   date.setDate(day);
 
   switch(period) {
-    case 720: // ALL
+    case 720:
       return date.toISOString().split('T')[0];
-    case 365: // 1Y
+    case 365: 
       return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-    case 180: // 6M
+    case 180: 
       return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-    case 30: // 1M
+    case 30: 
       return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
     default:
       return date.toISOString().split('T')[0];
@@ -86,6 +90,25 @@ export default function DashboardMain() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [revenue , setRevenue] = useState()
+
+
+  useEffect(()=>{
+    const revenueDetails = async()=>{
+      try {
+        const reveue = await adminRevenue()
+        console.log(reveue , "revenue")
+        setRevenue(reveue)
+        
+      } catch (error) {
+        console.log(error)
+        
+      }
+
+    }
+    revenueDetails()
+
+  },[])
 
   useEffect(() => {
     const loadData = async () => {
@@ -114,14 +137,27 @@ export default function DashboardMain() {
 
   return (
     <>
+     
       <main className="flex-1 p-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-gray-500 text-sm">Total Revenue</h3>
-            <p className="text-2xl font-semibold mt-2">₹2100000</p>
+
+      {revenue && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 ">
+        <div className="bg-white p-6 rounded-lg shadow">
+            <h3 className="text-gray-500 text-sm">Total Sales</h3>
+            <p className="text-2xl font-semibold mt-2"> ₹{revenue.revenue}</p>
           </div>
-          {/* Other dashboard cards... */}
+          <div className="bg-white p-6 rounded-lg shadow">
+            <h3 className="text-gray-500 text-sm">sales commission</h3>
+            <p className="text-2xl font-semibold mt-2"> ₹{revenue.totalSales}</p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow">
+            <h3 className="text-gray-500 text-sm">Total course</h3>
+            <p className="text-2xl font-semibold mt-2">{revenue.totalCourse}</p>
+          </div>
+          
+         
         </div>
+      )}
 
         <Chart
           data={data}

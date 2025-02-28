@@ -171,6 +171,7 @@ const [image, setImage] = useState()
         message: newMessage,
         senderId: sender._id,
         receiverId: participant._id,
+        
         timestamp: new Date().toISOString(),
       };
       console.log(sender.firstName, "firsttName");

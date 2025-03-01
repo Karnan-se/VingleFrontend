@@ -1,8 +1,9 @@
 
 import { PlayCircle, WrenchIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useState  , useEffect } from "react";
+import { useState  , useEffect, useCallback } from "react";
 import { usepdfContext } from "../../Components/context/pdfRenderContext";
+import { getprogress } from "../../features/api/progress";
 import {
     Card,
     CardBody,
@@ -15,7 +16,19 @@ import {
 export default function CourseCard({ order, action }) {
   
     const [isHovered, setIsHovered] = useState();
-    const {renderPdf} = usepdfContext()
+    const {renderPdf} = usepdfContext();
+    const [coursePercentage , setCoursePercentage] = useState()
+
+    const getProgress = useCallback(async () => {
+      const progress = await getprogress(order.userId, order.courseId);
+      console.log(progress, "progress Worked with useCallback");
+      setCoursePercentage(progress)
+    }, [order.userId, order.courseId]);
+    
+    useEffect(() => {
+      getProgress();
+    }, [getProgress]); 
+    
     
 
 
@@ -76,14 +89,16 @@ export default function CourseCard({ order, action }) {
             {order.courseId.name}
           </h3>
           <p className="text-gray-500 text-sm mb-3">{"tutor"}</p>
+          {coursePercentage >0 && (  
           <Progress
-            value={order.progress}
+            value={coursePercentage}
             className="w-full"
             classNames={{
               indicator: "bg-yellow-400",
               track: "bg-gray-200",
             }}
           />
+        )}
         </CardFooter>
       </Card>
     );

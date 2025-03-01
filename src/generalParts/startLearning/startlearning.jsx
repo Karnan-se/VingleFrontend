@@ -5,6 +5,9 @@ import { createProgress } from "../../features/api/isProgreesTracked";
 import { useSelector } from "react-redux";
 import { updateProgress } from "../../features/api/isProgreesTracked";
 import ProgressBar from "./ProgressBar";
+import { usepdfContext } from "../../Components/context/pdfRenderContext";
+import { FileText } from "lucide-react";
+
 
 import { Star, PlayCircle, ChevronDown } from "lucide-react";
 
@@ -14,6 +17,7 @@ export default function LearningComponent({ course }) {
   const [itemsId, setItems] = useState();
   const [openSections, setOpenSections] = useState([]);
   const [fileUrl, setFileUrl] = useState();
+  const { setOPenPdf , setPdfData} = usepdfContext()
 
   const toggleSection = (sectionId) => {
     setOpenSections((prev) =>
@@ -91,10 +95,32 @@ export default function LearningComponent({ course }) {
     }
   };
 
-  const handlefileUrl = (fileUrl, itemId) => {
+  const handlefileUrl = async(fileUrl, itemId) => {
     setFileUrl(fileUrl);
     setItems(itemId);
+    if(fileUrl.toLowerCase().endsWith(".pdf")) {
+      setFileUrl(null)
+      setPdfData(fileUrl);
+      setOPenPdf(true);
+      const updateProgres = await updateProgress(
+        userInfo._id, 
+        course._id,
+        itemId,
+        1000
+      )
+    }
   };
+
+  // setFileUrl(fileUrl);
+  // setItems(itemId);
+  // if (fileUrl.type == "application/pdf") {
+  //   setFileUrl(null);
+  //   console.log("it is pdf");
+  //   setFileUrl(null);
+  //   setPdfData(URL.createObjectURL(fileUrl));
+  //   setOPenPdf(true);
+  //   console.log("it is completed");
+  // }
 
   const getCurrentItemPercentage = () => {
     const currentItem = progress.completedItems.find(
@@ -161,7 +187,9 @@ export default function LearningComponent({ course }) {
                             key={item._id}
                             className="py-2 flex items-start gap-3 "
                           >
-                            <PlayCircle className="w-5 h-5 mt-1" />
+                            {item.type == "video" ? 
+                          <PlayCircle className="w-5 h-5 mt-1" /> : <FileText  className="w-5 h-5 mt-1"/> }
+
                             <div>
                               <label
                                 htmlFor=""

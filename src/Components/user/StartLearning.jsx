@@ -6,7 +6,8 @@ import VisitComponent from "../../generalParts/chatAndvideocall/visitProfile";
 import { useState } from "react";
 import RatingsModal from "../../generalParts/startLearning/ratingsModal";
 import { useSelector } from "react-redux";
-
+import PdfWrapper from "../context/pdfRenderContext";
+import { usepdfContext } from "../context/pdfRenderContext";
 
 export default function StartLearning(){
 
@@ -14,8 +15,8 @@ export default function StartLearning(){
     const {course } = location.state || {}
     const [ratingModal , setRatingsModal] = useState(false)
     const userInfo = useSelector((state)=> state.user.userInfo)
-    
-
+ 
+ 
     const openRatingsModals = () =>{
         setRatingsModal((prev)=>  prev = ! prev)
     }
@@ -26,7 +27,9 @@ export default function StartLearning(){
     return (
         <>
         <Navbar></Navbar>
+        <PdfWrapper>  
         <LearningComponent  course={course}/>
+        </PdfWrapper>
         <VisitComponent tutorId={course.tutorId} openRatingsModals={openRatingsModals}/>
         {ratingModal &&  userInfo && (
             <RatingsModal  course={course} openRatingsModals={openRatingsModals} userInfo={userInfo}/>

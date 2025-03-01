@@ -45,7 +45,7 @@ export default function StudentsView() {
       setFileUrl(null);
       setPdfData(URL.createObjectURL(fileUrl));
       setOPenPdf(true);
-      console.log("it is compoleateed");
+      console.log("it is completed");
     }
   };
 

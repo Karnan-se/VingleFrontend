@@ -10,6 +10,7 @@ import { useSocket } from "../../Components/context/socketContext";
 import { useOutletContext } from "react-router-dom";
 import { useNotification } from "../../Components/context/notificationContext";
 import PopOver from "./PopOver";
+import { uploadtoCloudinary } from "../../features/api/uploadCloudinary";
 
 export default function ChatInterface({ participants, sender }) {
   const { socket } = useSocket();
@@ -20,23 +21,24 @@ export default function ChatInterface({ participants, sender }) {
   const [isActive, setIsOnline] = useState(false);
   const [lastMessage, setLastMessage] = useState();
   const [isOpen, setIsOpen] = useState();
-const [image, setImage] = useState()
+  const [secureUrl, setSecureUrl] = useState();
+  const [image, setImage] = useState();
+  const [videoError, setVideoError] = useState()
 
   const scrollRef = useRef();
 
   const { onlineUsers } = useOutletContext();
-  const {
-    showMessageNotification,
-    showCallNotification,
-    setIsVideoCallActive,
-    isVideoCallActive,
-  } = useNotification();
+  // const {
+  //   showMessageNotification,
+  //   showCallNotification,
+  //   setIsVideoCallActive,
+  //   isVideoCallActive,
+  // } = useNotification();
 
-  useEffect(() => {
-    console.log(sender, "sender sender ");
-  }, [sender]);
+
 
   //handle save Messages and state uodation on new Message
+
   useEffect(() => {
     if (!socket) return;
 
@@ -51,10 +53,6 @@ const [image, setImage] = useState()
       socket.off("savedMessage", handleSavedMessage);
     };
   }, [socket]);
-
-  // useEffect(()=>{
-  //   console.log(onlineUsers , "Online Users")
-  // },[onlineUsers])
 
   // handleNotification
   useEffect(() => {
@@ -166,12 +164,17 @@ const [image, setImage] = useState()
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
+    if(newMessage.trim().length == 0){
+      console.log("no message")
+      return
+    }
     if (newMessage.trim()) {
       const Message = {
         message: newMessage,
         senderId: sender._id,
+        type: "text",
         receiverId: participant._id,
-        
+
         timestamp: new Date().toISOString(),
       };
       console.log(sender.firstName, "firsttName");
@@ -180,7 +183,6 @@ const [image, setImage] = useState()
       setMessages((prev) => [...prev, Message]);
       setNewMessage("");
     }
-
   };
 
   const formatTimestamp = (timestamp) => {
@@ -188,6 +190,7 @@ const [image, setImage] = useState()
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
+  //setOnline
   useEffect(() => {
     if (!participant?._id) {
       return;
@@ -198,7 +201,7 @@ const [image, setImage] = useState()
     );
   }, [participant?._id, onlineUsers]);
 
-  
+  //last message
   useEffect(() => {
     const lastMessage = messages
       .filter(
@@ -213,7 +216,59 @@ const [image, setImage] = useState()
     console.log(lastMessage, "lastMessage LastMEssage LAstMEssage ");
   }, [messages, participant?._id]);
 
-  
+  const handleImage = async (file) => {
+    setVideoError(false)
+    try {
+      if (file.type.startsWith("video/")) {
+        let maxSize = 10*1024*1024
+        if(file.size > maxSize){
+          setVideoError(true)
+          console.log("video size is too large")
+          return
+        }
+        setVideoError(false)
+        handleVideoUpload()
+        console.log("This is a video");
+        return;
+        
+      }
+      const secureurl = await uploadtoCloudinary(file);
+      let type =
+        file.type === "application/pdf"
+          ? "pdf"
+          : file.type.startsWith("image/")
+          ? "image"
+          : "unknown";
+
+      setSecureUrl(secureurl);
+      sendImage(secureurl, type);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleVideoUpload =() =>{
+    return 
+  }
+  const sendImage = async (secureUrl, type) => {
+    try {
+      console.log(secureUrl);
+
+      const Message = {
+        message: secureUrl,
+        senderId: sender._id,
+        type: type,
+        receiverId: participant._id,
+        timestamp: new Date().toISOString(),
+      };
+
+      const firstName = sender.firstName;
+      socket.emit("sendMessage", { Message, firstName });
+      setMessages((prev) => [...prev, Message]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -245,28 +300,62 @@ const [image, setImage] = useState()
                 ref={scrollRef}
               >
                 {messages.map((message) => (
-                  <div
-                    key={message._id}
-                    className={`flex ${
-                      message.senderId === sender?._id
-                        ? "justify-end"
-                        : "justify-start"
-                    }`}
-                  >
-
+                  <div key={message._id}>
                     <div
-                      className={`max-w-[80%] p-3 rounded-lg ${
-                        message.senderId === sender._id
-                          ? "bg-gray-600 text-white"
-                          : "bg-gray-200"
+                      className={`flex ${
+                        message.senderId === sender?._id
+                          ? "justify-end"
+                          : "justify-start"
                       }`}
                     >
-                      <p>{message.message}</p>
-                      <p className="text-xs text-right mt-1 opacity-70">
-                        {formatTimestamp(
-                          message.createdAt || message.timestamp
+                      <div
+                        className={`max-w-[43%] p-3 rounded-lg ${
+                          message.senderId === sender._id
+                            ? "bg-gray-600 text-white"
+                            : "bg-gray-200"
+                        }`}
+                      >
+                        {message.type === "text" && <p>{message.message}</p>}
+
+                        {message.type === "image" && (
+                          <img
+                            src={message.message}
+                            alt="Sent image"
+                            className="max-w-full rounded object-cover h-48 hover:cursor-pointer hover:size-48"
+                          />
                         )}
-                      </p>
+
+                        {message.type === "pdf" && (
+                          <div className="relative group w-full h-48">
+                          {/* Embedded PDF Preview */}
+                          <iframe
+                           src={`${message.message}#toolbar=0&scrollbar=0`}
+                            className="w-full h-full rounded object-cover scrollbar-hide "
+                            title="PDF Preview"
+                            
+                          >
+                            View PDF
+                          </iframe>
+                        
+                          {/* Download Button (Hidden by Default, Shown on Hover) */}
+                          <a
+                            href={message.message}
+                            download
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="absolute inset-0 flex items-center justify-center bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity rounded"
+                          >
+                            📥 Download PDF
+                          </a>
+                        </div>
+)}
+
+                        <p className="text-xs text-right mt-1 opacity-70">
+                          {formatTimestamp(
+                            message.createdAt || message.timestamp
+                          )}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -281,14 +370,14 @@ const [image, setImage] = useState()
                     <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-slate-300 text-white rounded-md shadow-md hover:bg-yellow-500 transition">
                       <input
                         type="file"
-                        accept="image/*"
+                        accept="image/*,video/*,.pdf"
                         className="hidden"
-                        onChange={(e) =>
-                          setImage(e.target.files)
-                        }
+                        onChange={(e) => handleImage(e.target.files[0])}
                       />
                       📷 Gallery
                     </label>
+                    {videoError && ( <> <p className="text-red-500 font-thin font-sans">Video size is too big</p></>)}
+                
                   </div>
                   <button type="submit" className="p-2 hover:text-gray-600">
                     <Send className="w-5 h-5" />

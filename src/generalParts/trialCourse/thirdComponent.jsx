@@ -5,6 +5,8 @@ import ProgressBar from "../startLearning/ProgressBar";
 import { useEffect, useState } from "react";
 import { usepdfContext } from "../../Components/context/pdfRenderContext";
 import TrailVideoPlayer from "./TrialVideoPlayer";
+import { FileText } from "lucide-react";
+
 
 export default function StudentsView() {
   const { basicForm, setBasicForm, basicError, section } = useCourseContext();
@@ -76,7 +78,9 @@ export default function StudentsView() {
                           key={item._id}
                           className="py-2 flex items-start gap-3 "
                         >
-                          <PlayCircle className="w-5 h-5 mt-1" />
+                          {item.type == "video" ? 
+                          <PlayCircle className="w-5 h-5 mt-1" /> : <FileText  className="w-5 h-5 mt-1"/> 
+}
                           <div>
                             <label
                               htmlFor=""

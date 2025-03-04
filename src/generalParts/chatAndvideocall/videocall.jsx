@@ -20,6 +20,13 @@ export default function VideoCall({ participant, onClose, sender }) {
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
 
+
+
+  useEffect(()=>{
+    console.log("remote Stream set")
+
+  },[setRemoteStream])
+
   const startVideoCall = useCallback(async () => {
     try {
      
@@ -83,6 +90,14 @@ export default function VideoCall({ participant, onClose, sender }) {
           socket.emit("peerSignal", { signal: data, receiverId: participant._id })
         })
 
+
+        // peerInstance.on("close", ()=>{
+        //   console.log("video call closed")
+        //   peerInstance.destroy()
+        //   setLocalStream(null)
+        //   handlePeerclose()
+        // })
+
         const handlePeerSignal = ({ signal }) => {
           console.log("recheed at peersignal listened at client ")
           peerInstance.signal(signal)
@@ -100,6 +115,7 @@ export default function VideoCall({ participant, onClose, sender }) {
 
         return () => {
           peerInstance.destroy()
+          
           socket.off("peerSignal")
           localStream.getTracks().forEach((track) => track.stop())
         }
@@ -108,6 +124,8 @@ export default function VideoCall({ participant, onClose, sender }) {
       }
     }
   }, [localStream])
+
+  
 
 
   const toggleMute = () => {
@@ -132,11 +150,26 @@ export default function VideoCall({ participant, onClose, sender }) {
   
   const handleClose = () => {
     if (peer) peer.destroy();
+    setLocalStream(null)
+    setRemoteStream(null)
+    setPeer(null)
     if (localStream) {
       localStream.getTracks().forEach((track) => track.stop());
     }
+    if(socket){
+      socket.emit("closeVideoCall", participant._id )
+    }
+  
     onClose();
   };
+
+    socket.on("closeVideoCall", ()=>{
+      setLocalStream(null)
+      setRemoteStream(null)
+      setPeer(null)
+      onClose()
+})
+
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

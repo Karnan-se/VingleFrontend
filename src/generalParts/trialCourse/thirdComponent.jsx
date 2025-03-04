@@ -37,6 +37,7 @@ export default function StudentsView() {
   };
 
   const handlefileUrl = (fileUrl, itemId) => {
+
     setFileUrl(fileUrl);
     setItems(itemId);
     if (fileUrl.type == "application/pdf") {
@@ -124,9 +125,9 @@ export default function StudentsView() {
         <div className="flex p-5 min-w-3xl">
           {fileUrl && section && section.length > 0 && (
             <>
-              {section.map((sec, index) =>
+              {section.length > 0 &&  section.map((sec, index) =>
                 sec.items.map((item, itemIndex) =>
-                  item.type === "video" ? (
+                  item.type === "video" && item.fileUrl == fileUrl ? (
                     <TrailVideoPlayer
                       key={`${index}-${itemIndex}`}
                       fileUrl={URL.createObjectURL(fileUrl)}

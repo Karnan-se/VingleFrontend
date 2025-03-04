@@ -4,6 +4,7 @@ import { ContentTypeSelector } from "../course/ContentTypeSelector";
 import { CurriculumItem } from "./Curriculam";
 import { Field, ErrorMessage } from "formik";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 export function Section({ section, sectionIndex, setFieldValue, errors }) {
   const [isExpanded, setIsExpanded] = useState(true);
@@ -35,8 +36,11 @@ export function Section({ section, sectionIndex, setFieldValue, errors }) {
   return (
     <div className="border rounded-lg p-4 bg-white">
       <div className="flex items-center gap-4">
-        <Button isIconOnly variant="light"  onClick={() => setIsExpanded(!isExpanded)}>
-
+        <Button
+          isIconOnly
+          variant="light"
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
           {isExpanded ? (
             <ChevronDown className="w-4 h-4" />
           ) : (
@@ -54,18 +58,24 @@ export function Section({ section, sectionIndex, setFieldValue, errors }) {
           component="p"
           className="text-danger "
         />
-
-        <Button
-          isIconOnly
-          variant="light"
-          onClick={() =>
-            setFieldValue("sections", (prev) =>
-              prev.filter((_, i) => i !== sectionIndex)
-            )
-          }
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
         >
-          <Trash2 className="w-4 h-4 text-danger" />
-        </Button>
+          <motion.button
+            whileHover={{ scale: 1.2, rotate: 10 }}
+            whileTap={{ scale: 0.9, rotate: -10 }}
+            className="p-2 rounded-full bg-transparent"
+            onClick={() =>
+              setFieldValue("sections", (prev) =>
+                prev.filter((_, i) => i !== sectionIndex)
+              )
+            }
+          >
+            <Trash2 className="w-4 h-4 text-danger" />
+          </motion.button>
+        </motion.div>
       </div>
 
       {isExpanded &&
@@ -85,7 +95,9 @@ export function Section({ section, sectionIndex, setFieldValue, errors }) {
         <ContentTypeSelector onSelect={addItem} />
       ) : (
         <Button
-          variant="light"
+          variant="ghost"
+          color="secondary"
+          className="border mt-2 shadow-sm hover:shadow-md bg-yellow-100 hover:bg-yellow-200"
           onClick={() => setShowContentTypeSelector(true)}
         >
           <Plus className="w-4 h-4" />

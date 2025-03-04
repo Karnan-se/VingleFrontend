@@ -6,7 +6,7 @@ import VideoPlayer1 from "../viewCourse/VideoPlayerEditCourse";
 
 export function CurriculumItem({ item, sectionIndex, itemIndex, setFieldValue, errors, deleteItem }) {
   const [video, setVideo] = useState();
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];

@@ -28,6 +28,7 @@
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "formik": "^2.4.6",
+    "framer-motion": "^12.4.10",
     "lucide-react": "^0.462.0",
     "node": "^23.7.0",
     "passport": "^0.7.0",

@@ -16,16 +16,20 @@ export default function ChatHeader({ participant, isActive  , onlineUsers , send
   const {showRinging , dismissRingingNotification} =useNotification()
 
   const handleVideoCall = () => {
+    console.log("video call element loading ")
+    console.log(isRinging ,"isRinging")
+    console.log(setisRinging , "setRinging")
     
     setisRinging(true)
   }
- 
+
   useEffect(()=>{
     if(!socket  || !isRinging || !sender){
       return 
     }
     socket.emit("isRinging", { receiverId: participant, sender });
     showRinging(participant )
+    setisRinging(false)
 
 
     return () => {
@@ -48,7 +52,7 @@ export default function ChatHeader({ participant, isActive  , onlineUsers , send
       socket.off("isCallAttended")
     }
 
-  },[socket , ])
+  },[socket ])
 
   
   

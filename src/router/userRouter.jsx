@@ -29,6 +29,7 @@ import HorizontalNonLinearStepper from "../generalParts/trialCourse/courseSteppe
 import CourseContext from "../generalParts/trialCourse/ContextCourse.jsx";
 import TrailAddCourse from "../Components/tutor/trialAddCourse.jsx";
 import PdfWrapper from "../Components/context/pdfRenderContext.jsx";
+import Courses from "../Components/user/courses.jsx";
 
 
 function UserRouter(){
@@ -51,6 +52,7 @@ function UserRouter(){
                 
                <Route element={<UserPrivateRoute/>}> 
                 <Route path="/" element={<LandingPage/>} />
+                <Route path="/courses" element={<Courses/>}></Route>
 
                 <Route path="/profile" element={<ProfilePage/>}>
                 <Route index element={<ProfileMain/>}></Route>

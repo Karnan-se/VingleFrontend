@@ -161,6 +161,7 @@ const Navbar = () => {
             className="rounded font-serif bg-gray-300 w-40 md:w-80 h-7 pl-3"
             placeholder="Search..."
           />
+          
 <Dropdown>
   <DropdownTrigger>
     <img
@@ -169,7 +170,7 @@ const Navbar = () => {
         "https://lh3.googleusercontent.com/a/ACg8ocLKHbbXlKTKlXS04FurppuwIwD-bw68yZnO8nrVjk1LMHeHyhM=s96-c"
       }
       alt="profile"
-      className="w-8 h-8 rounded-full border border-gray-200 cursor-pointer"
+      className="w-8 h-8 rounded-full border border-gray-200 cursor-pointer "
     />
   </DropdownTrigger>
   <DropdownMenu aria-label="Profile Actions" className="py-6">
@@ -199,9 +200,9 @@ const Navbar = () => {
   </DropdownMenu>
 </Dropdown>
 
-          <button className="btn bg-slate-200 py-1 px-3 rounded-sm text-black" onClick={logout}>
+          {/* <button className="btn bg-slate-200 py-1 px-3 rounded-sm text-black" onClick={logout}>
             Logout
-          </button>
+          </button> */}
         </div>
       </div>
     </nav>

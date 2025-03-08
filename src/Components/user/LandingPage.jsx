@@ -43,18 +43,19 @@ export default function LandingPage() {
     };
     fetchCategory();
   }, []);
-
+//filter the course by category
   const filterCourseByCategory = (id) => {
     console.log(id);
 
     if (filteredCourses && filteredCourses[0]?.category === id) {
+      console.log("else part need to be worked")
       setFilteredCourses(null);
     } else {
       const filtered = course.filter((c) => c.category == id);
       setFilteredCourses(filtered);
     }
   };
-
+//fetch all the courses 
   useEffect(() => {
     const fetchData = async () => {
       const courses = await fetchAllCourse();

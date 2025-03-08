@@ -106,7 +106,7 @@ export default function LearningComponent({ course }) {
         userInfo._id, 
         course._id,
         itemId,
-        1000
+        "100"
       )
     }
   };

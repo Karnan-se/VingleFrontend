@@ -13,6 +13,7 @@ import PhotoMain from "../generalParts/profile/photoMain";
 import TChatAndVIdeoCall from "../Components/tutor/TChatAndVideoCall";
 import VideoCall from "../generalParts/chatAndvideocall/videocall";
 import RevenuePage from "../Components/tutor/revenue";
+import TrailAddCourse from "../Components/tutor/trialAddCourse";
 
 function TutorLogin(){
     return (
@@ -24,7 +25,7 @@ function TutorLogin(){
     <Route path="profile" element={<ProfileMain/>} />
     <Route path="courses" element={<CourseTable/>} />
     <Route path="photo" element={<PhotoMain/>} />
-    <Route path="courseCreate" element={<CourseCreator/>}></Route>
+    <Route path="courseCreate" element={<TrailAddCourse/>}></Route>
     <Route path="editCourse" element={<EditCourse/>}></Route>
     <Route path="chat" element={<TChatAndVIdeoCall/>}></Route>
     <Route path="/revenue" element={<RevenuePage/>} /> 

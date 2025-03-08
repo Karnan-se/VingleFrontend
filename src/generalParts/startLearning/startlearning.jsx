@@ -111,16 +111,6 @@ export default function LearningComponent({ course }) {
     }
   };
 
-  // setFileUrl(fileUrl);
-  // setItems(itemId);
-  // if (fileUrl.type == "application/pdf") {
-  //   setFileUrl(null);
-  //   console.log("it is pdf");
-  //   setFileUrl(null);
-  //   setPdfData(URL.createObjectURL(fileUrl));
-  //   setOPenPdf(true);
-  //   console.log("it is completed");
-  // }
 
   const getCurrentItemPercentage = () => {
     const currentItem = progress.completedItems.find(

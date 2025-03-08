@@ -30,6 +30,7 @@ import CourseContext from "../generalParts/trialCourse/ContextCourse.jsx";
 import TrailAddCourse from "../Components/tutor/trialAddCourse.jsx";
 import PdfWrapper from "../Components/context/pdfRenderContext.jsx";
 import Courses from "../Components/user/courses.jsx";
+import TutorsDetails from "../Components/user/Tutors.jsx";
 
 
 function UserRouter(){
@@ -67,6 +68,7 @@ function UserRouter(){
                 <Route path="/StartLearning" element={<StartLearning/>}></Route>
                 <Route path="/chatInterface" element={<ChatAndVIdeoCall/>}/>
                 <Route path="/VideoCall" element={<VideoCall/>}></Route>
+                <Route path="/tutors" element={<TutorsDetails/>}></Route>
 
               
                 <Route path ="/trialStepper" element={<TrailAddCourse />} />

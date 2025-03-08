@@ -70,8 +70,8 @@ export default function VisitComponent({tutorId , openRatingsModals}){
         <>
         {CourseCount &&  instructorDetails && (
         <div className="mx-10 flex w-1/2 mb-10 gap-5 items-center">
-               <div className="bg-red-300 rounded-full w-28 h-28 " >
-                <img src={tutorId.photo} alt="" />
+               <div className=" rounded-full w-28 h-28 " >
+                <img src={tutorId.photo} alt="" className="rounded-full" />
                </div>
 
        
@@ -83,10 +83,11 @@ export default function VisitComponent({tutorId , openRatingsModals}){
             <div className="flex items-center space-x-4 mt-2">
               <div className="text-blue-600"> {CourseCount.length} Courses</div>
               <div className="flex items-center">
-                {/* <span className="text-gray-400">(76,335)</span> */}
+               
               </div>
             </div>
           </div>
+          
           <button className="h-12 items-center p-5 bg-yellow-300 rounded-lg ml-auto flex
             hover:bg-yellow-500 hover:text-white shadow-md " onClick={"visitProfile"}>
             Visit Profile

@@ -31,7 +31,7 @@ const ThankYouPage = () => {
   },[])
 
   useEffect(() => {
-    setTimeout(() => setShowConfetti(true), 500);
+    setTimeout(() => setShowConfetti(true), 0);
   }, []);
 
   return (

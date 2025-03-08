@@ -14,6 +14,9 @@ export const totalCourse  = async (tutorId)=>{
 export const getInStructorDetails = async (tutorId)=>{
     try {
         console.log(tutorId, "ghhjhfhkj")
+        if(!tutorId){
+            return
+        }
         const instructorDetails = await adminApi.post("/tutorsApplication", {_id:tutorId})
         return instructorDetails.data
         
@@ -22,3 +25,4 @@ export const getInStructorDetails = async (tutorId)=>{
         
     }
 }
+

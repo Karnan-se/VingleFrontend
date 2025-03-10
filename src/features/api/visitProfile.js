@@ -3,6 +3,7 @@ import { adminApi, tutorApi, userApi } from "../../axios/axiosInstance"
 export const totalCourse  = async (tutorId)=>{
     try {
         const totalCourse = await tutorApi.get("/tutorsCourse",{params:{tutorId}})
+        console.log(totalCourse.data , "totalCourse")
         return totalCourse.data
         
     } catch (error) {

@@ -84,6 +84,10 @@ export default function CourseTable() {
     setCourses(courses.filter(course => course._id !== courseId))
   }
 
+  const reportCourse =()=>{
+    console.log("report thee course")
+  }
+
  
 
   return (
@@ -178,17 +182,17 @@ export default function CourseTable() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button
-                      onClick={() => handleEdit(course)}
-                      className="mr-2 px-3 py-1 rounded bg-blue-100 text-blue-600 hover:bg-blue-200"
+                      onClick={() => reportCourse(course)}
+                      className="mr-2 px-3 py-1 rounded bg-red-100 text-red-600 hover:bg-red-200"
                     >
-                      Edit
+                      Report
                     </button>
-                    <button
+                    {/* <button
                       onClick={() => handleDelete(course._id)}
                       className="px-3 py-1 rounded bg-red-100 text-red-600 hover:bg-red-200"
                     >
                       Delete
-                    </button>
+                    </button> */}
                   </td>
                 </tr>
               ))}

@@ -27,3 +27,18 @@ export const fetchStudents = async () => {
         
       }
     }
+
+    export const fetchTutorByEmail  = async (emailAddress)=>{
+      try {
+        console.log(emailAddress , "emailAddress for api request")
+        const response = await tutorApi.get("/fetchTutorByEmail",{params:{emailAddress}})
+        console.log(response.data.tutors)
+        return response.data.tutors
+
+        
+      } catch (error) {
+        console.log(error)
+        throw error
+        
+      }
+    }

@@ -34,8 +34,6 @@ export default function StartLearning(){
         {ratingModal &&  userInfo && (
             <RatingsModal  course={course} openRatingsModals={openRatingsModals} userInfo={userInfo}/>
         )}
-       
-
         </>
     )
 }

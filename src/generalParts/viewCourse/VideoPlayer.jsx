@@ -1,11 +1,13 @@
 import { useRef, useState, useEffect } from "react"
-
+import {useLocation} from "react-router-dom"
+ 
 export default function VideoPlayer({ fileUrl, updatePercentage, initialPercentage, itemId }) {
   const videoRef = useRef(null)
   const [watchedRanges, setWatchedRanges] = useState([])
   const [percentageWatched, setPercentageWatched] = useState(initialPercentage || 0)
   const [totalDuration, setTotalDuration] = useState(0)
   const initialPercentageRef = useRef(initialPercentage)
+  const location = useLocation()
 
   useEffect(() => {
     initialPercentageRef.current = initialPercentage
@@ -72,12 +74,30 @@ export default function VideoPlayer({ fileUrl, updatePercentage, initialPercenta
   }, [watchedRanges, totalDuration])
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      updatePercentage(percentageWatched, itemId )
-    }, 1000)
+    // const intervalId = setInterval(() => {
+    //   updatePercentage(percentageWatched, itemId )
+    // }, 1000)
+
+    const handleBeforeUnload = () =>{
+      console.log("percentahe updated when the user reload the page")
+      updatePercentage(percentageWatched , itemId)
+    }
+
+
+    if(videoRef.current){
+      videoRef.current.addEventListener("pause" , handleBeforeUnload)
+    }
+    window.addEventListener("beforeunload", handleBeforeUnload);
+   
    
 
-    return () => clearInterval(intervalId)
+    return () => {
+      
+      if (videoRef.current) {
+        videoRef.current.removeEventListener("pause", handleBeforeUnload);
+      }
+       window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
   }, [percentageWatched, updatePercentage, itemId])
 
   return (

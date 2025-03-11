@@ -116,7 +116,7 @@ export default function LearningComponent({ course }) {
     const currentItem = progress.completedItems.find(
       (item) => item.itemId.toString() === itemsId.toString()
     );
-    console.log(currentItem.percentageCompleted, "total percentage");
+    console.log(currentItem.percentageCompleted, "total percentage current Irem");
     return currentItem.percentageCompleted;
   };
 

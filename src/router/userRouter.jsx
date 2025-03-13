@@ -31,7 +31,7 @@ import TrailAddCourse from "../Components/tutor/trialAddCourse.jsx";
 import PdfWrapper from "../Components/context/pdfRenderContext.jsx";
 import Courses from "../Components/user/courses.jsx";
 import TutorsDetails from "../Components/user/Tutors.jsx";
-
+import Certificate from "../Components/user/certificate.jsx";
 
 function UserRouter(){
 
@@ -60,6 +60,7 @@ function UserRouter(){
                 <Route path="/profile/photo" element={<PhotoMain/>}/>
                 
                 <Route path="/profile/course"  element={<PdfWrapper><CourseMain/></PdfWrapper>} />
+                <Route path="/profile/certifications" element={<PdfWrapper><Certificate/></PdfWrapper>} />
                 
                 </Route>
                 <Route path="/courseDetail" element={<Elements stripe={stripePromise}>  <CourseDetails/>   </Elements>  }></Route>
@@ -69,6 +70,7 @@ function UserRouter(){
                 <Route path="/chatInterface" element={<ChatAndVIdeoCall/>}/>
                 <Route path="/VideoCall" element={<VideoCall/>}></Route>
                 <Route path="/tutors" element={<TutorsDetails/>}></Route>
+                
 
               
                 <Route path ="/trialStepper" element={<TrailAddCourse />} />

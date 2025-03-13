@@ -69,7 +69,7 @@ export default function ProfileAside() {
               Course
             </NavLink>
             <NavLink
-              to="profile/certifications"
+              to="/profile/certifications"
               className={({ isActive }) =>
                 `w-full px-4 py-4 flex items-center gap-3 text-sm ${
                   isActive
@@ -82,7 +82,7 @@ export default function ProfileAside() {
               Certifications
             </NavLink>
             <NavLink
-              to="profile/notifications"
+              to="/profile/notifications"
               className={({ isActive }) =>
                 `w-full px-4 py-4 flex items-center gap-3 text-sm ${
                   isActive

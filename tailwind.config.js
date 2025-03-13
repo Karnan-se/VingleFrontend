@@ -10,12 +10,13 @@ export default {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
         poppins: ['Poppins', 'sans-serif'],
+        sansita: ["Sansita Swashed", "cursive"],
       },
       width: {
         120: "30rem",
       },
       colors: {
-        danger: "#F31260", // Configure only the danger color
+        danger: "#F31260", 
       },
       
     },

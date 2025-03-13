@@ -3,7 +3,7 @@ import Navbar from "../../generalParts/landipage/Navbar"
 import LearningComponent from "../../generalParts/startLearning/startlearning"
 import { useLocation } from "react-router-dom"
 import VisitComponent from "../../generalParts/chatAndvideocall/visitProfile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RatingsModal from "../../generalParts/startLearning/ratingsModal";
 import { useSelector } from "react-redux";
 import PdfWrapper from "../context/pdfRenderContext";
@@ -15,6 +15,11 @@ export default function StartLearning(){
     const {course } = location.state || {}
     const [ratingModal , setRatingsModal] = useState(false)
     const userInfo = useSelector((state)=> state.user.userInfo)
+
+    useEffect(()=>{
+        console.log(course , "course in startLEarning")
+
+    },[course])
  
  
     const openRatingsModals = () =>{

@@ -11,7 +11,7 @@ import {
   import { useState } from "react";
   import { CircleAlert } from "lucide-react";
   
-  export default function RejectionModal({onReject}) {
+  export default function RejectionModal({onReject , buttonName}) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [rejectionReasons, setRejectionReasons] = useState([]);
     const [currentReason, setCurrentReason] = useState("");
@@ -37,7 +37,7 @@ import {
           onPress={onOpen}
           className="border bg-red-500 text-white hover:bg-red-600"
         >
-          Reject Application
+         <button>{`${buttonName || "Reject Application "}`}</button>
         </Button>
         <Modal
           isOpen={isOpen}
@@ -50,7 +50,7 @@ import {
             {(onClose) => (
               <>
                 <ModalHeader className="text-center text-lg font-semibold text-red-500">
-                  Reject Application
+                  Rejection Details
                 </ModalHeader>
                 <ModalBody className="flex flex-col justify-center items-center space-y-4 p-6">
                   <div className="flex w-full max-w-sm items-center space-x-2">

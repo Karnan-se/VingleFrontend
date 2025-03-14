@@ -1,10 +1,13 @@
 
 
 import { useEffect, useState } from 'react'
-import { PlusCircle } from 'lucide-react'
+import { icons, PlusCircle } from 'lucide-react'
 import { tutorApi } from '../../axios/axiosInstance'
 import {useNavigate} from "react-router-dom"
 import { updateCourse } from '../../features/api/fetchAllcourse'
+import RejectionModal from '../modals/rejectionModal'
+import { rejectCourse } from '../../features/api/emailService'
+import swal from "sweetalert"
 
 
 
@@ -42,6 +45,7 @@ export default function CourseTable() {
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [currentPage, setCurrentPage] = useState(1)
+  const [openRejectionModal , setOpenRejectionModal] = useState(false)
   const navigate = useNavigate()
   const itemsPerPage = 5
 
@@ -86,6 +90,20 @@ export default function CourseTable() {
 
   const reportCourse =()=>{
     console.log("report thee course")
+    setOpenRejectionModal(true)
+  }
+
+  const sendRejectionMail = async (rejectionReasons , tutorId ) =>{
+    console.log(rejectionReasons , tutorId ,"going to send the Mail")
+    const rejectionMail = await rejectCourse(rejectionReasons , tutorId)
+    if(rejectionMail){
+      swal({
+        icons:"success",
+        text: "Email Send Successfully"
+      })
+    }
+    
+
   }
 
  
@@ -181,12 +199,7 @@ export default function CourseTable() {
                     </button>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button
-                      onClick={() => reportCourse(course)}
-                      className="mr-2 px-3 py-1 rounded bg-red-100 text-red-600 hover:bg-red-200"
-                    >
-                      Report
-                    </button>
+                  <RejectionModal onReject={(rejectionReasons )=>sendRejectionMail(rejectionReasons ,course.tutorId )} buttonName={"Report"}/>
                     {/* <button
                       onClick={() => handleDelete(course._id)}
                       className="px-3 py-1 rounded bg-red-100 text-red-600 hover:bg-red-200"
@@ -245,7 +258,14 @@ export default function CourseTable() {
           </div>
         </div>
       </div>
+      {/* {openRejectionModal && (
+    
+    <RejectionModal onReject={sendRejectionMail}/>
+    
+   
+  )} */}
     </div>
+
   )
 }
 

@@ -19,7 +19,7 @@ import {
     const handleAddReason = () => {
       if (currentReason.trim()) {
         setRejectionReasons((prevReasons) => [...prevReasons, currentReason.trim()]);
-        setCurrentReason(""); // Clear the input field
+        setCurrentReason(""); 
       }
     };
   

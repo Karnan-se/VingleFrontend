@@ -5,13 +5,6 @@ import { Search } from "lucide-react"
 import { tutorApi } from "../../axios/axiosInstance"
 import { allOrders } from "../../features/api/isOrderPlaced"
 
-const dummyOrders = [
-    { id: 1, username: "john_doe", tutorName: "Jane Smith", paymentStatus: "Paid", totalAmount: 150 },
-    { id: 2, username: "alice_wonder", tutorName: "Bob Johnson", paymentStatus: "Pending", totalAmount: 200 },
-    { id: 3, username: "charlie_brown", tutorName: "Emma Davis", paymentStatus: "Paid", totalAmount: 175 },
-    { id: 4, username: "david_miller", tutorName: "Sophia Wilson", paymentStatus: "Failed", totalAmount: 125 },
-    { id: 5, username: "eva_green", tutorName: "Michael Brown", paymentStatus: "Paid", totalAmount: 225 },
-  ]
 
 
 export default function OrderDetails() {
@@ -66,8 +59,8 @@ export default function OrderDetails() {
           className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="all">All Status</option>
-          <option value="paid">Paid</option>
-          <option value="pending">Pending</option>
+          <option value="Completed">Paid</option>
+          <option value="Pending">Pending</option>
           <option value="failed">Failed</option>
         </select>
       </div>
@@ -100,7 +93,7 @@ export default function OrderDetails() {
                     <div className="text-sm font-medium text-gray-900">{order.userId.firstName}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{order.courseId.tutorId.firstName}</div>
+                    <div className="text-sm text-gray-900">{order.courseId?.tutorId?.firstName}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span

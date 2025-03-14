@@ -156,14 +156,10 @@ const Navbar = () => {
 
      
         <div className="hidden md:flex items-center space-x-4">
-          <input
-            type="text"
-            className="rounded font-serif bg-gray-300 w-40 md:w-80 h-7 pl-3"
-            placeholder="Search..."
-          />
+       
           
 <Dropdown>
-  <DropdownTrigger>
+  <DropdownTrigger className="mr-4 bg-white">
     <img
       src={
         userInfo?.photo ||
@@ -173,7 +169,7 @@ const Navbar = () => {
       className="w-8 h-8 rounded-full border border-gray-200 cursor-pointer "
     />
   </DropdownTrigger>
-  <DropdownMenu aria-label="Profile Actions" className="py-6">
+  <DropdownMenu aria-label="Profile Actions" className="py-6 bg-white">
     <DropdownItem
       key="profile"
       className="py-3 hover:bg-slate-200 px-5"
@@ -191,7 +187,7 @@ const Navbar = () => {
 
     <DropdownItem
       key="logout"
-      className="text-danger px-5 hover:bg-slate-200"
+      className="text-danger px-5 hover:bg-slate-200 hover:text-black"
       color="danger"
       onClick={logout}
     >

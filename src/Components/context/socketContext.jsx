@@ -27,6 +27,7 @@ export const SocketProvider = ({ children }) => {
 
    socketRef.current.on("disconnect", () => {
      setIsConnected(false);
+     setSocket(null); // this part also should be deletd if anything goes wrong
    });
  };
 
@@ -35,6 +36,7 @@ export const SocketProvider = ({ children }) => {
      if (socketRef.current) {
        socketRef.current.disconnect();
        console.log("disconnected");
+       setSocket(null)  //this part is developement purpoise only ant errir delet thjs part 
      }
    };
  }, []);

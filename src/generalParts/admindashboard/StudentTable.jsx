@@ -2,11 +2,10 @@
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { adminApi, tutorApi , userApi } from '../../axios/axiosInstance'
-
-
-
+import { useSocket } from '../../Components/context/socketContext';
 
 export default function StudentTable() {
+  const {socket} = useSocket()
 
 
 
@@ -68,7 +67,7 @@ export default function StudentTable() {
 
     setStudents(updatedStudents);
   
-    console.log("After setStudents (immediate):", students);
+    
     const updatedStudent = updatedStudents.find(
       (student) => student._id === studentId
     );
@@ -82,6 +81,10 @@ export default function StudentTable() {
   const updateUser = async (user) => {
     try {
       const response = await userApi.post("/update", { user });
+      if(user.isBlocked == false && socket ){
+        console.log("socket is goung to implement ")
+        socket.emit("userBlocked", (user))
+      }
       console.log("Update Response:", response);
     } catch (error) {
       console.error("Error updating user:", error);

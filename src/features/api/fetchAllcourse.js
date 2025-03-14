@@ -24,3 +24,17 @@ export const updateCourse = async(courseId , courseDetails)=>{
         
     }
 }
+
+export const getCourse = async(courseId)=>{
+   try {
+    const response = await userApi.post("/getCourse", {courseId});
+    console.log(response.data.course);
+    return response.data.course;
+
+    
+   } catch (error) {
+    console.log(error)
+    throw error
+    
+   }
+}

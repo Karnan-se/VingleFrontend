@@ -11,11 +11,15 @@ export default function Courses() {
     <div className="bg-white relative">
       <Navbar />
 
-      {/* Main Content */}
+      
       <div className="flex flex-col mx-36 align-middle border">
-        <div className="p-16">
+        <div className="p-16 flex justify-evenly">
           <Welcome />
+          {/* <div className="w-60 h-60 bg-slate-600">
+
+          </div> */}
         </div>
+    
         <div className="p-3 font-bold">
           <p className="font-inter text-2xl">What to Learn Next</p>
         </div>

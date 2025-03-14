@@ -32,6 +32,7 @@ import PdfWrapper from "../Components/context/pdfRenderContext.jsx";
 import Courses from "../Components/user/courses.jsx";
 import TutorsDetails from "../Components/user/Tutors.jsx";
 import Certificate from "../Components/user/certificate.jsx";
+import AboutUs from "../Components/user/aboutUs.jsx";
 
 function UserRouter(){
 
@@ -70,6 +71,8 @@ function UserRouter(){
                 <Route path="/chatInterface" element={<ChatAndVIdeoCall/>}/>
                 <Route path="/VideoCall" element={<VideoCall/>}></Route>
                 <Route path="/tutors" element={<TutorsDetails/>}></Route>
+                <Route path={"/about"} element={<AboutUs/>}/>
+                
                 
 
               

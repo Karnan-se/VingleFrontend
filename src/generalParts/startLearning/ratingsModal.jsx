@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import { sendRatings } from "../../features/api/saveRatings";
 
-export default function RatingsModal({ openRatingsModals, course, userInfo }) {
-  const [rating, setRating] = useState(0);
-  const [review, setFeedback] = useState("");
+export default function RatingsModal({ openRatingsModals, course, userInfo ,rating , setRating}) {
 
-  const handleRating = (index) => setRating(index + 1);
+  const [review, setFeedback] = useState("");
 
   useEffect(() => {
     console.log("fetch ratings");
@@ -28,8 +26,10 @@ export default function RatingsModal({ openRatingsModals, course, userInfo }) {
 
       const sendRating = await sendRatings(ratings);
       if (sendRating) {
+       
         openRatingsModals();
       }
+      setRating(rating)
       console.log(sendRating, "sendRatings");
     } catch (error) {
       console.log(error);
@@ -99,7 +99,7 @@ export default function RatingsModal({ openRatingsModals, course, userInfo }) {
                   className="cursor-pointer transition-transform transform hover:scale-110"
                   fill={i < rating ? "#FFD700" : "none"}
                   stroke={i < rating ? "#FFD700" : "#000"}
-                  onClick={() => handleRating(i)}
+                  onClick={() => setRating(i+1)}
                 />
               ))}
             </div>

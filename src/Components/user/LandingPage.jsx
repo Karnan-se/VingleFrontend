@@ -47,11 +47,13 @@ export default function LandingPage() {
   const filterCourseByCategory = (id) => {
     console.log(id);
 
-    if (filteredCourses && filteredCourses[0]?.category === id) {
+    if (filteredCourses && filteredCourses[0]?.category == id) {
       console.log("else part need to be worked")
       setFilteredCourses(null);
     } else {
-      const filtered = course.filter((c) => c.category == id);
+     
+      const filtered = course.filter((c)=>c.category?._id == id)
+      console.log(filtered ,  "course")
       setFilteredCourses(filtered);
     }
   };

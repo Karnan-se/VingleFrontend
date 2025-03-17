@@ -11,6 +11,7 @@ import { adminApi } from "../../axios/axiosInstance";
 import { fetchAllCourse } from "../../features/api/fetchAllcourse";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export default function LandingPage() {
   const scrollref = useRef(null);
@@ -43,27 +44,28 @@ export default function LandingPage() {
     };
     fetchCategory();
   }, []);
-//filter the course by category
+  //filter the course by category
   const filterCourseByCategory = (id) => {
     console.log(id);
 
     if (filteredCourses && filteredCourses[0]?.category == id) {
-      console.log("else part need to be worked")
+      console.log("else part need to be worked");
       setFilteredCourses(null);
     } else {
-     
-      const filtered = course.filter((c)=>c.category?._id == id)
-      console.log(filtered ,  "course")
+      const filtered = course.filter((c) => c.category?._id == id);
+      console.log(filtered, "course");
       setFilteredCourses(filtered);
     }
   };
-//fetch all the courses 
+  //fetch all the courses
   useEffect(() => {
     const fetchData = async () => {
       const courses = await fetchAllCourse();
       console.log(courses);
-      const updatedCourses = await courses.filter((crs)=> crs.isPublished  ==  true)
-      console.log(updatedCourses , "updatedCourse")
+      const updatedCourses = await courses.filter(
+        (crs) => crs.isPublished == true
+      );
+      console.log(updatedCourses, "updatedCourse");
       setCourse(updatedCourses);
     };
     fetchData();
@@ -78,9 +80,57 @@ export default function LandingPage() {
       {course && (
         <div className="min-h-screen bg-white">
           <Navbar />
+          <section className="w-full py-12 px-4">
+            <div className="max-w-7xl mx-auto relative">
+              <img
+                src="https://img-c.udemycdn.com/notices/web_carousel_slide/image/db24b94e-d190-4d5a-b1dd-958f702cc8f5.jpg"
+                className="object-cover "
+                alt=""
+              />
+              <div className="absolute top-1/2  transform -translate-y-1/2 p-3  ">
+                <motion.div
+                  initial={{ x: -500, scale: 0.5, background: "bg-red-500" }}
+                  animate={{
+                    x: 0,
+                    opacity: 1,
+                    scale: 1,
+                  }}
+                  transition={{
+                    duration: 0.4,
+                    ease: "easeInOut",
+                  }}
+                  className="w-full border p-14 bg-slate-50"
+                >
+                  <h1 className=" font-poppins text-3xl">
+                    {" "}
+                    Learning that gets you{" "}
+                  </h1>
+                  <motion.p
+                    animate={{
+                      color: [
+                        "#f43f5e",
+                        "#f59e0b",
+                        "#10b981",
+                        "#3b82f6",
+                        "#f43f5e",
+                      ],
+                    }}
+                    transition={{
+                      repeat: Infinity,
+                      duration: 3,
+                      ease: "linear",
+                    }}
+                  >
+                    Skills for your present (and your future). Get started with
+                    us.
+                  </motion.p>
+                </motion.div>
+              </div>
+            </div>
+          </section>
 
           <section className="w-full py-12 px-4">
-            <div className="max-w-6xl mx-auto">
+            <div className="max-w-7xl mx-auto">
               <h1 className="text-4xl font-bold mb-4">
                 All The Skill You Need In One Place
               </h1>
@@ -89,23 +139,26 @@ export default function LandingPage() {
                 professional development
               </p>
 
-              <div className="flex flex-wrap gap-2 mb-8">
-                {categories &&
-                  categories.map((category) => (
-                    <Button
-                      key={category}
-                      variant="flat"
-                      className="bg-gray-200 hover:bg-gray-300 rounded-md"
-                      onClick={() => filterCourseByCategory(category._id)}
-                    >
-                      {category.value}
-                    </Button>
-                  ))}
+              <div className="flex flex-wrap gap-10 mb-8">
+              {categories.map((category, index) => (
+  <motion.button
+    key={category._id}
+    variant="flat"
+    className="bg-gray-200 hover:bg-gray-300 rounded-md p-3 shadow-md shadow-slate-300"
+    onClick={() => filterCourseByCategory(category._id)}
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: index * 0.2, duration: 0.5, ease: "easeOut" }}
+  >
+    {category.value}
+  </motion.button>
+))}
+
               </div>
             </div>
           </section>
 
-          <section className="max-w-6xl mx-auto px-4 mb-12">
+          <section className="max-w-7xl mx-auto px-4 mb-12">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-semibold">Featured Courses</h2>
               <Button variant="light">See all</Button>
@@ -129,7 +182,7 @@ export default function LandingPage() {
             </div>
           </section>
 
-          {/* <section className="max-w-6xl mx-auto px-4 mb-12">
+          {/* <section className="max-w-7xl mx-auto px-4 mb-12">
           <h2 className="text-2xl font-semibold mb-6">Best Seller</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[...Array(4)].map((_, i) => (
@@ -141,7 +194,7 @@ export default function LandingPage() {
           </div>
         </section> */}
 
-          <section className="max-w-6xl mx-auto px-4 mb-12">
+          <section className="max-w-7xl mx-auto px-4 mb-12">
             <h2 className="text-3xl font-bold mb-4">
               Learn English With Our AI
             </h2>
@@ -150,8 +203,8 @@ export default function LandingPage() {
             </p>
           </section>
 
-          <section className="bg-gray-200 py-20 mb-12">
-            <div className="max-w-6xl mx-auto px-4">
+          <section className="bg-gray-200 py-20 mb-12 max-w-7xl mx-auto">
+            <div className="max-w-7xl mx-auto px-4">
               <div className="flex flex-col md:flex-row justify-between items-center gap-8">
                 <div className="text-lg">1k+ users</div>
                 <div className="text-center">

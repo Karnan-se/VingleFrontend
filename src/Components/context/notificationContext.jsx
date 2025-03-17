@@ -80,7 +80,7 @@ export const NotificationProvider = ({ children }) => {
     );
   };
 
-// Notification dismissal Logic
+
   const dismissRingingNotification = (participant) => {
     console.log("Call cancelled from the user side");
     console.log(participant ,   "sender and reciever when the call is canecelled")

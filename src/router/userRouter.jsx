@@ -44,7 +44,7 @@ function UserRouter(){
                 
                 
                 <Route path="/ForgotPassword" element={<PreventBackNavigation><ForgotPassword/></PreventBackNavigation>}></Route>
-                <Route path="/forgotpassword/otp" element={<PreventBackNavigation><ForgotOtpPage/></PreventBackNavigation>}></Route>
+                <Route path="/forgotpassword/otp" element={<ForgotOtpPage/>}></Route>
                 <Route path="/otp" element={<PreventBackNavigation><UserOtpPage/></PreventBackNavigation>} />
                 <Route path="/createpassword" element={<PreventBackNavigation><UserCreatePassword/></PreventBackNavigation>}></Route>
               

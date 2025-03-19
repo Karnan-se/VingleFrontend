@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 // import swal from "sweetalert";
 
 
-export function ForgotOtpPage(){
+export default function ForgotOtpPage(){
     const LoginRoute = "/login"
     
 

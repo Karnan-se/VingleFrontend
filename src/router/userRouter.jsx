@@ -9,11 +9,11 @@ import PhotoMain from "../generalParts/profile/photoMain.jsx";
 import ProfileMain from "../generalParts/profile/profileMain.jsx";
 import CourseMain from "../generalParts/profile/courseMain.jsx";
 import ForgotPassword from "../Components/user/forgotPassword.jsx";
-import ForgotOtpPage from "../Components/user/forgotOTP.jsx";
 import UserCreatePassword from "../Components/user/userChangePassord.jsx";
 import PreventBackNavigation from "../features/navigation/backNavigation.jsx";
 import InstructorApplicationForm from "../Components/tutor/tutorApplication.jsx";
 import CourseDetails from "../Components/user/courseDetails.jsx";
+import ForgotOtpPage from "../Components/user/forgotOTP.jsx";
 
 import {loadStripe} from  "@stripe/stripe-js"
 import {Elements} from "@stripe/react-stripe-js"
@@ -24,9 +24,6 @@ import ThankYouPage from "../generalParts/thankyou/success.jsx";
 import StartLearning from "../Components/user/StartLearning.jsx";
 import ChatAndVIdeoCall from "../Components/user/ChatvideoCall.jsx";
 import VideoCall from "../generalParts/chatAndvideocall/videocall.jsx";
-import RevenuePage from "../Components/tutor/revenue.jsx";
-import HorizontalNonLinearStepper from "../generalParts/trialCourse/courseStepper.jsx";
-import CourseContext from "../generalParts/trialCourse/ContextCourse.jsx";
 import TrailAddCourse from "../Components/tutor/trialAddCourse.jsx";
 import PdfWrapper from "../Components/context/pdfRenderContext.jsx";
 import Courses from "../Components/user/courses.jsx";
@@ -47,7 +44,7 @@ function UserRouter(){
                 
                 
                 <Route path="/ForgotPassword" element={<PreventBackNavigation><ForgotPassword/></PreventBackNavigation>}></Route>
-                <Route path="forgotpassword/otp" element={<PreventBackNavigation><ForgotOtpPage/></PreventBackNavigation>}></Route>
+                <Route path="/forgotpassword/otp" element={<PreventBackNavigation><ForgotOtpPage/></PreventBackNavigation>}></Route>
                 <Route path="/otp" element={<PreventBackNavigation><UserOtpPage/></PreventBackNavigation>} />
                 <Route path="/createpassword" element={<PreventBackNavigation><UserCreatePassword/></PreventBackNavigation>}></Route>
               

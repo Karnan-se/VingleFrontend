@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { setUserCredentials } from "../../features/authSlice.jsx";
 
 
-export default function userOtpPage(){
+export default function UserOtpPage(){
     const LoginRoute = "/login"
     const dispatch = useDispatch()
     

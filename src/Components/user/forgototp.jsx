@@ -1,4 +1,4 @@
-import OTPVerification from "../../generalParts/otpPage.jsx";
+import OTPVerification from "../../generalParts/OtpPage.jsx";
 import { useNavigate } from "react-router-dom";
 import { userApi } from "../../axios/axiosInstance.js";
 import { useLocation } from "react-router-dom";

@@ -2,6 +2,7 @@ import OTPVerification from "../../generalParts/otpPage.jsx";
 import { useNavigate } from "react-router-dom";
 import { userApi } from "../../axios/axiosInstance.js";
 import { useLocation } from "react-router-dom";
+import swal from "sweetalert";
 
 
 export default function ForgotOtpPage(){

@@ -2,10 +2,10 @@ import OTPVerification from "../../generalParts/OtpPage.jsx";
 import { useNavigate } from "react-router-dom";
 import { userApi } from "../../axios/axiosInstance.js";
 import { useLocation } from "react-router-dom";
-import swal from "sweetalert";
+// import swal from "sweetalert";
 
 
-export default function ForgotOtpPage(){
+export function ForgotOtpPage(){
     const LoginRoute = "/login"
     
 
@@ -37,10 +37,10 @@ export default function ForgotOtpPage(){
     
   } catch (error) {
     console.log(error)
-    swal({
-        icon:"error",
-        title:"Invalid OTP"
-    })
+    // swal({
+    //     icon:"error",
+    //     title:"Invalid OTP"
+    // })
     
   }
   

@@ -45,11 +45,6 @@ const submit = (otp)=>{
   handleSubmit(otp);
 
 }
-    
- 
-  
-
-
 
 
   return (

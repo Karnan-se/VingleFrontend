@@ -13,7 +13,7 @@ import UserCreatePassword from "../Components/user/userChangePassord.jsx";
 import PreventBackNavigation from "../features/navigation/backNavigation.jsx";
 import InstructorApplicationForm from "../Components/tutor/tutorApplication.jsx";
 import CourseDetails from "../Components/user/courseDetails.jsx";
-import ForgotOtpPage from  "../Components/user/Forgototp.jsx"
+// import ForgotOtpPage from  "../Components/user/Forgototp.jsx"
 
 import {loadStripe} from  "@stripe/stripe-js"
 import {Elements} from "@stripe/react-stripe-js"
@@ -44,7 +44,7 @@ function UserRouter(){
                 
                 
                 <Route path="/ForgotPassword" element={<PreventBackNavigation><ForgotPassword/></PreventBackNavigation>}></Route>
-                <Route path="/forgotpassword/otp" element={<ForgotOtpPage/>}></Route>
+                {/* <Route path="/forgotpassword/otp" element={<ForgotOtpPage/>}></Route> */}
                 <Route path="/otp" element={<PreventBackNavigation><UserOtpPage/></PreventBackNavigation>} />
                 <Route path="/createpassword" element={<PreventBackNavigation><UserCreatePassword/></PreventBackNavigation>}></Route>
               

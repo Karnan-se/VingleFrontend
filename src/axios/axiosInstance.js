@@ -1,16 +1,15 @@
-import axios from "axios"
+import axios from "axios";
 
 const axiosBaseConfig = axios.create({
-    baseURL : 'https://api.vingle.shop',
-    timeout:10000,
-    withCredentials:true,
-})
+    timeout: 10000,
+    withCredentials: true,
+});
 
 export const userApi = axios.create({
     ...axiosBaseConfig,
-    baseURL:`https://api.vingle.shop/user`,
-    withCredentials:true
-})
+    baseURL: "/api/user",  // 🔥 Now using relative path
+});
+
 userApi.interceptors.response.use(
     (response) => response,
     (error) => {
@@ -22,17 +21,16 @@ userApi.interceptors.response.use(
                 window.location.href = "/login";
             }
         }
-        return Promise.reject(error); 
+        return Promise.reject(error);
     }
 );
 
 export const adminApi = axios.create({
     ...axiosBaseConfig,
-    baseURL : `https://api.vingle.shop/admin`,
-    withCredentials:true
-})
+    baseURL: "/api/admin",  // 🔥 Using relative path
+});
+
 export const tutorApi = axios.create({
     ...axiosBaseConfig,
-    baseURL:`https://api.vingle.shop/tutor`,
-    withCredentials:true
-})
+    baseURL: "/api/tutor",  // 🔥 Using relative path
+});

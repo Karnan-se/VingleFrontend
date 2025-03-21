@@ -1,9 +1,8 @@
 {
     "rewrites": [
-      { "source": "/api/:path*", "destination": "https://api.vingle.shop/:path*" },
-      { "source": "/tutor/:path*", "destination": "https://api.vingle.shop/tutor/:path*" },
-      { "source": "/admin/:path*", "destination": "https://api.vingle.shop/admin/:path*" },
-      { "source": "/user/:path*", "destination": "https://api.vingle.shop/user/:path*" },
+      { "source": "/api/tutor/:path*", "destination": "https://api.vingle.shop/tutor/:path*" },
+      { "source": "/api/admin/:path*", "destination": "https://api.vingle.shop/admin/:path*" },
+      { "source": "/api/user/:path*", "destination": "https://api.vingle.shop/user/:path*" },
       { "source": "/(.*)", "destination": "/index.html" }
     ]
   }

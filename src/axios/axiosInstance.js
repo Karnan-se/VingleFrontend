@@ -1,14 +1,14 @@
 import axios from "axios"
 
 const axiosBaseConfig = axios.create({
-    baseURL : 'http://localhost:3000',
+    baseURL : 'https://api.vingle.shop',
     timeout:10000,
     withCredentials:true,
 })
 
 export const userApi = axios.create({
     ...axiosBaseConfig,
-    baseURL:`http://localhost:3000/user`,
+    baseURL:`https://api.vingle.shop/user`,
     withCredentials:true
 })
 userApi.interceptors.response.use(
@@ -28,11 +28,11 @@ userApi.interceptors.response.use(
 
 export const adminApi = axios.create({
     ...axiosBaseConfig,
-    baseURL : `http://localhost:3000/admin`,
+    baseURL : `https://api.vingle.shop/admin`,
     withCredentials:true
 })
 export const tutorApi = axios.create({
     ...axiosBaseConfig,
-    baseURL:`http://localhost:3000/tutor`,
+    baseURL:`https://api.vingle.shop/tutor`,
     withCredentials:true
 })

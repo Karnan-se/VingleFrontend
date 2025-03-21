@@ -19,6 +19,11 @@ export default function LearningComponent({ course }) {
   const [fileUrl, setFileUrl] = useState();
   const { setOPenPdf , setPdfData} = usepdfContext()
 
+  useEffect(()=>{
+    console.log(course , "course course course")
+
+  },[course])
+
   const toggleSection = (sectionId) => {
     setOpenSections((prev) =>
       prev.includes(sectionId)

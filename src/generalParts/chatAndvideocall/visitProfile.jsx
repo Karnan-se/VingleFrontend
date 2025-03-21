@@ -3,11 +3,13 @@ import { userApi } from "../../axios/axiosInstance"
 import { totalCourse } from "../../features/api/visitProfile"
 import { getInStructorDetails } from "../../features/api/visitProfile"
 import {useNavigate} from "react-router-dom"
+import { useSelector } from "react-redux"
 
 export default function VisitComponent({tutorId , openRatingsModals}){
 
     const [CourseCount, setTotalCourse] = useState();
-    const [instructorDetails, setInstructorDetails] = useState()
+    const [instructorDetails, setInstructorDetails] = useState();
+    const userInfo = useSelector((state)=> state.user.userInfo)
     const navigate = useNavigate()
 
 
@@ -27,7 +29,7 @@ export default function VisitComponent({tutorId , openRatingsModals}){
     
             const [totalCourseResult, instructorDetailsResult] = await Promise.all([
                 totalCourse(tutorId._id),
-                getInStructorDetails(tutorId._id),
+                getInStructorDetails(userInfo._id),
             ]);
     
     
@@ -51,7 +53,7 @@ export default function VisitComponent({tutorId , openRatingsModals}){
     
 
 
-    },[])
+    },[userInfo])
 
     
 

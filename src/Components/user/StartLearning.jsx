@@ -27,9 +27,11 @@ export default function StartLearning() {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
+      
         
           const course1 = await getCourse(course._id);
-          console.log(course1, "RatingUpdated Course");
+          
+
           setCourseDetails(course1);
         
       } catch (error) {
@@ -39,21 +41,23 @@ export default function StartLearning() {
     fetchCourse();
   }, [rating ,course ,setRating]);
 
+
+
   return (
     <>
-      {courseDetails && (
+      {course && (
         <>
           <Navbar></Navbar>
           <PdfWrapper>
-            <LearningComponent course={courseDetails} />
+            <LearningComponent course={course} />
           </PdfWrapper>
           <VisitComponent
-            tutorId={courseDetails.tutorId}
+            tutorId={course.tutorId}
             openRatingsModals={openRatingsModals}
           />
           {ratingModal && userInfo && (
             <RatingsModal
-              course={courseDetails}
+              course={course}
               openRatingsModals={openRatingsModals}
               userInfo={userInfo}
               rating={rating}

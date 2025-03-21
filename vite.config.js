@@ -4,13 +4,7 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
 
 export default defineConfig({
-  server: {
-    proxy: {
-      "/tutor": "https://api.vingle.shop",
-      "/admin": "https://api.vingle.shop",
-      "/user": "https://api.vingle.shop",
-    }
-  },
+
   plugins: [react()],
   define: {
     global: 'window',

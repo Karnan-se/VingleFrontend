@@ -1,4 +1,10 @@
 {
-    "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+    "rewrites": [
+      { "source": "/api/:path*", "destination": "https://api.vingle.shop/:path*" },
+      { "source": "/tutor/:path*", "destination": "https://api.vingle.shop/tutor/:path*" },
+      { "source": "/admin/:path*", "destination": "https://api.vingle.shop/admin/:path*" },
+      { "source": "/user/:path*", "destination": "https://api.vingle.shop/user/:path*" },
+      { "source": "/(.*)", "destination": "/index.html" }
+    ]
   }
   

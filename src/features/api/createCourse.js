@@ -4,12 +4,10 @@ import swal from "sweetalert"
 
 export const createCourse = async (form) =>{
  try {
-    const response = await tutorApi.post("/createCourse",form,{
-      headers : {
-          "Content-Type": "multipart/form-data", 
-      },
-      
-    } ,)
+  for (const pair of form.entries()) {
+    console.log(pair[0], pair[1]); 
+}
+    const response = await tutorApi.post("/createCourse",form)
       console.log(response , "response")
       if(response){
      

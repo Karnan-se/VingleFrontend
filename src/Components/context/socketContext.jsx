@@ -2,6 +2,13 @@ import React, { createContext, useContext, useRef, useEffect, useState } from "r
 import { useCallback } from "react";
 import { io } from "socket.io-client";
 
+
+let environment = (import.meta.env.VITE_ENVIRONMENT) ?? "production"
+
+let baseurl = environment == "development" ? "http://localhost:3000" :"https://api.vingle.shop"
+
+
+
 const SocketContext = createContext({ socket: null });
 
 export const SocketProvider = ({ children }) => {
@@ -14,7 +21,7 @@ export const SocketProvider = ({ children }) => {
      socketRef.current.disconnect();
    }
 
-   socketRef.current = io("https://api.vingle.shop", {
+   socketRef.current = io(`${baseurl}`, {
      withCredentials: true,
      transports: ["websocket"],
      query: { userId },

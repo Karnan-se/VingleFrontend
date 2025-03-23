@@ -13,7 +13,7 @@ export default function Welcome(){
 
     return (
         <div className=" w-1/2">
-            <div className=" flex flex-row"> 
+            <div className=" flex flex-col md:flex-col lg:flex-row  xl:flex-row  "> 
             <div className="rounded-full bg-purple-200 w-16 h-16">
                 <img src={userInfo.photo} alt="" className="object-cover w-16 h-16 rounded-full" />
             </div>

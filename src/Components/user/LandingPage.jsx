@@ -87,7 +87,7 @@ export default function LandingPage() {
                 className="object-cover "
                 alt=""
               />
-              <div className="absolute top-1/2  transform -translate-y-1/2 p-3 sm:p-5 md:p-8 sm:w-2/5 md:w-3/4 lg:w-1/2 xl:w-2/5 w-2/5">
+              <div className="absolute top-1/2  transform -translate-y-1/2 p-3 sm:p-3 md:p-8 sm:w-2/5 md:w-3/4 lg:w-1/2 xl:w-2/5 w-2/5">
                 <motion.div
                   initial={{ x: -500, scale: 0.5, background: "bg-red-500" }}
                   animate={{
@@ -101,7 +101,7 @@ export default function LandingPage() {
                   }}
                   className="w-full border p-3 xl:p-14 md:p-9 sm:p-5 bg-slate-50"
                 >
-                  <h1 className=" font-poppins text-sm sm:text-2xl md:text-3xl lg:text-4xl xl:text-3xl ">
+                  <h1 className=" font-poppins text-[12px] sm:text-2xl md:text-3xl lg:text-4xl xl:text-3xl ">
                     {" "}
                     Learning that gets you{" "}
                   </h1>
@@ -120,7 +120,7 @@ export default function LandingPage() {
                       duration: 3,
                       ease: "linear",
                     }}
-                    className="text-sm xl:text-lg"
+                    className="text-[7px] xl:text-lg"
                   >
                     Skills for your present (and your future). Get started with
                     us.
@@ -140,7 +140,7 @@ export default function LandingPage() {
                 professional development
               </p>
 
-              <div className="flex flex-wrap gap-10 mb-8">
+              <div className="flex flex-wrap gap-4 sm:5 mb-8 lg:7 xl:10 ">
               {categories.map((category, index) => (
   <motion.button
     key={category._id}
@@ -171,7 +171,7 @@ export default function LandingPage() {
                 ref={scrollref}
               >
                 {(filteredCourses || course).map((courseData, i) => (
-                  <Card key={i} className="min-w-[300px]">
+                  <Card key={i} className=" min-w-[300px]">
                     <ImageCard ImageLink={courseData} navigate={courseDetail} />
                     <CardFooter courseData={courseData} />
                   </Card>

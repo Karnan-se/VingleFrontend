@@ -155,8 +155,8 @@ export default function LearningComponent({ course }) {
           </div>
         </div>
 
-        <div className=" flex  p-10">
-          <div className="mb-8 w-1/2 ">
+        <div className="flex flex-col  p-1 md:p-5 lg:p-7  md:flex-row">
+          <div className="mb-8 w-full  sm:w-full md:w-1/2">
             <h2 className="text-xl font-bold mb-4">Course Content</h2>
             <div className="border rounded-lg divide-y">
               {course.sections.map((section) => (
@@ -224,7 +224,7 @@ export default function LearningComponent({ course }) {
               ))}
             </div>
           </div>
-          <div className="flex p-5 min-w-3xl">
+          <div className="flex  min-w-3xl">
             {fileUrl && progress && (
               <>
               

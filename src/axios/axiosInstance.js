@@ -1,16 +1,21 @@
 import axios from "axios"
 
 
+let environment = (import.meta.env.VITE_ENVIRONMENT) ?? "production"
+
+let baseurl = environment == "development" ? "http://localhost:3000" :"https://api.vingle.shop"
+
+
 
 const axiosBaseConfig = axios.create({
-    baseURL : 'https://api.vingle.shop',
+    baseURL : `${baseurl}`,
     timeout:10000,
     withCredentials:true,
 })
 
 export const userApi = axios.create({
     ...axiosBaseConfig,
-    baseURL:`https://api.vingle.shop/user`,
+    baseURL:`${baseurl}/user`,
     withCredentials:true
 })
 userApi.interceptors.response.use(
@@ -30,11 +35,11 @@ userApi.interceptors.response.use(
 
 export const adminApi = axios.create({
     ...axiosBaseConfig,
-    baseURL : `https://api.vingle.shop/admin`,
+    baseURL : `${baseurl}/admin`,
     withCredentials:true
 })
 export const tutorApi = axios.create({
     ...axiosBaseConfig,
-    baseURL:`https://api.vingle.shop/tutor`,
+    baseURL:`${baseurl}/tutor`,
     withCredentials:true
 })

@@ -81,39 +81,54 @@ export default function LandingPage() {
         <div className="min-h-screen bg-white">
           <Navbar />
           <section className="w-full py-12 px-4">
-      <div className="max-w-7xl mx-auto relative">
-        {/* Background Image */}
-        <img
-          src="https://img-c.udemycdn.com/notices/web_carousel_slide/image/db24b94e-d190-4d5a-b1dd-958f702cc8f5.jpg"
-          className="object-cover w-full h-[300px] md:h-[400px] lg:h-[500px] rounded-lg"
-          alt=""
-        />
-
-        {/* Content Box */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full px-4 md:w-3/4 lg:w-1/2">
-          <motion.div
-            initial={{ x: -500, opacity: 0, scale: 0.5 }}
-            animate={{ x: 0, opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="w-full p-6 md:p-10 bg-white border rounded-lg shadow-lg text-center"
-          >
-            <h1 className="font-poppins text-2xl md:text-3xl font-semibold">
-              Learning that gets you
-            </h1>
-
-            <motion.p
-              className="text-base md:text-lg mt-2"
-              animate={{
-                color: ["#f43f5e", "#f59e0b", "#10b981", "#3b82f6", "#f43f5e"],
-              }}
-              transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
-            >
-              Skills for your present (and your future). Get started with us.
-            </motion.p>
-          </motion.div>
-        </div>
-      </div>
-    </section>
+            <div className="max-w-7xl mx-auto relative ">
+              <img
+                src="https://img-c.udemycdn.com/notices/web_carousel_slide/image/db24b94e-d190-4d5a-b1dd-958f702cc8f5.jpg"
+                className="object-cover "
+                alt=""
+              />
+              <div className="absolute top-1/2  transform -translate-y-1/2 p-3 sm:p-5 md:p-8 sm:w-2/5 md:w-3/4 lg:w-1/2 xl:w-2/5 w-2/5">
+                <motion.div
+                  initial={{ x: -500, scale: 0.5, background: "bg-red-500" }}
+                  animate={{
+                    x: 0,
+                    opacity: 1,
+                    scale: 1,
+                  }}
+                  transition={{
+                    duration: 0.4,
+                    ease: "easeInOut",
+                  }}
+                  className="w-full border p-3 xl:p-14 md:p-9 sm:p-5 bg-slate-50"
+                >
+                  <h1 className=" font-poppins text-sm sm:text-2xl md:text-3xl lg:text-4xl xl:text-3xl ">
+                    {" "}
+                    Learning that gets you{" "}
+                  </h1>
+                  <motion.p
+                    animate={{
+                      color: [
+                        "#f43f5e",
+                        "#f59e0b",
+                        "#10b981",
+                        "#3b82f6",
+                        "#f43f5e",
+                      ],
+                    }}
+                    transition={{
+                      repeat: Infinity,
+                      duration: 3,
+                      ease: "linear",
+                    }}
+                    className="text-sm xl:text-lg"
+                  >
+                    Skills for your present (and your future). Get started with
+                    us.
+                  </motion.p>
+                </motion.div>
+              </div>
+            </div>
+          </section>
 
           <section className="w-full py-12 px-4">
             <div className="max-w-7xl mx-auto">

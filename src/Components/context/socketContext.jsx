@@ -14,7 +14,7 @@ export const SocketProvider = ({ children }) => {
      socketRef.current.disconnect();
    }
 
-   socketRef.current = io("http://localhost:3000", {
+   socketRef.current = io("https://api.vingle.shop", {
      withCredentials: true,
      transports: ["websocket"],
      query: { userId },

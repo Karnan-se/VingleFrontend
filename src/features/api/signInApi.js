@@ -8,7 +8,7 @@ import { tutorApi } from "../../axios/axiosInstance";
 const login = (api) => {
     return async (values) => {
       try {
-        const response = await api.post("/login",{ user: values });
+        const response = await api.post("/login", { user: values } );
         console.log(response.data.data);
         return response.data.data; 
       } catch (error) {

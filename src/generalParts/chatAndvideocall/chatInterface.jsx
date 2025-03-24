@@ -136,6 +136,8 @@ export default function ChatInterface({ participants, sender }) {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
+    
+
     if (newMessage.trim().length == 0) {
       console.log("no message");
       return;

@@ -4,23 +4,28 @@ import { useEffect, useState } from 'react'
 import { PlusCircle } from 'lucide-react'
 import { tutorApi } from '../../axios/axiosInstance'
 import {useNavigate} from "react-router-dom"
+import { useSelector } from 'react-redux'
 
 
 
 export default function CourseTable() {
 
 
+  const tutorInfo = useSelector((state)=> state.tutor.tutorInfo)
+
  
 
 
   useEffect(()=>{
-    console.log(" jwenfkjn2f ")
+    console.log( tutorInfo , " jwenfkjn2f ")
     const fetchcourse = async()=>{
+      
       
       try {
         const response = await tutorApi.get("/getallCourse" , {withCredentials:true})
         console.log(response.data)
-        setCourses(response.data)
+        console.log(tutorInfo , "tutorInfo")
+        setCourses(response.data.filter((course)=> course.tutorId== tutorInfo._id))
         
       } catch (error) {
         console.log(error)
@@ -33,7 +38,7 @@ export default function CourseTable() {
     return ()=>fetchcourse()
    
   
-  },[])
+  },[tutorInfo])
 
 
 
@@ -130,7 +135,7 @@ export default function CourseTable() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {paginatedCourses.map((course, index) => (
-                <tr key={course.id} className="hover:bg-gray-50">
+                <tr key={course._id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {startIndex + index + 1}
                   </td>

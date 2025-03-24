@@ -27,11 +27,14 @@ export default function OrderDetails() {
     }
     fetchOrders()
   }, [])
+  if(!orders){
+    return null
+  }
 
   const filteredOrders = orders.filter((order) => {
     const matchesSearch =
-      order.userId.firstName.toLowerCase().includes(search.toLowerCase()) ||
-      order.courseId.tutorId.firstName.toLowerCase().includes(search.toLowerCase())
+      order.userId?.firstName.toLowerCase().includes(search.toLowerCase()) ||
+      order.courseId.tutorId?.firstName.toLowerCase().includes(search.toLowerCase())
     const matchesStatus = statusFilter === "all" || order.paymentStatus === statusFilter
     return matchesSearch && matchesStatus
   })
@@ -90,7 +93,7 @@ export default function OrderDetails() {
                 <tr key={order.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{startIndex + index + 1}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{order.userId.firstName}</div>
+                    <div className="text-sm font-medium text-gray-900">{order.userId?.firstName}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">{order.courseId?.tutorId?.firstName}</div>

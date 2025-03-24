@@ -141,7 +141,7 @@ export default function TutorsTable() {
                   Student Name
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Courses Purchased
+                  Application Date
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                  Application status
@@ -175,14 +175,14 @@ export default function TutorsTable() {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex flex-wrap gap-2">
-                      {/* {student.coursesPurchased.map((course) => (
+                      
                         <span
-                          key={course}
+                     
                           className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
                         >
-                          {course}
+                          {student?.createdAt ? new Date(student.createdAt).toLocaleDateString("en-GB") : "22-03-2025"}
                         </span>
-                      ))} */}
+                      
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -227,7 +227,7 @@ export default function TutorsTable() {
                     <button className="px-3 py-1 rounded bg-blue-100 text-blue-600 hover:bg-blue-200" onClick={()=>viewApplication(student._id)}>
                       ViewApplication
                     </button>
-                     ): <button className="px-3 py-1 rounded bg-blue-100 text-blue-600 hover:bg-blue-200">
+                     ): <button className="px-3 py-1 rounded bg-blue-100 text-blue-600 hover:bg-blue-200" onClick={(()=>viewApplication(student._id))}>
                      ViewDetails
                    </button>}
 

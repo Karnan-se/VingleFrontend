@@ -21,6 +21,11 @@ export const createCourse = async (form) =>{
     
  } catch (error) {
     console.log(error)
+    swal({
+      icon:"success",
+      title:"Success",
+      text:"course Saved Sucessfully",
+    })
     throw error
     
  }

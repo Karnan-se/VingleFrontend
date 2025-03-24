@@ -9,7 +9,7 @@ let baseurl = environment == "development" ? "http://localhost:3000" :"https://a
 
 const axiosBaseConfig = axios.create({
     baseURL : `${baseurl}`,
-    timeout:10000,
+    timeout:600000,
     withCredentials:true,
 })
 

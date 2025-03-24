@@ -137,6 +137,7 @@ const CreateCourseForm = () => {
               value={formik.values.category}
               onChange={formik.handleChange}
             >
+              <option value={""}>{"Choose any category"}</option>
               {category && category.map((cat)=> ( <option value={cat._id}>{cat.name}</option>  )  )}
              
               

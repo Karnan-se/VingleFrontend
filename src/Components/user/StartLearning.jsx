@@ -20,9 +20,14 @@ export default function StartLearning() {
     setRatingsModal((prev) => (prev = !prev));
   };
 
-//   useEffect(() => {
-//     setCourseDetails((prev) => (prev !== course ? course : prev));
-//   }, [course]);
+  // useEffect(() => {
+  //   setCourseDetails((prev) => (prev !== course ? courseDetails : prev));
+  // }, [courseDetails]);
+
+      useEffect(()=>{
+        console.log(rating ,  "rating changed ")
+
+      },[rating])
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -45,19 +50,19 @@ export default function StartLearning() {
 
   return (
     <>
-      {course && (
+      {courseDetails && (
         <>
           <Navbar></Navbar>
           <PdfWrapper>
-            <LearningComponent course={course} />
+            <LearningComponent course={courseDetails} />
           </PdfWrapper>
           <VisitComponent
-            tutorId={course.tutorId}
+            tutorId={courseDetails.tutorId}
             openRatingsModals={openRatingsModals}
           />
           {ratingModal && userInfo && (
             <RatingsModal
-              course={course}
+              course={courseDetails}
               openRatingsModals={openRatingsModals}
               userInfo={userInfo}
               rating={rating}

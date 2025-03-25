@@ -118,7 +118,7 @@ if(selectedCourse){
         {isExpanded && (
           <>
             <motion.div
-              className="w-full h-auto bg-red-100  absolute left-0  items-center justify-center"
+              className="w-full h-auto bg-red-100  absolute left-0  items-center justify-center p-10"
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               transition={{
@@ -135,7 +135,7 @@ if(selectedCourse){
               <div className="">
                 {selectedCourse.length > 0 ? (
                   <>
-                   <div className="flex justify-start items-center flex-wrap gap-36">  
+                   <div className="flex justify-center items-center flex-wrap gap-36">  
                     {paginatedCourse.map((courseData, i) => (
                       <Card key={i} className="h-full w-56">
                         <Suspense
@@ -154,7 +154,7 @@ if(selectedCourse){
                      </div>
 
 
-                     <div className="p-10 w-full flex justify-end" > 
+                     <div className="p-10 w-full " > 
                     
                       <button
                         onClick={() =>

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Navigate, NavLink } from "react-router-dom";
 import logo from "../../assets/logo/Vingle.png";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 import {
   Dropdown,
@@ -16,6 +17,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [currState, setState] = useState();
   const userInfo = useSelector((state) => state.user.userInfo);
+  const navigate = useNavigate()
 
   useEffect(() => {
     setState(userInfo);
@@ -169,7 +171,7 @@ const Navbar = () => {
               <img
                 src={
                   userInfo?.photo ||
-                  "https://lh3.googleusercontent.com/a/ACg8ocLKHbbXlKTKlXS04FurppuwIwD-bw68yZnO8nrVjk1LMHeHyhM=s96-c"
+                  "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1114445501.jpg"
                 }
                 alt="profile"
                 className="w-8 h-8 rounded-full border border-gray-200 cursor-pointer "
@@ -190,6 +192,9 @@ const Navbar = () => {
 
               {content}
 
+
+              {userInfo  ?  ( 
+
               <DropdownItem
                 key="logout"
                 className="text-danger px-5 hover:bg-slate-200 hover:text-black"
@@ -198,6 +203,14 @@ const Navbar = () => {
               >
                 Logout
               </DropdownItem>
+                ) : (   <DropdownItem
+                  key="logout"
+                  className="text-danger px-5 hover:bg-slate-200 hover:text-black"
+                  color="danger"
+                  onClick={()=>navigate("/login")}
+                >
+                  SIGN IN
+                </DropdownItem>   )}
             </DropdownMenu>
           </Dropdown>
 

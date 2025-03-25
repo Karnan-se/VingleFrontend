@@ -30,17 +30,20 @@ import Courses from "../Components/user/courses.jsx";
 import TutorsDetails from "../Components/user/Tutors.jsx";
 import Certificate from "../Components/user/certificate.jsx";
 import AboutUs from "../Components/user/aboutUs.jsx";
+import { AnimatePresence } from "framer-motion";
+import LoginAnimation from "../Components/animation/LoginAnimation.jsx";
 
 function UserRouter(){
 
     return (
         <>
-        
+         <AnimatePresence  mode="wait">  
             <Routes>
                 <Route path="/register" element={<RegistrationForm/>} />
              
                 
-                <Route path="/login" element={<LoginPage/>}/>
+                <Route path="/login" element={<LoginAnimation>  <LoginPage/></LoginAnimation>}/>
+             
                 
                 
                 <Route path="/ForgotPassword" element={<PreventBackNavigation><ForgotPassword/></PreventBackNavigation>}></Route>
@@ -48,7 +51,7 @@ function UserRouter(){
                 <Route path="/otp" element={<PreventBackNavigation><UserOtpPage/></PreventBackNavigation>} />
                 <Route path="/createpassword" element={<PreventBackNavigation><UserCreatePassword/></PreventBackNavigation>}></Route>
               
-                <Route path="/" element={<LandingPage/>} />
+                <Route path="/" element={<LoginAnimation><LandingPage/> </LoginAnimation> } />
                <Route element={<UserPrivateRoute/>}> 
              
                 <Route path="/courses" element={<Courses/>}></Route>
@@ -81,6 +84,8 @@ function UserRouter(){
                 </Route> 
    
             </Routes>
+
+            </AnimatePresence>
     
         </> 
     )

@@ -63,7 +63,7 @@ export default function LoginPage() {
       <div className="w-full max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-8">
         <div className="relative w-32 h-32">
           <motion.img
-            src="https://res-console.cloudinary.com/deubjmlf3/thumbnails/v1/image/upload/v1742884139/cGFuZGFfMl94bzFja2M=/drilldown"
+            src="https://res.cloudinary.com/deubjmlf3/image/upload/v1742884733/panda_2_tjxw3c.jpg"
             alt=""
             className="w-32 h-32 absolute top-0 left-0"
         
@@ -73,7 +73,7 @@ export default function LoginPage() {
           />
 
           <motion.img
-            src="https://res-console.cloudinary.com/deubjmlf3/thumbnails/v1/image/upload/v1742884139/cGFuZGEtMV91eXBzcXk=/drilldown"
+            src="https://res.cloudinary.com/deubjmlf3/image/upload/v1742884732/panda-1_y4kczm.jpg"
             alt=""
             className="w-32 h-32 absolute top-0 left-0"
           

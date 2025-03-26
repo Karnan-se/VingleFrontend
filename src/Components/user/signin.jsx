@@ -66,7 +66,7 @@ export default function LoginPage() {
             src="https://res-console.cloudinary.com/deubjmlf3/thumbnails/v1/image/upload/v1742884139/cGFuZGFfMl94bzFja2M=/drilldown"
             alt=""
             className="w-32 h-32 absolute top-0 left-0"
-            referrerPolicy="no-referrer"
+            referrerPolicy=""
             initial={{ opacity: 0.5 }}
             animate={{ opacity: isTypingPassword ? 1 : 0.5 }}
             transition={{ duration: 0.3 }}
@@ -76,7 +76,7 @@ export default function LoginPage() {
             src="https://res-console.cloudinary.com/deubjmlf3/thumbnails/v1/image/upload/v1742884139/cGFuZGEtMV91eXBzcXk=/drilldown"
             alt=""
             className="w-32 h-32 absolute top-0 left-0"
-            referrerPolicy="no-referrer"
+            referrerPolicy=""
             initial={{ opacity: 1 }}
             animate={{ opacity: isTypingPassword ? 0 : 1 }}
             transition={{ duration: 0.3 }}

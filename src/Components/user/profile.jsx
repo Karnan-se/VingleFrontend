@@ -13,14 +13,17 @@ export default function ProfileComponent() {
  
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className=" bg-gray-50 w-full">
       <Navbar />
 
-      <div className="container mx-auto max-w-screen-xl">
-        <div className="flex gap-6">
+      <div className=" mx-auto max-w-screen-xl">
+        <div className=" flex flex-col sm:flex-row  md:flex-row lg:flex-row xl:flex-row gap-6">
           <ProfileAside state={userDetail} />
+      <div  className=" flex-1">
+      <Outlet  context ={{userUpdate, userDetail , setUserCredentials}}  />
 
-          <Outlet  context ={{userUpdate, userDetail , setUserCredentials}}  />
+      </div>
+         
         </div>
       </div>
     </div>

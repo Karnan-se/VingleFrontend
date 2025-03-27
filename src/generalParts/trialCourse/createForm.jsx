@@ -251,6 +251,7 @@ const CreateCourseForm = () => {
           <input
             type="file"
             name="thumbnail"
+            accept="image/png, image/jpeg, image/jpg"
             className="w-full p-2 border rounded"
             onChange={(event) =>
               formik.setFieldValue("thumbnail", event.target.files[0])

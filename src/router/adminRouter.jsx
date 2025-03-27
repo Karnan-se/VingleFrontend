@@ -11,6 +11,7 @@ import PviewApplication from "../generalParts/admindashboard/higherOrder/PviewAp
 import Category from "../generalParts/category/categories";
 import Order from "../Components/admin/order";
 import AdminCourses from "../Components/admin/adminCourses";
+import AdminRevenue from "../Components/admin/adminRevenue";
 
 
 
@@ -35,6 +36,7 @@ return (
     <Route path="categories" element={<Category/>}></Route>
     <Route path="orders" element={<Order/>}></Route>
     <Route path="courses" element={<AdminCourses/>}></Route>
+    <Route path="revenue" element={<AdminRevenue/>}></Route>
     </Route>
     
     </Route>

@@ -5,7 +5,7 @@ export default function (){
 
     return (
         <>
-      <aside className="w-64 bg-white h-[calc(100vh-64px)] shadow-lg">
+      <aside className="w-64 bg-white h-[calc(100vh-64px)] shadow-lg ">
   <nav className="p-4">
   
     <div className="mb-6">
@@ -70,6 +70,17 @@ export default function (){
         }
       >
         Courses
+      </NavLink>
+      
+      <NavLink
+        to="/admin/revenue"
+        className={({ isActive }) =>
+          `p-2 mb-1 rounded cursor-pointer block ${
+            isActive ? 'bg-gray-300 font-bold' : 'hover:bg-gray-100'
+          }`
+        }
+      >
+        Revenue
       </NavLink>
     </div>
 

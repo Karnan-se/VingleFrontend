@@ -1,4 +1,4 @@
-import { tutorApi } from "../../axios/axiosInstance";
+import { adminApi, tutorApi } from "../../axios/axiosInstance";
 
 
 export const revenue = async (tutorId)=>{
@@ -21,6 +21,17 @@ export const tutorsChart = async()=>{
     } catch (error) {
         console.log(error)
     
+        
+    }
+}
+
+export const adminRevenue  =  async()=>{
+    try {
+        const adminRevenue = await adminApi.get("/fetchadminRevenue")
+        return adminRevenue.data.revenue
+    } catch (error) {
+        console.log(error)
+        throw error
         
     }
 }

@@ -19,6 +19,7 @@ export default function LandingPage() {
   const [filteredCourses, setFilteredCourses] = useState(null);
   const [course, setCourse] = useState();
   const navigate = useNavigate();
+  const [isPaused, setIsPaused] = useState(false);
 
   const scroll = (direction) => {
     if (scrollref.current) {
@@ -141,20 +142,23 @@ export default function LandingPage() {
               </p>
 
               <div className="flex flex-wrap gap-4 sm:5 mb-8 lg:7 xl:10 ">
-              {categories.map((category, index) => (
-  <motion.button
-    key={category._id}
-    variant="flat"
-    className="bg-gray-200 hover:bg-gray-300 rounded-md p-3 shadow-md shadow-slate-300"
-    onClick={() => filterCourseByCategory(category._id)}
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: index * 0.2, duration: 0.5, ease: "easeOut" }}
-  >
-    {category.value}
-  </motion.button>
-))}
-
+                {categories.map((category, index) => (
+                  <motion.button
+                    key={category._id}
+                    variant="flat"
+                    className="bg-gray-200 hover:bg-gray-300 rounded-md p-3 shadow-md shadow-slate-300"
+                    onClick={() => filterCourseByCategory(category._id)}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      delay: index * 0.2,
+                      duration: 0.5,
+                      ease: "easeOut",
+                    }}
+                  >
+                    {category.value}
+                  </motion.button>
+                ))}
               </div>
             </div>
           </section>
@@ -167,7 +171,7 @@ export default function LandingPage() {
 
             <div className="relative">
               <div
-                className="flex gap-4 pb-4 overflow-x-hidden"
+                className="flex gap-4 pb-4 overflow-x-hidden flex-nowrap"
                 ref={scrollref}
               >
                 {(filteredCourses || course).map((courseData, i) => (
@@ -183,17 +187,61 @@ export default function LandingPage() {
             </div>
           </section>
 
-          {/* <section className="max-w-7xl mx-auto px-4 mb-12">
-          <h2 className="text-2xl font-semibold mb-6">Best Seller</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[...Array(4)].map((_, i) => (
-              <Card key={i}>
-                <ImageCard ImageLink={courseData.thumbnail} />
-                <CardFooter courseData={courseData}></CardFooter>
+
+
+
+          <section className="max-w-7xl mx-auto px-4 mb-12 overflow-hidden">
+      <h2 className="text-2xl font-semibold mb-6">Courses You may Like</h2>
+
+      <div className="relative w-full overflow-hidden">
+      <motion.div
+          className="flex gap-4"
+          animate={isPaused ? {} : { x: ["0%", "-100%"] }}
+          transition={{
+            repeat: isPaused ? 0 : Infinity, 
+            duration: 15, 
+            ease: "linear",
+          }}
+          onHoverStart={() => setIsPaused(true)}
+          onHoverEnd={() => setIsPaused(false)}
+        >
+          {[...course, ...course].map((courseData, i) => (
+            <motion.div key={i} className="min-w-[150px] h-[150px]">
+              <Card>
+                <ImageCard ImageLink={courseData} navigate={courseDetail} />
+                <CardFooter courseData={courseData} />
               </Card>
-            ))}
-          </div>
-        </section> */}
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+    <section className="max-w-7xl mx-auto px-4 mb-12 overflow-hidden">
+     
+
+      <div className="relative w-full overflow-hidden">
+      <motion.div
+          className="flex gap-4"
+          animate={isPaused ? {} : { x: ["-100%", "0%"] }}
+          transition={{
+            repeat: isPaused ? 0 : Infinity, 
+            duration: 15, 
+            ease: "linear",
+          }}
+          onHoverStart={() => setIsPaused(true)}
+          onHoverEnd={() => setIsPaused(false)}
+        >
+          {[...course, ...course].map((courseData, i) => (
+            <motion.div key={i} className="min-w-[150px] h-[150px]">
+              <Card>
+                <ImageCard ImageLink={courseData} navigate={courseDetail} />
+                <CardFooter courseData={courseData} />
+              </Card>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
 
           <section className="max-w-7xl mx-auto px-4 mb-12">
             <h2 className="text-3xl font-bold mb-4">

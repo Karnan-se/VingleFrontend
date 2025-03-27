@@ -12,7 +12,7 @@ export default function ProfileAside() {
   },[userInfo])
   return (
     <>
-      <div className="w-64 flex-shrink-0">
+      <div className="w-full sm:w-64 flex-shrink flex-row">
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           {/* Profile Section */}
           <div className="p-6 bg-gray-100 text-center">
@@ -28,7 +28,7 @@ export default function ProfileAside() {
             <div className="text-sm">{userInfo.firstname || ""}</div>
           </div>
 
-          <nav className="py-5">
+          <nav className="py-5 flex-row  sm:flex-col md:flex-col lg:flex-col xl:flex-col">
             <NavLink
               to="/profile" end
               className={({ isActive }) =>

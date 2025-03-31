@@ -64,7 +64,7 @@ function UserRouter(){
                 <Route path="/profile/certifications" element={<PdfWrapper><Certificate/></PdfWrapper>} />
                 
                 </Route>
-                <Route path="/courseDetail" element={<Elements stripe={stripePromise}>  <CourseDetails/>   </Elements>  }></Route>
+                <Route path="/courseDetail" element={ <CourseDetails/>  }></Route>
                 <Route path="/beaInstructor"  element={<InstructorApplicationForm/>}></Route>
                 <Route path="/success" element={<ThankYouPage/>}></Route>
                 <Route path="/StartLearning" element={<StartLearning/>}></Route>

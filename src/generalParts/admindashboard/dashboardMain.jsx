@@ -166,22 +166,22 @@ export default function DashboardMain() {
           handleRangeChange={handleRangeChange}
         />
 
-<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 mt-9 ">
+{/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 mt-9 ">
         <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-gray-500 text-sm">Total Sales</h3>
-            <p className="text-2xl font-semibold mt-2"> ₹{revenue.revenue}</p>
+            <p className="text-2xl font-semibold mt-2"> ₹{revenue?.revenue}</p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-gray-500 text-sm">sales commission</h3>
-            <p className="text-2xl font-semibold mt-2"> ₹{revenue.totalSales}</p>
+            <p className="text-2xl font-semibold mt-2"> ₹{revenue?.totalSales}</p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-gray-500 text-sm">Total course</h3>
-            <p className="text-2xl font-semibold mt-2">{revenue.totalCourse}</p>
+            <p className="text-2xl font-semibold mt-2">{revenue?.totalCourse}</p>
           </div>
           
          
-        </div>
+        </div> */}
       </main>
     </>
   );

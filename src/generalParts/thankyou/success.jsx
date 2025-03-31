@@ -18,6 +18,7 @@ const ThankYouPage = () => {
   useEffect(()=>{
     if(sessionId){
         
+       try {
         const paymentUpdate =async()=>{
           const paymentVerify = await verifyPayment(userInfo, sessionId);
           console.log(paymentVerify)
@@ -25,10 +26,18 @@ const ThankYouPage = () => {
         }
         paymentUpdate();
         
+       } catch (error) {
+        console.log(error)
+        
+       } finally {
+
+        setLoading(false)
+       }
+        
     }else{
         console.log("no sessionId")
     }
-  },[])
+  },[userInfo , sessionId])
 
   useEffect(() => {
     setTimeout(() => setShowConfetti(true), 0);
@@ -48,7 +57,7 @@ const ThankYouPage = () => {
           <button
             className="mt-8 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-lg font-medium rounded-full shadow hover:from-blue-600 hover:to-purple-600 flex items-center justify-center transition-all"
             onClick={() => (window.location.href = '/')}
-         >
+          disabled={isLoading}>
             Go to Dashboard
             <ArrowRight className="ml-2 w-5 h-5" />
           </button>

@@ -30,12 +30,9 @@ export default function CourseTable() {
         console.log(error)
         
       }
-     
-  
     }
+    fetchcourse()
     return ()=>fetchcourse()
-   
-  
   },[])
 
 

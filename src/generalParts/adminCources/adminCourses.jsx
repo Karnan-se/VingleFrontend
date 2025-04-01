@@ -163,7 +163,7 @@ export default function CourseTable() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {paginatedCourses.map((course, index) => (
-                <tr key={course.id} className="hover:bg-gray-50">
+                <tr key={course._id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {startIndex + index + 1}
                   </td>

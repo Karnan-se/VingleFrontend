@@ -37,7 +37,7 @@ import {
           onPress={onOpen}
           className="border bg-red-500 text-white hover:bg-red-600"
         >
-         <button>{`${buttonName || "Reject Application "}`}</button>
+         {`${buttonName || "Reject Application "}`}
         </Button>
         <Modal
           isOpen={isOpen}

@@ -4,6 +4,7 @@ import { CheckCircle, ArrowRight, Snowflake as Confetti } from 'lucide-react';
 import {useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { verifyPayment } from '../../features/api/verifypayment';
+import { useNavigate } from 'react-router-dom';
 
 
 const ThankYouPage = () => {
@@ -12,6 +13,7 @@ const ThankYouPage = () => {
   const [message, setMessage] = useState('');
   const sessionId = searchParams.get('session_id');
   const userInfo = useSelector((state)=> state.user.userInfo)
+  const navigate = useNavigate()
 
   const [isLoading, setLoading] = useState(true)
 
@@ -28,7 +30,7 @@ const ThankYouPage = () => {
         
        } catch (error) {
         console.log(error)
-        
+
        } finally {
 
         setLoading(false)
@@ -56,7 +58,7 @@ const ThankYouPage = () => {
           </p>
           <button
             className="mt-8 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-lg font-medium rounded-full shadow hover:from-blue-600 hover:to-purple-600 flex items-center justify-center transition-all"
-            onClick={() => (window.location.href = '/')}
+            onClick={() => (navigate("/"))}
           disabled={isLoading}>
             Go to Dashboard
             <ArrowRight className="ml-2 w-5 h-5" />

@@ -14,6 +14,7 @@ import TChatAndVIdeoCall from "../Components/tutor/TChatAndVideoCall";
 import VideoCall from "../generalParts/chatAndvideocall/videocall";
 import RevenuePage from "../Components/tutor/revenue";
 import TrailAddCourse from "../Components/tutor/trialAddCourse";
+import { EfficientAddCourse } from "../Components/tutor/secondAddCourse";
 
 function TutorLogin(){
     return (
@@ -25,7 +26,7 @@ function TutorLogin(){
     <Route path="profile" element={<ProfileMain/>} />
     <Route path="courses" element={<CourseTable/>} />
     <Route path="photo" element={<PhotoMain/>} />
-    <Route path="courseCreate" element={<TrailAddCourse/>}></Route>
+    <Route path="courseCreate" element={<EfficientAddCourse/>}></Route>
     <Route path="editCourse" element={<EditCourse/>}></Route>
     <Route path="chat" element={<TChatAndVIdeoCall/>}></Route>
     <Route path="/revenue" element={<RevenuePage/>} /> 
@@ -35,6 +36,7 @@ function TutorLogin(){
     <Route path= "/login" element={<LoginPage/>}></Route>
     <Route path="/register" element={<RegistrationForm/>}></Route>
     <Route path="/videocall" element={<VideoCall/>}></Route>
+    <Route path="/effiecient" element={<EfficientAddCourse />}></Route>
     
        </Routes>
     )

@@ -19,7 +19,7 @@ const TutorNavbar = () => {
   const userInfo = useSelector((state) => state.tutor.tutorInfo);
 
   useEffect(() => {
-    console.log("User Info:", userInfo);
+
     setState(userInfo);
   }, [userInfo]);
   

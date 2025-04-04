@@ -38,13 +38,26 @@ export default function OrderDetails() {
 
   useEffect(() => {
     fetchOrders(currentPage , search , statusFilter)
-  }, [currentPage, search, statusFilter])
+  }, [currentPage,statusFilter, search ])
 
 
   const handlePageChange = (page) => {
     setCurrentPage(page)
 
   }
+  const searchOrder = (search, statusFilter)=>{
+   try {
+    
+   } catch (error) {
+    
+   }
+  }
+
+  useEffect(()=>{
+
+
+
+  },[search , statusFilter])
 
 
   const handleSearchOrFilterChange = useCallback(() => {
@@ -64,8 +77,18 @@ export default function OrderDetails() {
     <div className="min-h-full bg-gray-50 p-8 mx-auto w-full">
       <div className="mb-6 flex flex-col sm:flex-row items-center gap-6">
         <div className="flex-1 relative">
-          
-         
+          <input
+            type="text"
+            placeholder="Search by username or tutor..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value)
+            
+              handleSearchOrFilterChange()
+            }}
+            className="w-full px-4 py-2 pl-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
         </div>
         <select
           value={statusFilter}

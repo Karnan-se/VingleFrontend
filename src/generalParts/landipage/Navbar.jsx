@@ -3,7 +3,7 @@ import { Navigate, NavLink } from "react-router-dom";
 import logo from "../../assets/logo/Vingle.png";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-
+import { userLogoutApi } from "../../features/api/Logout";
 import {
   Dropdown,
   DropdownTrigger,
@@ -25,8 +25,9 @@ const Navbar = () => {
 
   const dispatch = useDispatch();
 
-  const logout = () => {
+  const logout = async () => {
     try {
+     await  userLogoutApi()
       dispatch(userLogout());
     } catch (error) {
       console.log(error);

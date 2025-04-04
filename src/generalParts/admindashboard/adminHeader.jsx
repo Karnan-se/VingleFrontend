@@ -1,3 +1,4 @@
+import { adminLogoutApi } from '../../features/api/Logout';
 import { adminLogout } from '../../features/authSlice';
 import { useDispatch } from 'react-redux';
 
@@ -5,8 +6,10 @@ export default function  AdminHeader({heading}){
 
     const dispatch = useDispatch();
 
-    const logout = () =>{
+    const logout = async() =>{
+       await adminLogoutApi()
         const logout = dispatch(adminLogout())
+       
       }
 
     return(

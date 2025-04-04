@@ -10,6 +10,7 @@ import { EfficientAddCourse } from "../../Components/tutor/secondAddCourse";
 import { tutorApi } from "../../axios/axiosInstance";
 import { uploadtoCloudinarySignedURL } from "../../features/api/uploadCloudinary";
 import { uploadtoCloudinary } from "../../features/api/uploadCloudinary";
+import { useNavigate } from "react-router-dom";
 
 // Create the context
 const CourseContext = createContext();
@@ -21,6 +22,7 @@ export default function CourseProvider({ children }) {
   const [basicError, setBasicError] = useState({});
   const [section, setSection] = useState([]);
   const [secondError, setSecondError] = useState([]);
+  const navigate = useNavigate()
 
   const addSection = () => {
     const newSection = {
@@ -95,9 +97,12 @@ export default function CourseProvider({ children }) {
       try {
         const course= await createCourse(updatedData)
         console.log(course , "createCourse")
+        if(course){
+          navigate("/tutor/courses")
+        
+        }
 
-        
-        
+          
         
       } catch (error) {
         console.log(error)

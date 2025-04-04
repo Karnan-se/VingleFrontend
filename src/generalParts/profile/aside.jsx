@@ -81,7 +81,7 @@ export default function ProfileAside() {
               <FileText size={16} />
               Certifications
             </NavLink>
-            <NavLink
+            {/* <NavLink
               to="/profile/notifications"
               className={({ isActive }) =>
                 `w-full px-4 py-4 flex items-center gap-3 text-sm ${
@@ -93,7 +93,7 @@ export default function ProfileAside() {
             >
               <Bell size={16} />
               Notifications
-            </NavLink>
+            </NavLink> */}
           </nav>
         </div>
       </div>

@@ -1,8 +1,8 @@
-"use client"
 
 import { useEffect, useState } from "react"
 import { Search } from "lucide-react"
 import { adminOrder } from "../../features/api/paginatiion/order"
+import { useCallback } from "react"
 
 export default function OrderDetails() {
   const [orders, setOrders] = useState([])
@@ -12,17 +12,19 @@ export default function OrderDetails() {
   const [totalOrders, setTotalOrders] = useState(0)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+
   const itemsPerPage = 10
 
   
   const totalPages = Math.ceil(totalOrders / itemsPerPage)
 
   
-  const fetchOrders = async (page = 1, search = "" , statusFilter) => {
+  const fetchOrders = async (page = 1, search , statusFilter) => {
     setLoading(true)
     setError(null)
     try {
-      const response = await adminOrder(page)
+      console.log(search  , "search")
+      const response = await adminOrder(page , search , statusFilter)
   
       setOrders(response.orders)
       setTotalOrders(response.totalOrders)
@@ -34,25 +36,21 @@ export default function OrderDetails() {
     }
   }
 
-
   useEffect(() => {
-    fetchOrders(currentPage)
-  }, [])
+    fetchOrders(currentPage , search , statusFilter)
+  }, [currentPage, search, statusFilter])
 
-  // Handle page change
+
   const handlePageChange = (page) => {
     setCurrentPage(page)
-    console.log(page , "number number pagenUmber")
-    fetchOrders(page)
+
   }
 
-  // Handle search and filter changes
-  const handleSearchOrFilterChange = () => {
-    // Reset to page 1 when search or filter changes
+
+  const handleSearchOrFilterChange = useCallback(() => {
     setCurrentPage(1)
-    fetchOrders(1 , search , statusFilter)
-    // Note: You'll need to modify your API to accept search and filter parameters
-  }
+  
+  }, [])
 
   if (loading && !orders.length) {
     return <div className="min-h-full bg-gray-50 p-8 flex justify-center items-center">Loading...</div>
@@ -66,18 +64,8 @@ export default function OrderDetails() {
     <div className="min-h-full bg-gray-50 p-8 mx-auto w-full">
       <div className="mb-6 flex flex-col sm:flex-row items-center gap-6">
         <div className="flex-1 relative">
-          <input
-            type="text"
-            placeholder="Search by username or tutor..."
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value)
-            
-              handleSearchOrFilterChange()
-            }}
-            className="w-full px-4 py-2 pl-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+          
+         
         </div>
         <select
           value={statusFilter}
@@ -123,10 +111,10 @@ export default function OrderDetails() {
                     {(currentPage - 1) * itemsPerPage + index + 1}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{order.userId?.firstName}</div>
+                    <div className="text-sm font-medium text-gray-900">{order.user?.firstName}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{order.courseId?.tutorId?.firstName}</div>
+                    <div className="text-sm text-gray-900">{order.course?.name}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span

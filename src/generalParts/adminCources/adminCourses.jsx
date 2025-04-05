@@ -1,109 +1,106 @@
+"use client"
 
-
-import { useEffect, useState } from 'react'
-import { icons, PlusCircle } from 'lucide-react'
-import { tutorApi } from '../../axios/axiosInstance'
-import {useNavigate} from "react-router-dom"
-import { updateCourse } from '../../features/api/fetchAllcourse'
-import RejectionModal from '../modals/rejectionModal'
-import { rejectCourse } from '../../features/api/emailService'
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { updateCourse } from "../../features/api/fetchAllcourse"
+import RejectionModal from "../modals/rejectionModal"
+import { rejectCourse } from "../../features/api/emailService"
 import swal from "sweetalert"
-
-
+import { adminPaginatedCourse } from "../../features/api/paginatiion/order"
 
 export default function CourseTable() {
-
-
- 
-
-
-  useEffect(()=>{
-    console.log(" jwenfkjn2f ")
-    const fetchcourse = async()=>{
-      
-      try {
-        const response = await tutorApi.get("/getallCourse" , {withCredentials:true})
-        console.log(response.data)
-        setCourses(response.data)
-        
-      } catch (error) {
-        console.log(error)
-        
-      }
-    }
-    fetchcourse()
-    return ()=>fetchcourse()
-  },[])
-
-
-
-
   const [courses, setCourses] = useState([])
-  const [search, setSearch] = useState('')
-  const [statusFilter, setStatusFilter] = useState('all')
+  const [search, setSearch] = useState("")
+  const [statusFilter, setStatusFilter] = useState("all")
   const [currentPage, setCurrentPage] = useState(1)
-  const [openRejectionModal , setOpenRejectionModal] = useState(false)
+  const [totalCourses, setTotalCourses] = useState(0)
+  const [openRejectionModal, setOpenRejectionModal] = useState(false)
   const navigate = useNavigate()
   const itemsPerPage = 5
 
-  const filteredCourses = courses.filter(course => {
-    const matchesSearch = course.name.toLowerCase().includes(search.toLowerCase())
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        
+        const filterToSend = statusFilter === "all" ? null : statusFilter
+        const response = await adminPaginatedCourse(currentPage, search, filterToSend)
+        const { course, totalCourse } = response
+        setCourses(course)
+        setTotalCourses(totalCourse)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    fetchCourses()
+
+
+  }, [currentPage, search, statusFilter])
+
+  useEffect(()=>{
+    setCurrentPage(1)
+
+  },[search])
+
+ 
+  const totalPages = Math.ceil(totalCourses / itemsPerPage)
   
-    const matchesStatus = statusFilter == 'all' || course.isPublished === (statusFilter === 'true');
-
-
-    return matchesSearch && matchesStatus
-  })
-
-  const totalPages = Math.ceil(filteredCourses.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
-  const paginatedCourses = filteredCourses.slice(startIndex, startIndex + itemsPerPage)
 
   const toggleStatus = async (courseId) => {
-   
-    const selectCourse=courses.map((course)=> course._id == courseId ? {...course, isPublished : !course.isPublished} : course)
-    
-    const changedCourse = courses
-  .filter((course) => course._id === courseId)
-  .map((course) => ({ ...course, isPublished: !course.isPublished }));
-    console.log(changedCourse[0] , "changedCourse")
-    setCourses(selectCourse)
-    const response = await updateCourse(courseId , changedCourse[0])
-    console.log(response,  "updated ")
-     
+    const selectCourse = courses.map((course) =>
+      course._id === courseId ? { ...course, isPublished: !course.isPublished } : course,
+    )
 
+    const changedCourse = courses
+      .filter((course) => course._id === courseId)
+      .map((course) => ({ ...course, isPublished: !course.isPublished }))
+
+    console.log(changedCourse[0], "changedCourse")
+    setCourses(selectCourse)
+
+    try {
+      const response = await updateCourse(courseId, changedCourse[0])
+      console.log(response, "updated")
+    } catch (error) {
+      console.error("Error updating course status:", error)
     
+      setCourses(courses)
+    }
   }
 
   const handleEdit = (course) => {
     console.log(course)
-    navigate("/tutor/editCourse", {state:{course}})
-    
+    navigate("/tutor/editCourse", { state: { course } })
   }
 
   const handleDelete = (courseId) => {
-    setCourses(courses.filter(course => course._id !== courseId))
+    setCourses(courses.filter((course) => course._id !== courseId))
   }
 
-  const reportCourse =()=>{
-    console.log("report thee course")
+  const reportCourse = () => {
+    console.log("report the course")
     setOpenRejectionModal(true)
   }
 
-  const sendRejectionMail = async (rejectionReasons , tutorId ) =>{
-    console.log(rejectionReasons , tutorId ,"going to send the Mail")
-    const rejectionMail = await rejectCourse(rejectionReasons , tutorId)
-    if(rejectionMail){
+  const sendRejectionMail = async (rejectionReasons, tutorId) => {
+    console.log(rejectionReasons, tutorId, "going to send the Mail")
+    try {
+      const rejectionMail = await rejectCourse(rejectionReasons, tutorId)
+      if (rejectionMail) {
+        swal({
+          icon: "success",
+          text: "Email Sent Successfully",
+        })
+      }
+    } catch (error) {
+      console.error("Error sending rejection email:", error)
       swal({
-        icons:"success",
-        text: "Email Send Successfully"
+        icon: "error",
+        text: "Failed to send email",
       })
     }
-    
-
   }
-
- 
 
   return (
     <div className="min-h-full bg-gray-50 p-8 mx-auto w-full">
@@ -126,14 +123,6 @@ export default function CourseTable() {
           <option value="true">Published</option>
           <option value="false">Unpublished</option>
         </select>
-        
-        {/* <button
-          onClick={handleAddNewCourse}
-          className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        >
-          <PlusCircle className="w-5 h-5 mr-2" />
-          Add New Course
-        </button> */}
       </div>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -147,9 +136,7 @@ export default function CourseTable() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Course Name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Date
-                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
@@ -159,17 +146,15 @@ export default function CourseTable() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {paginatedCourses.map((course, index) => (
+              {courses.map((course, index) => (
                 <tr key={course._id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {startIndex + index + 1}
-                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{startIndex + index + 1}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
                         <img
                           className="h-10 w-10 rounded-full"
-                          src={course.thumbnail}
+                          src={course.thumbnail || "/placeholder.svg"}
                           alt=""
                           width={40}
                           height={40}
@@ -181,28 +166,25 @@ export default function CourseTable() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(course.createdAt).toLocaleDateString("en-GB") }
+                    {new Date(course.createdAt).toLocaleDateString("en-GB")}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button
                       onClick={() => toggleStatus(course._id)}
                       className={`px-3 py-1 rounded ${
                         course.isPublished
-                          ? 'bg-green-100 text-green-800 hover:bg-green-200'
-                          : 'bg-red-100 text-red-800 hover:bg-red-200'
+                          ? "bg-green-100 text-green-800 hover:bg-green-200"
+                          : "bg-red-100 text-red-800 hover:bg-red-200"
                       }`}
                     >
-                      {course.isPublished ? 'Published' : 'Unpublished'}
+                      {course.isPublished ? "Published" : "Unpublished"}
                     </button>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <RejectionModal onReject={(rejectionReasons )=>sendRejectionMail(rejectionReasons ,course.tutorId )} buttonName={"Report"}/>
-                    {/* <button
-                      onClick={() => handleDelete(course._id)}
-                      className="px-3 py-1 rounded bg-red-100 text-red-600 hover:bg-red-200"
-                    >
-                      Delete
-                    </button> */}
+                    <RejectionModal
+                      onReject={(rejectionReasons) => sendRejectionMail(rejectionReasons, course.tutorId)}
+                      buttonName={"Report"}
+                    />
                   </td>
                 </tr>
               ))}
@@ -214,11 +196,9 @@ export default function CourseTable() {
           <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
             <div>
               <p className="text-sm text-gray-700">
-                Showing <span className="font-medium">{startIndex + 1}</span> to{' '}
-                <span className="font-medium">
-                  {Math.min(startIndex + itemsPerPage, filteredCourses.length)}
-                </span>{' '}
-                of <span className="font-medium">{filteredCourses.length}</span> results
+                Showing <span className="font-medium">{startIndex + 1}</span> to{" "}
+                <span className="font-medium">{Math.min(startIndex + itemsPerPage, totalCourses)}</span> of{" "}
+                <span className="font-medium">{totalCourses}</span> results
               </p>
             </div>
             <div>
@@ -236,8 +216,8 @@ export default function CourseTable() {
                     onClick={() => setCurrentPage(i + 1)}
                     className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium ${
                       currentPage === i + 1
-                        ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
-                        : 'text-gray-500 hover:bg-gray-50'
+                        ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
+                        : "text-gray-500 hover:bg-gray-50"
                     }`}
                   >
                     {i + 1}
@@ -245,7 +225,7 @@ export default function CourseTable() {
                 ))}
                 <button
                   onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                  disabled={currentPage === totalPages}
+                  disabled={currentPage === totalPages || totalPages === 0}
                   className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:bg-gray-100 disabled:cursor-not-allowed"
                 >
                   Next
@@ -255,14 +235,7 @@ export default function CourseTable() {
           </div>
         </div>
       </div>
-      {/* {openRejectionModal && (
-    
-    <RejectionModal onReject={sendRejectionMail}/>
-    
-   
-  )} */}
     </div>
-
   )
 }
 

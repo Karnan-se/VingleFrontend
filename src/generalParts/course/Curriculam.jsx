@@ -9,9 +9,15 @@ import VideoPlayer1 from '../viewCourse/VideoPlayerEditCourse'
 export function CurriculumItem({ item, onUpdate, onDelete, error }) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [video , setVideo] = useState()
+  const [pdfData , setPdfData] = useState()
+
+
+
 
 
    const saveVideo =(e)=>{
+    if(e.target.files?.[0]?.type == 'video/mp4') {
+
     onUpdate({
       ...item,
       fileUrl: e.target.files?.[0]
@@ -19,10 +25,24 @@ export function CurriculumItem({ item, onUpdate, onDelete, error }) {
         : undefined,
     })
     setVideo(URL.createObjectURL(e.target.files[0]))
+    setPdfData(undefined)
+   }else{
+    onUpdate({
+      ...item,
+      fileUrl: e.target.files?.[0]
+        ? (e.target.files[0])
+        : undefined,
+    })
+    setPdfData(URL.createObjectURL(e.target.files[0]))
+    setVideo(undefined)
    }
+  }
 
    const updateDuration =(duration) =>{
-    console.log("duration")
+    onUpdate({
+      ...item,
+      duration: duration,
+    })
    }
    
 
@@ -52,13 +72,6 @@ export function CurriculumItem({ item, onUpdate, onDelete, error }) {
 
         </div>
       
-        <Input
-          value={item.duration}
-          onChange={(e) => onUpdate({ ...item, duration: e.target.value })}
-          className="w-24"
-          placeholder="Duration"
-          variant="bordered"
-        />
         <Button
           isIconOnly
           variant="light"
@@ -87,15 +100,17 @@ export function CurriculumItem({ item, onUpdate, onDelete, error }) {
             <p className="text-sm text-danger mt-1">{error.description}</p>
       )}
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 ">
             <p className="text-sm">Content File</p>
 
-            {item.fileUrl ? (<>
-            <div className='w-120'>
+            {item.type == "video" ? (<>
+            <div className='w-full'>
             <VideoPlayer1 fileUrl={video? video : item.fileUrl || ""} updateDuration={updateDuration} />
 
             </div>
-            </>):("")}
+            </>):(<div className='w-full h-60 bg-red-50'><iframe src={pdfData ? pdfData : item.fileUrl} frameborder="0" className='object-cover w-full h-full'></iframe></div>)}
+
+
             <Input
               type="file"
               

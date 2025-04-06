@@ -10,6 +10,7 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { tutorApi } from "../../axios/axiosInstance";
 import { uploadtoCloudinarySignedURL } from "../../features/api/uploadCloudinary";
+import { usepdfContext } from "../../Components/context/pdfRenderContext";
 
 import React, { useEffect, useState } from "react";
 import VideoPlayer1 from "./VideoPlayerEditCourse";
@@ -29,6 +30,7 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
     title: "",
     items: [{ title: "", type: "video", duration: "", description: "" }],
   });
+  const { renderPdf } = usepdfContext();
 
   const navigate = useNavigate();
 
@@ -206,6 +208,8 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
   );
   const totalDuration = "3h 45m";
 
+  
+
   return (
     <>
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -378,7 +382,8 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
                   <X className="w-6 h-6" />
                 </button>
               </div>
-              <VideoPlayer1 fileUrl={item.fileUrl} />
+              {item.type === "video" ? ( <VideoPlayer1 fileUrl={item.fileUrl} />) : (<p onClick={()=>renderPdf(item.fileUrl)} className=" cursor-pointer text-xl font-poppins ">View Pdf</p>)}
+             
             </div>
           </div>
         )}

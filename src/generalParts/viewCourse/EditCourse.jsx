@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom"
 import CourseSection from "./viewsection";
 import { useState } from "react";
 import { getCourse } from "./getCourse";
+import PdfWrapper from "../../Components/context/pdfRenderContext";
 
 
 export default function EditCourse(){
@@ -34,10 +35,11 @@ export default function EditCourse(){
  
     return (
         <>
+        <PdfWrapper>  
         {section.length >0 && (  
         <CourseSection sectionData={section} setSection={setSection} course_id={course._id}/>
     )}
-
+ </PdfWrapper>
         </>
     )
 }

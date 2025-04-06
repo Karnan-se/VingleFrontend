@@ -4,7 +4,10 @@ export default function VideoPlayer1({ fileUrl , updateDuration}) {
 
 
   const handleMetaData =(event) =>{
-    updateDuration(event.target.duration)
+    console.log(event.target.duration , "duration")
+    const duration = event.target.duration.toFixed(2);
+  
+    updateDuration(duration )
     
   }
 
@@ -21,8 +24,8 @@ return (
    
         />
       ) : (
-        <div className="items-center w-full bg-black text-center">
-          <p>Invalid or missing video URL</p>
+        <div className="items-center w-full  text-center">
+          <p className="backdrop-blur-sm bg-white/30 text-gray-800 text-xs px-2 py-0.5 rounded-full shadow-sm">Invalid or missing video URL</p>
         </div>
       )}
     

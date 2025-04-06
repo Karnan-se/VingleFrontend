@@ -33,6 +33,8 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
   const { renderPdf } = usepdfContext();
 
   const navigate = useNavigate();
+  const [forcedRender , setForcedRender] = useState(false)
+
 
   const [newError, setNewError] = useState({ title: "", items: [] });
 
@@ -44,11 +46,19 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
     setSection(afterDetele);
   };
 
+
+
+
+
+
   const handleEdit = (e, section_id) => {
     e.preventDefault();
     setEditable(section_id);
     setExpanded(true);
   };
+
+  //handle Edit is finished *** *** ** Handle edit is finished *******`    **************
+//handle edit is finished *** *** ** Handle edit is finished *******`    **************`    ************** 
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -68,14 +78,14 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
     });
 
     if (hasError) {
-      console.log("Form submission failed due to validation errors.");
+      console.log(validationErrors ,"Form submission failed due to validation errors.");
       setError(validationErrors);
       console.log(validationErrors);
       return;
     }
 
     try {
-      console.log("this is thr funxtion to edit");
+    
 
       setLoading(true);
       const updatedSectionData = await Promise.all(
@@ -122,6 +132,15 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
     }
   };
 
+
+
+
+
+
+
+
+
+
   const toggleSection = (sectionId) => {
     setExpandedSections((prev) =>
       prev.includes(sectionId)
@@ -148,6 +167,8 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
 
   const createNewSection = async () => {
     const addError = sectionValidation(newSection);
+    console.log(addError, "addError");
+
 
     const hasError = () => {
       if (addError.title.length > 0) return true;
@@ -158,7 +179,8 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
     };
 
     if (hasError()) {
-      console.log("Form submission failed due to validation errors.");
+      console.log(addError , "Form submission failed due to validation errors.");
+
       setNewError(addError);
       return;
     }
@@ -187,7 +209,7 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
       })
     );
     
-    console.log(updatedSection , "helloe heelo ehello ehelelo heeelo heelloe heleleoeo  ehgeelelke heh jebhje  ejhbejhbehj j ebekbe ")
+  
 
     try {
       if (updatedSection) {
@@ -207,6 +229,11 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
     0
   );
   const totalDuration = "3h 45m";
+
+  useEffect(() => {
+    console.log(error, "error in viewSections.jsx");
+    setForcedRender((prev)=> !prev)
+  },[error])
 
   
 
@@ -310,30 +337,48 @@ export default function CourseSection({ sectionData, setSection, course_id }) {
                   <button
                     className="w-full bg-gray-800 text-white py-2 px-4 hover:bg-gray-700 transition-colors"
                     onClick={() => {
-                      setAdded(true); // Enable add mode
+                      setAdded(true); 
                     }}
                   >
                     Add new Section
                   </button>
                 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
               ) : (
                 <div className="p-6 bg-gray-100 border shadow-lg border-black">
                   {sectionData
-                    .filter((section) => editable === section._id)
-                    .map((section, index) => (
-                      <div key={section._id} className="mb-6">
-                        <Section
-                          key={section._id}
-                          section={section}
-                          onUpdate={(updatedSection) => {
-                            updateSection(section._id, updatedSection);
-                          }}
-                          canAddContent={""}
-                          error={error[index]}
-                          onDelete={() => deleteSection(section._id)}
-                        />
-                      </div>
-                    ))}
+                            .filter((section) => editable === section._id)
+                            .map((section) => {
+                              // Find the original index of this section in the sectionData array
+                              const originalIndex = sectionData.findIndex(s => s._id === section._id);
+                              
+                              return (
+                                <div key={section._id} className="mb-6">
+                                  <Section
+                                    key={section._id}
+                                    section={section}
+                                    onUpdate={(updatedSection) => {
+                                      updateSection(section._id, updatedSection);
+                                    }}
+                                    canAddContent={""}
+                                    error={error[originalIndex] || { title: "", items: [] }}
+                                    onDelete={() => deleteSection(section._id)}
+                                  />
+                                </div>
+                              );
+                            })}
                   <div className="mt-6 text-center">
                     <button
                       className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-lg font-semibold"

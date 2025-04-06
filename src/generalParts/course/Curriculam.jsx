@@ -11,6 +11,8 @@ export function CurriculumItem({ item, onUpdate, onDelete, error }) {
   const [video , setVideo] = useState()
   const [pdfData , setPdfData] = useState()
 
+  console.log(error , "error")
+
 
 
 

@@ -11,6 +11,11 @@ export function Section({ section, onUpdate, onDelete, error, canAddContent }) {
   const [isExpanded, setIsExpanded] = useState(true)
   const [showContentTypeSelector, setShowContentTypeSelector] = useState(false)
 
+  useEffect(()=>{
+    console.log(error , "error in section ")  
+
+  },[error])
+
 
  
 

@@ -8,6 +8,7 @@ import { adminPaginatedStudent } from "../../features/api/paginatiion/order"
 
 export default function StudentTable() {
   const { socket } = useSocket()
+  
 
   const [students, setStudents] = useState([])
   const [search, setSearch] = useState("")
@@ -58,11 +59,8 @@ export default function StudentTable() {
 
   const updateUser = async (user) => {
     try {
-      const response = await userApi.post("/update", { user })
-      if (user.isBlocked == false && socket) {
-        console.log("socket is goung to implement ")
-        socket.emit("userBlocked", user)
-      }
+      const response = await userApi.post("/block", { user })
+
       console.log("Update Response:", response)
     } catch (error) {
       console.error("Error updating user:", error)

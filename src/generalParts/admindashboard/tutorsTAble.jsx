@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { adminApi, tutorApi , userApi } from '../../axios/axiosInstance'
+import { adminPaginatedTutors } from '../../features/api/paginatiion/admin/tutortable';
 
 
 
@@ -17,11 +18,11 @@ export default function TutorsTable() {
    
     const fetchStudents = async () => {
       try {
-        const response = await adminApi.get('/getallStudents' );
-        console.log(response.data , "all Users Resposnse")
+        const response = await adminPaginatedTutors()
+        console.log(response, "all Users Resposnse")
 
-        const appliedTutors = response.data.students.filter((student)=> student.isInstructor !== "Notapplied" &&  student.isBlocked == false)
-        setStudents(appliedTutors)
+    
+        setStudents(response)
         
       } catch (err) {
         console.error(err);
@@ -35,15 +36,15 @@ export default function TutorsTable() {
 
   const viewApplication = async(tutorsId)=>{
     navigate("/admin/viewApplication", {state:{_id: tutorsId}})
-    
-
   }
+
+  
 
   const [students, setStudents] = useState([])
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 5
+  const itemsPerPage = 6
 
 
   const filteredStudents = students.filter(student => {
@@ -153,7 +154,7 @@ export default function TutorsTable() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {paginatedStudents.map((student, index) => (
-                <tr key={student.id} className="hover:bg-gray-50">
+                <tr key={student._id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {startIndex + index + 1}
                   </td>
@@ -180,7 +181,7 @@ export default function TutorsTable() {
                      
                           className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
                         >
-                          {student?.createdAt ? new Date(student.createdAt).toLocaleDateString("en-GB") : "22-03-2025"}
+                          {student?.applicationDate ? new Date(student.applicationDate).toLocaleDateString("en-GB") : "22-03-2025"}
                         </span>
                       
                     </div>
@@ -222,7 +223,7 @@ export default function TutorsTable() {
                      )}
 
 
-                  {/* for accepted case  aanel may be we can give additonl button details */}
+                  {/* for accepted case   may be we can give additonl button details */}
                       { (student.isInstructor == "pending" ||  student.isInstructor == "Rejected") ? (   
                     <button className="px-3 py-1 rounded bg-blue-100 text-blue-600 hover:bg-blue-200" onClick={()=>viewApplication(student._id)}>
                       ViewApplication

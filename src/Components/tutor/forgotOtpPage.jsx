@@ -2,6 +2,7 @@ import OTPVerification from "../../generalParts/otpPage.jsx";
 import { useNavigate } from "react-router-dom";
 import { tutorApi, userApi } from "../../axios/axiosInstance.js";
 import { useLocation } from "react-router-dom";
+import { toast } from "sonner";
 
 
 
@@ -37,10 +38,7 @@ export default function TutorForgotOtpPage(){
     
   } catch (error) {
     console.log(error)
-    swal({
-        icon:"error",
-        title:"Invalid OTP"
-    })
+    toast.error(error.response?.data?.error?.message || "Unexpected Error",)
     
   }
   

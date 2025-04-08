@@ -3,6 +3,7 @@ import { Eye, Download, CheckCircle, XCircle } from "lucide-react";
 import { adminApi } from "../../axios/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import RejectionModal from "../modals/rejectionModal";
+import { toast } from "sonner";
 
 const ViewApplication = ({ application }) => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const ViewApplication = ({ application }) => {
     const response = await adminApi.put("/approveApplication", { application });
     console.log(response.data.approve);
     if (response) {
+      toast.success("Application Approved")
       navigate("/admin/tutors");
     }
   };
@@ -30,6 +32,7 @@ const ViewApplication = ({ application }) => {
     });
     console.log(response.data.data);
     if (response) {
+      toast.error("Application Rejected")
       navigate("/admin/tutors");
     }
   };

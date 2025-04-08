@@ -1,12 +1,12 @@
 import OTPVerification from "../../generalParts/otpPage.jsx";
 import { useNavigate } from "react-router-dom";
-import { userApi } from "../../axios/axiosInstance.js";
+import { tutorApi, userApi } from "../../axios/axiosInstance.js";
 import { useLocation } from "react-router-dom";
 
 
 
-export default function ForgotOtpPage(){
-    const LoginRoute = "/login"
+export default function TutorForgotOtpPage(){
+    const LoginRoute = "/tutor/login"
     
 
     const navigate = useNavigate("")
@@ -25,11 +25,11 @@ export default function ForgotOtpPage(){
     
     const payload = {userDetails:userInfo, otp }
   try {
-    const verifyUser  = await userApi.post("/verifyUser", {payload}).then((data)=>{
+    const verifyUser  = await tutorApi.post("/verifyUser", {payload}).then((data)=>{
     
       if(data.data.data){
         
-        navigate("/createpassword", {state:{data:data.data.data}},  {replace:true})
+        navigate("/tutor/createpassword", {state:{data:data.data.data}},  {replace:true})
        
       }
       console.log(data, "verified")
@@ -37,16 +37,14 @@ export default function ForgotOtpPage(){
     
   } catch (error) {
     console.log(error)
-    // swal({
-    //     icon:"error",
-    //     title:"Invalid OTP"
-    // })
+    swal({
+        icon:"error",
+        title:"Invalid OTP"
+    })
     
   }
   
 
-    
-    console.log('OTP submitted:', otp)
   }
 
     return (

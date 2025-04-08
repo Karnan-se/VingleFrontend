@@ -15,6 +15,11 @@ import VideoCall from "../generalParts/chatAndvideocall/videocall";
 import RevenuePage from "../Components/tutor/revenue";
 import TrailAddCourse from "../Components/tutor/trialAddCourse";
 import { EfficientAddCourse } from "../Components/tutor/secondAddCourse";
+import TutorForgotPassword from "../Components/tutor/forgotpassword";
+import TutorForgotOtpPage from "../Components/tutor/forgotOtpPage";
+import TutorCreatePassword from "../Components/tutor/createPassword";
+
+
 
 function TutorLogin(){
     return (
@@ -36,7 +41,12 @@ function TutorLogin(){
     <Route path= "/login" element={<LoginPage/>}></Route>
     <Route path="/register" element={<RegistrationForm/>}></Route>
     <Route path="/videocall" element={<VideoCall/>}></Route>
-    <Route path="/effiecient" element={<EfficientAddCourse />}></Route>
+    <Route path="/forgotPassword" element={<TutorForgotPassword />}></Route>
+    <Route path="/forgotpassword/otp" element={<TutorForgotOtpPage/>}></Route>
+
+    <Route path="/createpassword" element={<TutorCreatePassword/>}></Route>
+   
+    {/* <Route path="/effiecient" element={<EfficientAddCourse />}></Route> */}
     
        </Routes>
     )

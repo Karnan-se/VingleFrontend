@@ -117,7 +117,7 @@ export default function LoginPage() {
                       />
                       <span className="ml-2">Remember my email address</span>
                     </label>
-                    <a href="/forgot-password" className="text-sm text-blue-500 hover:underline">
+                    <a href="/tutor/forgotPassword" className="text-sm text-blue-500 hover:underline">
                       Forgot Password?
                     </a>
                   </div>

@@ -8,7 +8,7 @@ import ProfilePage from "../Components/user/profile.jsx";
 import PhotoMain from "../generalParts/profile/photoMain.jsx";
 import ProfileMain from "../generalParts/profile/profileMain.jsx";
 import CourseMain from "../generalParts/profile/courseMain.jsx";
-import ForgotPassword from "../Components/user/forgotPassword.jsx";
+import UserForgotPassword from "../Components/user/forgotPassword.jsx";
 import UserCreatePassword from "../Components/user/userChangePassord.jsx";
 import PreventBackNavigation from "../features/navigation/backNavigation.jsx";
 import InstructorApplicationForm from "../Components/tutor/tutorApplication.jsx";
@@ -46,7 +46,7 @@ function UserRouter(){
              
                 
                 
-                <Route path="/ForgotPassword" element={<PreventBackNavigation><ForgotPassword/></PreventBackNavigation>}></Route>
+                <Route path="/ForgotPassword" element={<PreventBackNavigation><UserForgotPassword/></PreventBackNavigation>}></Route>
                 <Route path="/forgotpassword/otp" element={<ForgotOtpPage/>}></Route>
                 <Route path="/otp" element={<PreventBackNavigation><UserOtpPage/></PreventBackNavigation>} />
                 <Route path="/createpassword" element={<PreventBackNavigation><UserCreatePassword/></PreventBackNavigation>}></Route>

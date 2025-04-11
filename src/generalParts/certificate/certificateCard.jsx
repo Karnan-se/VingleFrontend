@@ -6,19 +6,19 @@ const CertificatePreview = ({ pdfUrl, courseName }) => {
   const { renderPdf } = usepdfContext();
 
   return (
-    <Card className="w-full flex flex-col cursor-pointer" onClick={() => renderPdf(pdfUrl)}>
+    <Card className=" flex  cursor-pointer w-full" onClick={() => renderPdf(pdfUrl)}>
       <CardHeader>
         <h4 className="text-xl font-semibold">{courseName}</h4>
       </CardHeader>
       <CardBody>
-        <div className="flex justify-center h-[200px] relative">
+        <div className="flex justify-center h-[320px] relative ">
          
           <div
             className="absolute inset-0"
             onClick={() => renderPdf(pdfUrl)}
           ></div>
           
-          <iframe src={pdfUrl} className="w-full h-full" />
+          <iframe  src={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0`} className="w-full h-full object-cover "/>
         </div>
       </CardBody>
     </Card>

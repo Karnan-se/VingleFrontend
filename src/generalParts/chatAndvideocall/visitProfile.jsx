@@ -101,12 +101,12 @@ export default function VisitComponent({ tutorId, openRatingsModals }) {
 
           {/* Buttons Section */}
           <div className="flex flex-col sm:flex-row gap-3 mt-4 md:mt-0 md:ml-auto w-full sm:w-auto">
-            <button
+            {/* <button
               className="w-full sm:w-auto h-12 px-4 sm:px-5 bg-yellow-300 rounded-lg flex items-center justify-center text-sm sm:text-base hover:bg-yellow-500 hover:text-white shadow-md transition-colors"
               onClick={() => "visitProfile"} // Assuming this is a placeholder; replace with actual function
             >
               Visit Profile
-            </button>
+            </button> */}
             <button
               className="w-full sm:w-auto h-12 px-4 sm:px-5 bg-yellow-300 rounded-lg flex items-center justify-center text-sm sm:text-base hover:bg-yellow-500 hover:text-white shadow-md transition-colors"
               onClick={startChat}

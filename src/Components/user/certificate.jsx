@@ -53,12 +53,12 @@ export default function Certificate(){
 
     return(
         <>
-       <div className="flex flex-col items-center"> 
-  <div className="w-full h-52  flex justify-center items-center">
+       <div className="flex flex-col md:flex "> 
+  <div className="w-full h-full  flex justify-center items-center">
     <p className="text-center font-semibold text-4xl font-sansita">Your Certifications</p>
   </div>
 
-  <div className="flex flex-wrap justify-center gap-4 mt-4 flex-row"> 
+  <div className="flex w-full justify-center gap-4 mt-4  md:flex-row flex-col object-cover"> 
     {certificate && certificate.map((cert, index) => (
       <CertificateCard 
         key={index} 

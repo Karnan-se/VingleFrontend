@@ -7,8 +7,11 @@ import RatingsModal from "../../generalParts/startLearning/ratingsModal";
 import { useSelector } from "react-redux";
 import PdfWrapper from "../context/pdfRenderContext";
 import { getCourse } from "../../features/api/fetchAllcourse";
+import { useNavigate } from "react-router-dom";
+
 
 export default function StartLearning() {
+  const navigate = useNavigate()
   const location = useLocation();
   const { course } = location.state || {};
   const [ratingModal, setRatingsModal] = useState(false);
@@ -20,9 +23,13 @@ export default function StartLearning() {
     setRatingsModal((prev) => (prev = !prev));
   };
 
-  // useEffect(() => {
-  //   setCourseDetails((prev) => (prev !== course ? courseDetails : prev));
-  // }, [courseDetails]);
+  useEffect(() => {
+    if (!course) {
+      console.warn("No course data found.");
+      navigate("/");
+    }
+
+  }, [course, navigate]);
 
       useEffect(()=>{
         console.log(rating ,  "rating changed ")

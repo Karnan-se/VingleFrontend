@@ -51,7 +51,7 @@ export default function StartLearning() {
       }
     };
     fetchCourse();
-  }, [rating ,course ,setRating]);
+  }, [rating ,course ,setRating , ratingModal]);
 
 
 

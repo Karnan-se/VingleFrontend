@@ -27,3 +27,13 @@ export const individualRatings = async(courseId)=>{
         
     }
 }
+
+export const averagRatings =async(courseId)=>{
+    try {
+        const averagRating = await userApi.get("/averagRating",{params:{courseId}})
+        return averagRating.data.averagRating
+        
+    } catch (error) {
+        
+    }
+}

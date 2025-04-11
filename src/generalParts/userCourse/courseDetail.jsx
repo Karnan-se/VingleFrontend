@@ -17,11 +17,16 @@ import { isOrderCompleated } from "../../features/api/isOrderPlaced";
 import { useDisclosure  , Button } from "@nextui-org/react";
 import RatingsModal from "../RatingsModal.ts/Ratings";
 
+import { averagRatings } from "../../features/api/ratings";
+
+
 export default function CourseDetail({ userInfo }) {
   const [openSections, setOpenSections] = useState([]);
   const [isOrdered, setOrdered] = useState();
   const location = useLocation();
   const navigate = useNavigate();
+  const [averageRating , setAverageRatings] = useState()
+
  
   
   
@@ -82,6 +87,29 @@ export default function CourseDetail({ userInfo }) {
     return null;
   }
 
+  useEffect(()=>{
+    const fetchRatings = async(courseId)=>{
+      try {
+        const response = await averagRatings(courseId)
+        console.log(response , "response ratings ")
+        setAverageRatings(response)
+        
+      } catch (error) {
+        console.log(error)
+        throw error
+        
+      }
+    }
+    fetchRatings(course._id)
+
+
+  },[course , isOpen])
+
+
+
+
+
+
   const startLearning =()=>navigate("/StartLearning",{state:{course}})
 
   return (
@@ -92,18 +120,21 @@ export default function CourseDetail({ userInfo }) {
             <h1 className="text-3xl font-bold mb-4">{course.name}</h1>
             <p className="mb-4">{course.description}</p>
             <div className="flex items-center gap-2">
+            {averageRating && ( <>  
               <span className="bg-yellow-400 text-black px-2 py-1 rounded">
-                {course.averageRating}
+                {Math.floor(averageRating)  ||     Math.floor(course.averageRating)}
               </span>
+             
 
                {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
-                              className={`w-4 h-4 ${
-                                i < course.averageRating ? "fill-yellow-400 text-yellow-400" : "fill-gray-300 text-gray-300"
+                              className={`w-4 h-4  ${
+                                i < Math.floor(averageRating) ? "fill-yellow-400 text-yellow-400" : "fill-gray-300 text-gray-300"
                               }`}
                             />
                           ))}
+                           </>  )}
             </div>
             <p className="mt-2">Created by: {course.tutorId.firstName}</p>
 

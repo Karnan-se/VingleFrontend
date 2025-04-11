@@ -14,12 +14,18 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { confirmPayment } from "../../features/api/confirmPayment";
 import { isOrderCompleated } from "../../features/api/isOrderPlaced";
+import { useDisclosure  , Button } from "@nextui-org/react";
+import RatingsModal from "../RatingsModal.ts/Ratings";
 
 export default function CourseDetail({ userInfo }) {
   const [openSections, setOpenSections] = useState([]);
   const [isOrdered, setOrdered] = useState();
   const location = useLocation();
   const navigate = useNavigate();
+ 
+  
+  
+    const {isOpen, onOpen, onClose} = useDisclosure();
 
 
 
@@ -44,7 +50,7 @@ export default function CourseDetail({ userInfo }) {
   useEffect(() => {
     async function fetchOrderDetails() {
       const orders = await isOrderCompleated(course._id, userInfo._id);
-      console.log(orders, "hello orders");
+      
       if (orders) {
         setOrdered(orders);
       }
@@ -100,6 +106,10 @@ export default function CourseDetail({ userInfo }) {
                           ))}
             </div>
             <p className="mt-2">Created by: {course.tutorId.firstName}</p>
+
+            <Button key={0} onPress={() => onOpen()} className="text-yellow-400 underline-offset-4 underline justify-start">
+            View Ratings
+          </Button>
           </div>
         </div>
 
@@ -192,8 +202,14 @@ export default function CourseDetail({ userInfo }) {
             </div>
           </div>
         </div>
-        {/* <CoursePurchaseModal course={course}  isOpen={isMOdalOpen} onClose={()=>setModalOpen(false)} onPurchase={handlePurchase}  /> */}
+        
+
+        <RatingsModal key={0} isOpen={isOpen} size={"4xl"} onClose={onClose} course={course} ></RatingsModal>
+
+       
+       
       </div>
+      
     </>
   );
 }
